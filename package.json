@@ -1,0 +1,19 @@
+{
+  "name": "dashboard",
+  "private": true,
+  "version": "0.0.0",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:next\" \"npm run dev:flask\"",
+    "dev:next": "npm run dev --workspace=packages/next-mono",
+    "dev:flask": "cd packages/flask-mono && python -m flask run --reload",
+    "db:push": "npm run db:push --workspace=packages/next-mono",
+    "deploy": "docker-compose up"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
