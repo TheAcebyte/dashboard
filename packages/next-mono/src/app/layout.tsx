@@ -1,3 +1,5 @@
+import Sidebar from "@/components/sidebar";
+import ThemeProvider from "@/components/theme-provider";
 import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { Mona_Sans } from "next/font/google";
@@ -17,8 +19,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${monaSans.className} antialiased`}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${monaSans.className} bg-primary-bg antialiased`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <main className="flex w-full">
+            <Sidebar />
+            <div className="flex-1">{children}</div>
+          </main>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
