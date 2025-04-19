@@ -23,11 +23,11 @@ export default function LargeSidebar() {
                 className={cn(
                   "relative flex gap-4 py-2 pr-32 pl-8 text-gray-500 transition-colors",
                   routeMatch && "bg-green-50 text-green-700",
-                  !routeMatch && "hover:bg-gray-50 hover:text-zinc-900",
+                  !routeMatch && "hover:bg-gray-50 hover:text-zinc-700",
                 )}
               >
                 {tab.icon}
-                <p>{tab.name}</p>
+                <p className="font-medium">{tab.name}</p>
                 {routeMatch && (
                   <div className="absolute top-0 left-0 h-full w-[2px] bg-green-700" />
                 )}

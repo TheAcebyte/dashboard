@@ -21,7 +21,7 @@ export default function SmallSidebar() {
                   "flex rounded-full p-4 text-gray-500 transition-colors",
                   routeMatch && "bg-green-50 text-green-700",
                   !routeMatch &&
-                    "cursor-pointer hover:bg-gray-50 hover:text-zinc-900",
+                    "cursor-pointer hover:bg-gray-50 hover:text-zinc-700",
                 )}
               >
                 {tab.icon}

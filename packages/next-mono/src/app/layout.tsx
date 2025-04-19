@@ -1,3 +1,4 @@
+import ActionIcons from "@/components/action-icons";
 import Sidebar from "@/components/sidebar";
 import ThemeProvider from "@/components/theme-provider";
 import "@/styles/globals.css";
@@ -24,8 +25,9 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <main className="flex w-full">
             <Sidebar />
-            <div className="flex-1">{children}</div>
+            {children}
           </main>
+          <ActionIcons />
         </ThemeProvider>
       </body>
     </html>

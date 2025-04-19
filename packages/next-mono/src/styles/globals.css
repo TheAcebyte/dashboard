@@ -14,3 +14,12 @@
   --color-primary-bg: var(--primary-bg);
   --color-primary-fg: var(--primary-fg);
 }
+
+.transition-dropdown {
+  transition-property: scale, opacity;
+  transition-timing-function: var(
+    --tw-ease,
+    var(--default-transition-timing-function)
+  );
+  transition-duration: var(--tw-duration, var(--default-transition-duration));
+}
