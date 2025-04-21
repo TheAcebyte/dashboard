@@ -82,12 +82,12 @@ export function CNEInput({ label, setValue, error }: OTPInputProps) {
 }
 
 export function DateInput({ label, setValue, error }: OTPInputProps) {
-  const registerDate = (date: string) => {
-    const day = date.slice(0, 2);
-    const month = date.slice(2, 4);
-    const year = date.slice(4);
-    const birthDate = `${day}/${month}/${year}`;
-    setValue(birthDate);
+  const registerDate = (euLocaleDate: string) => {
+    const day = euLocaleDate.slice(0, 2);
+    const month = euLocaleDate.slice(2, 4);
+    const year = euLocaleDate.slice(4);
+    const usLocaleDate = `${month}/${day}/${year}`;
+    setValue(usLocaleDate);
   };
 
   return (

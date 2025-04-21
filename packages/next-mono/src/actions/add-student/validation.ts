@@ -9,10 +9,9 @@ export const studentSchema = z.object({
   birthDate: z
     .string()
     .nonempty("Date is required.")
-    .refine((date) => {
-      const [day, month, year] = date.split("/").map((part) => parseInt(part));
-      if (!day || !month || !year) return false;
-      return day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1;
+    .refine((usLocaleDate) => {
+      const date = new Date(usLocaleDate);
+      return !isNaN(date.getDate());
     }, "Invalid date."),
   group: z.string().nonempty("Group is required."),
   file: z.instanceof(File),
