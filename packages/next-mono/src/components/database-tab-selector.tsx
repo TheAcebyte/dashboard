@@ -11,7 +11,7 @@ interface Props {
 
 export default function DatabaseTabSelector({ selected }: Props) {
   return (
-    <div className="w-full border-b border-gray-200">
+    <div className="w-full border-b border-gray-300">
       <TabSelector tabs={databaseTabs} selected={selected} />
     </div>
   );

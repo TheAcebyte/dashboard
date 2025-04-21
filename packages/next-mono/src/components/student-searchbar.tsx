@@ -4,23 +4,22 @@ import {
   Dropdown,
   DropdownContent,
   DropdownTrigger,
+  dropdownContext,
 } from "@/components/ui/dropdown";
 import { cn } from "@/lib/utils";
 import { Search } from "lucide-react";
 import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 interface Props {
   className?: string;
 }
 
 export default function StudentSearchbar({ className }: Props) {
-  const [activeDropdown, setActiveDropdown] = useState(false);
-
   return (
     <div
       className={cn(
-        "flex items-center gap-4 rounded-full border border-gray-200 px-4",
+        "flex items-center gap-4 rounded-full border border-gray-300 px-4",
         className,
       )}
     >
@@ -30,20 +29,36 @@ export default function StudentSearchbar({ className }: Props) {
         placeholder="Search for students"
         className="min-w-0 flex-1 outline-none placeholder:text-gray-400"
       />
-      <Dropdown registerActive={setActiveDropdown} className="py-2">
-        <DropdownTrigger className="flex cursor-pointer items-center gap-2 font-medium text-zinc-900">
-          By Name
-          <ChevronDown
-            className={cn(
-              "size-5 transition-transform",
-              activeDropdown && "rotate-180",
-            )}
-          />
+      <Dropdown className="py-2">
+        <DropdownTrigger>
+          <StudentSearchbarDropdownTrigger />
         </DropdownTrigger>
-        <DropdownContent className="w-[100px] rounded-2xl border border-gray-200 bg-white">
-          Fill this up
+        <DropdownContent
+          align="right"
+          className="w-[100px] rounded-2xl border border-gray-300 bg-white"
+        >
+          Fill this up yeah dawg do yo thing
         </DropdownContent>
       </Dropdown>
+    </div>
+  );
+}
+
+function StudentSearchbarDropdownTrigger() {
+  const contextValue = useContext(dropdownContext);
+  if (!contextValue) {
+    throw new Error(
+      "StudentSearchbarDropdownTrigger must be placed inside a DropdownTrigger component.",
+    );
+  }
+
+  const { active } = contextValue;
+  return (
+    <div className="flex cursor-pointer items-center gap-2 font-medium text-zinc-900">
+      <p>By Name</p>
+      <ChevronDown
+        className={cn("size-5 transition-transform", active && "rotate-180")}
+      />
     </div>
   );
 }

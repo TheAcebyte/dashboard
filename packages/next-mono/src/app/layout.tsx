@@ -1,14 +1,10 @@
 import ActionIcons from "@/components/action-icons";
 import Sidebar from "@/components/sidebar";
 import ThemeProvider from "@/components/theme-provider";
+import { monaSans } from "@/lib/fonts";
+import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
 import type { Metadata } from "next";
-import { Mona_Sans } from "next/font/google";
-
-export const monaSans = Mona_Sans({
-  variable: "--font-mona-sans",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -21,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${monaSans.className} bg-primary-bg antialiased`}>
+      <body className={cn("bg-primary-bg antialiased", monaSans.className)}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <main className="flex w-full">
             <Sidebar />

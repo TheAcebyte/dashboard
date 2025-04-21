@@ -1,18 +1,11 @@
 "use client";
 
 import Button from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { useTableLayoutStore } from "@/stores/table-layout-store";
 import { LayoutGrid, LayoutList } from "lucide-react";
-import { useState } from "react";
 
-export type TableLayout = "list" | "card";
-
-interface Props {
-  initialLayout: TableLayout;
-}
-
-export default function TableLayoutSelector({ initialLayout }: Props) {
-  const [tableLayout, setTableLayout] = useState(initialLayout);
+export default function TableLayoutSelector() {
+  const { tableLayout, setTableLayout } = useTableLayoutStore();
 
   return (
     <div className="flex rounded-full">
