@@ -19,8 +19,8 @@ import {
 } from "@/components/ui/input";
 import useFormAction from "@/hooks/use-form-action";
 import { cn } from "@/lib/utils";
-import { Plus, X } from "lucide-react";
-import { useContext } from "react";
+import { CircleAlert, Plus, X } from "lucide-react";
+import { useContext, useEffect } from "react";
 
 export default function AddStudentDialog() {
   return (
@@ -51,6 +51,9 @@ function AddStudentDialogContent() {
     addStudent,
     studentSchema,
   );
+  useEffect(() => {
+    if (response?.success) close();
+  }, [response]);
 
   return (
     <div className="rounded-2xl border border-gray-300 bg-white">
@@ -65,7 +68,7 @@ function AddStudentDialogContent() {
         className="flex flex-col items-center gap-8 p-8"
         onSubmit={handleSubmit}
       >
-        <ImageInput setValue={register("picture")} />
+        <ImageInput setValue={register("file")} />
         <div className="flex gap-8">
           <TextInput
             id="first-name"
@@ -111,6 +114,12 @@ function AddStudentDialogContent() {
             Add
           </Button>
         </div>
+        {response && !response.success && (
+          <div className="flex items-center gap-2 font-medium text-red-700">
+            <CircleAlert />
+            <p>{response.message}</p>
+          </div>
+        )}
       </form>
     </div>
   );

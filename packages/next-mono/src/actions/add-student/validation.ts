@@ -1,4 +1,3 @@
-import { isImage } from "@/lib/utils";
 import { z } from "zod";
 
 const CNERegex = /^[A-Z][0-9]{9}$/;
@@ -16,7 +15,7 @@ export const studentSchema = z.object({
       return day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1;
     }, "Invalid date."),
   group: z.string().nonempty("Group is required."),
-  picture: z.instanceof(File).refine(isImage),
+  file: z.instanceof(File),
 });
 
 export type StudentFields = z.infer<typeof studentSchema>;

@@ -1,4 +1,4 @@
-import { ServerAction } from "@/types/utils";
+import type { ServerAction } from "@/types/utils";
 import { type FormEvent, useState } from "react";
 import { z } from "zod";
 import { init } from "zod-empty";
@@ -15,8 +15,7 @@ export default function useFormAction<T extends z.ZodRawShape, R>(
   const defaultFields = init(schema);
   const [fields, setFields] = useState<FormFields>(defaultFields);
   const [errors, setErrors] = useState<FormFieldErrors>();
-  const [response, setResponse] =
-    useState<Awaited<ReturnType<typeof action>>>();
+  const [response, setResponse] = useState<R>();
 
   const register =
     <K extends keyof FormFields>(field: K) =>
@@ -31,9 +30,9 @@ export default function useFormAction<T extends z.ZodRawShape, R>(
       return;
     }
 
-    setErrors(undefined);
     const response = await action(fields);
     setResponse(response);
+    setErrors(undefined);
   };
 
   return {

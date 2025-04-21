@@ -137,6 +137,10 @@ export function SelectInput({
     setValue(options[index]);
   };
 
+  useEffect(() => {
+    setValue(options[selected]);
+  }, []);
+
   return (
     <div className="flex w-full flex-col gap-2">
       <label className="font-medium text-zinc-600">{label}</label>
