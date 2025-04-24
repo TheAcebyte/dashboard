@@ -4,10 +4,13 @@ import {
   type StudentFields,
   studentSchema,
 } from "@/actions/add-student/validation";
+import { cst } from "@/constants";
 import { db } from "@/db";
-import { findStudentByCNE, studentsTable } from "@/db/schema/students";
+import { findStudentByCNE } from "@/db/queries/students";
+import { studentPictures, students } from "@/db/schema/students";
 import { isImage } from "@/lib/utils";
 import type { ServerActionResponse } from "@/types/utils";
+import { randomUUID } from "crypto";
 
 export default async function addStudent(
   payload: StudentFields,
@@ -21,19 +24,28 @@ export default async function addStudent(
     return { success: false, message: "Uploaded file is not an image." };
   }
 
-  const matchedStudents = await findStudentByCNE(payload.cne);
-  if (matchedStudents.length != 0) {
+  const matchedStudent = await findStudentByCNE(payload.cne);
+  if (matchedStudent) {
     return { success: false, message: "CNE is already taken." };
   }
 
-  const birthDate = new Date(payload.birthDate);
+  const studentId = randomUUID();
+  const birthDate = new Date(payload.birthDate).getTime();
   const fileArrayBuffer = await payload.file.arrayBuffer();
   const picture = Buffer.from(fileArrayBuffer);
-  await db.insert(studentsTable).values({
+  const pictureUrl = new URL(`/api/students/${studentId}/picture`, cst.APP_URL);
+
+  await db.insert(students).values({
+    studentId: studentId,
     firstName: payload.firstName,
     lastName: payload.lastName,
     cne: payload.cne,
     birthDate: birthDate,
+    group: payload.group,
+    pictureUrl: pictureUrl.toString(),
+  });
+  await db.insert(studentPictures).values({
+    studentId: studentId,
     picture: picture,
   });
 

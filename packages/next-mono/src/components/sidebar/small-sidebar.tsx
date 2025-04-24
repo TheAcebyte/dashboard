@@ -8,7 +8,7 @@ export default function SmallSidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="sticky flex size-full flex-col items-center gap-16 border-r border-gray-300 p-4">
+    <div className="sticky top-0 flex flex-col items-center gap-16 p-4">
       <Image src="/logo.svg" alt="" width={32} height={32} />
       <ul className="flex flex-col gap-4">
         {navigationTabs.map((tab, index) => {

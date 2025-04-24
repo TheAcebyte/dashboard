@@ -1,10 +1,23 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ReactNode, createContext, useContext } from "react";
+import { ComponentProps, ReactNode, createContext, useContext } from "react";
+
+type TableRowVariant = "header" | "body";
+
+const tableRowStyles: Record<TableRowVariant, { row: string; cell: string }> = {
+  header: {
+    row: "flex rounded-l-full rounded-r-full bg-gray-50",
+    cell: "text-gray-500 font-medium px-8 py-1",
+  },
+  body: {
+    row: "border-b border-gray-200",
+    cell: "text-gray-900 px-8 py-6",
+  },
+};
 
 const tableContext = createContext(true);
-const tableRowContext = createContext(true);
+const tableRowContext = createContext<TableRowVariant | null>(null);
 
 interface TableProps {
   className?: string;
@@ -13,59 +26,41 @@ interface TableProps {
 
 export function Table({ className, children }: TableProps) {
   return (
-    <div className={className}>
+    <ul className={className}>
       <tableContext.Provider value={true}>{children}</tableContext.Provider>
-    </div>
-  );
-}
-
-interface TableHeaderProps {
-  className?: string;
-  children?: ReactNode;
-}
-
-export function TableHeader({ className, children }: TableHeaderProps) {
-  const contextValue = useContext(tableContext);
-  if (!contextValue) {
-    throw new Error("TableHeader must be placed inside a Table component.");
-  }
-
-  return (
-    <div
-      className={cn("flex bg-gray-100 font-medium text-gray-500", className)}
-      style={{
-        display: "grid",
-        gridAutoColumns: "minmax(0, 1fr)",
-        gridAutoFlow: "column",
-      }}
-    >
-      {children}
-    </div>
+    </ul>
   );
 }
 
 interface TableRowProps {
-  className?: string;
-  children?: ReactNode;
+  variant?: TableRowVariant;
 }
 
-export function TableRow({ className, children }: TableRowProps) {
+export function TableRow({
+  variant = "body",
+  className,
+  children,
+  ...props
+}: TableRowProps & ComponentProps<"li">) {
   const contextValue = useContext(tableContext);
   if (!contextValue) {
     throw new Error("TableRow must be placed inside a Table component.");
   }
 
   return (
-    <div
-      className={cn("border-b border-gray-300 text-zinc-900", className)}
+    <li
+      className={cn(tableRowStyles[variant].row, className)}
       style={{
         display: "grid",
         gridAutoColumns: "minmax(0, 1fr)",
         gridAutoFlow: "column",
       }}
+      {...props}
     >
-      {children}
-    </div>
+      <tableRowContext.Provider value={variant}>
+        {children}
+      </tableRowContext.Provider>
+    </li>
   );
 }
 
@@ -75,22 +70,22 @@ interface TableCellProps {
   children?: ReactNode;
 }
 
-export function TableCell({ weight, className, children }: TableCellProps) {
+export function TableCell({ weight = 1, className, children }: TableCellProps) {
   const contextValue = useContext(tableRowContext);
   if (!contextValue) {
-    throw new Error(
-      "TableCell must be placed inside a TableRow or TableHeader component.",
-    );
+    throw new Error("TableCell must be placed inside a TableRow component.");
   }
 
-  const cellWeight = weight ?? 1;
   return (
     <div
       className={cn(
         "overflow-hidden overflow-ellipsis whitespace-nowrap",
+        tableRowStyles[contextValue].cell,
         className,
       )}
-      style={{ gridColumn: `span ${cellWeight}` }}
+      style={{
+        gridColumn: `span ${weight}`,
+      }}
     >
       {children}
     </div>

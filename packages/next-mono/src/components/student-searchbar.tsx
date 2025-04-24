@@ -9,7 +9,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Search } from "lucide-react";
 import { ChevronDown } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 interface Props {
   className?: string;

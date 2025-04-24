@@ -1,5 +1,3 @@
-import { z } from "zod";
-
 export type ServerAction<T, R> = (payload: T) => Promise<R>;
 
 export type ServerActionResponse = {

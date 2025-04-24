@@ -1,9 +1,9 @@
 import { ChartNoAxesColumn, Database, Settings } from "lucide-react";
-import type { ReactElement } from "react";
+import type { ReactNode } from "react";
 
 interface NavigationTab {
   name: string;
-  icon: ReactElement;
+  icon: ReactNode;
   route: string;
 }
 

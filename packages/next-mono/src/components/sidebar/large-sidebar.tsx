@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 export default function LargeSidebar() {
   const pathname = usePathname();
   return (
-    <div className="sticky flex size-full flex-col gap-16 border-r border-gray-300">
+    <div className="sticky top-0 flex flex-col gap-16">
       <div className="px-6 py-4">
         <Logo />
       </div>
