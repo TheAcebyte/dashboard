@@ -54,6 +54,7 @@ export function TableRow({
         display: "grid",
         gridAutoColumns: "minmax(0, 1fr)",
         gridAutoFlow: "column",
+        alignItems: "center",
       }}
       {...props}
     >

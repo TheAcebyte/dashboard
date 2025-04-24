@@ -9,11 +9,12 @@ import { cst } from "@/constants";
 import { StudentColumns } from "@/db/schema/students";
 import usePagination from "@/hooks/use-pagination";
 import { getAge } from "@/lib/utils";
+import Image from "next/image";
 
 const studentEndpoint = new URL("/api/students", cst.APP_URL);
 
 export default function StudentTable() {
-  const response = usePagination<StudentColumns>(studentEndpoint, 6);
+  const response = usePagination<StudentColumns>(studentEndpoint, 5);
   if (!response) return null;
 
   const { page, limit, count, total, data, gotoPage } = response;
@@ -33,7 +34,15 @@ export default function StudentTable() {
 
           return (
             <TableRow key={index}>
-              <TableCell weight={2}>{fullName}</TableCell>
+              <TableCell weight={2}>
+                <div className="flex items-center gap-4">
+                  <img
+                    src={entry.pictureUrl}
+                    className="size-12 rounded-full border border-gray-300 object-cover"
+                  />
+                  <p>{fullName}</p>
+                </div>
+              </TableCell>
               <TableCell weight={2}>{entry.cne}</TableCell>
               <TableCell>{age}</TableCell>
               <TableCell>{entry.group}</TableCell>
