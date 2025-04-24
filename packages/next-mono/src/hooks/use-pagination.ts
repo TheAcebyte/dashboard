@@ -20,7 +20,7 @@ export default function usePagination<T>(
 
   if (!response) return null;
   return {
-    page: page,
+    page: response.page,
     limit: response.limit,
     count: response.count,
     total: response.total,
