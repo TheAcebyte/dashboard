@@ -1,20 +1,34 @@
 "use client";
 
+import Avatar from "@/components/ui/avatar";
 import {
   PaginationControl,
   PaginationStatus,
 } from "@/components/ui/pagination";
 import { Table, TableCell, TableRow } from "@/components/ui/table";
 import { cst } from "@/constants";
-import { StudentColumns } from "@/db/schema/students";
+import { StudentFilterField } from "@/constants/filters";
+import type { StudentColumns } from "@/db/schema/students";
 import usePagination from "@/hooks/use-pagination";
 import { getAge } from "@/lib/utils";
-import Image from "next/image";
+import { useStudentSearchStore } from "@/stores/student-search-store";
+import { useEffect, useState } from "react";
 
 const studentEndpoint = new URL("/api/students", cst.APP_URL);
 
 export default function StudentTable() {
-  const response = usePagination<StudentColumns>(studentEndpoint, 5);
+  const { searchField, searchTerm } = useStudentSearchStore();
+  const [queryParameters, setQueryParameters] =
+    useState<Partial<Record<StudentFilterField, string>>>();
+  useEffect(() => {
+    setQueryParameters({ [searchField]: searchTerm });
+  }, [searchField, searchTerm]);
+
+  const response = usePagination<StudentColumns>(
+    studentEndpoint,
+    5,
+    queryParameters,
+  );
   if (!response) return null;
 
   const { page, limit, count, total, data, gotoPage } = response;
@@ -36,11 +50,13 @@ export default function StudentTable() {
             <TableRow key={index}>
               <TableCell weight={2}>
                 <div className="flex items-center gap-4">
-                  <img
+                  <Avatar
                     src={entry.pictureUrl}
-                    className="size-12 rounded-full border border-gray-300 object-cover"
+                    className="size-12 min-h-12 min-w-12"
                   />
-                  <p>{fullName}</p>
+                  <p className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+                    {fullName}
+                  </p>
                 </div>
               </TableCell>
               <TableCell weight={2}>{entry.cne}</TableCell>

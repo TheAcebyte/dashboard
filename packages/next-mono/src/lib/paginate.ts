@@ -1,12 +1,10 @@
 const defaultPage = 1;
 const defaultLimit = 10;
 
-type PaginatedFetchDataCallback<R> = (
+type PaginatedFetchCallback<R> = (
   limit: number,
   offset: number,
 ) => Promise<R[]>;
-
-type FetchTotalCallback = () => Promise<number>;
 
 export type PaginatedResponse<R> = {
   page: number;
@@ -29,8 +27,8 @@ type PaginatedResult<R> =
 
 export default async function paginate<R>(
   endpoint: string,
-  fetchData: PaginatedFetchDataCallback<R>,
-  fetchTotal: FetchTotalCallback,
+  paginatedFetch: PaginatedFetchCallback<R>,
+  total: number,
 ): Promise<PaginatedResult<R>> {
   const url = new URL(endpoint);
   const parameters = {
@@ -40,13 +38,11 @@ export default async function paginate<R>(
 
   const page = parameters.page ? parseInt(parameters.page) : defaultPage;
   const limit = parameters.limit ? parseInt(parameters.limit) : defaultLimit;
-
   if (isNaN(page) || isNaN(limit)) {
     return { success: false };
   }
 
-  const data = await fetchData(page, limit);
-  const total = await fetchTotal();
+  const data = await paginatedFetch(page, limit);
   const count = data.length;
   const previousUrl = new URL(endpoint);
   const nextUrl = new URL(endpoint);

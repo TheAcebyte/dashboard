@@ -1,22 +1,20 @@
 "use client";
 
-import {
-  Dropdown,
-  DropdownContent,
-  DropdownTrigger,
-} from "@/components/ui/dropdown";
-import { dropdownContext } from "@/components/ui/dropdown";
 import { OTPInput, OTPInputSlot } from "@/components/ui/otp-input";
+import Select, {
+  type SelectOption,
+  selectContext,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { ChevronsUpDown, Upload, User } from "lucide-react";
+import { Upload, User } from "lucide-react";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 
 interface TextInputProps {
   id: string;
   label: string;
   placeholder?: string;
-  setValue: (value: string) => void;
   error?: string;
+  setValue: (value: string) => void;
 }
 
 export function TextInput({
@@ -48,8 +46,8 @@ export function TextInput({
 
 interface OTPInputProps {
   label: string;
-  setValue: (value: string) => void;
   error?: string;
+  setValue: (value: string) => void;
 }
 
 export function CNEInput({ label, setValue, error }: OTPInputProps) {
@@ -118,91 +116,32 @@ export function DateInput({ label, setValue, error }: OTPInputProps) {
 }
 
 interface SelectInputProps {
+  options: SelectOption[];
   label: string;
   placeholder?: string;
-  setValue: (value: string) => void;
   error?: string;
-  options: string[];
+  setValue: (value: string) => void;
 }
 
 export function SelectInput({
-  label,
-  setValue,
-  error,
   options,
+  label,
+  error,
+  setValue,
 }: SelectInputProps) {
-  const [selected, setSelected] = useState<number>(0);
-  const select = (index: number) => {
-    setSelected(index);
-    setValue(options[index]);
-  };
-
-  useEffect(() => {
-    setValue(options[selected]);
-  }, []);
-
   return (
     <div className="flex w-full flex-col gap-2">
       <label className="font-medium text-zinc-600">{label}</label>
-      <div
+      <Select
+        options={options}
+        setValue={setValue}
         className={cn(
-          "flex items-center gap-4 rounded-full border border-gray-300 px-4 text-zinc-900 focus-within:border-gray-500",
+          "w-full rounded-full border border-gray-300 px-4 focus-within:border-gray-500",
           error && "border-red-700",
         )}
-      >
-        <p className="flex-1 py-2">{options[selected]}</p>
-        <Dropdown className="flex items-center">
-          <DropdownTrigger className="cursor-pointer transition-colors hover:text-zinc-800">
-            <ChevronsUpDown width={20} height={20} />
-          </DropdownTrigger>
-          <DropdownContent
-            align="right"
-            offsetX={18}
-            offsetY={20}
-            className="rounded-xl border border-gray-300 bg-white"
-          >
-            <SelectInputDropdownContent options={options} select={select} />
-          </DropdownContent>
-        </Dropdown>
-      </div>
+      />
       {error && <p className="text-sm font-medium text-red-700">{error}</p>}
     </div>
-  );
-}
-
-interface OptionSelectorProps {
-  options: string[];
-  select: (index: number) => void;
-}
-
-function SelectInputDropdownContent({ options, select }: OptionSelectorProps) {
-  const contextValue = useContext(dropdownContext);
-  if (!contextValue) {
-    throw new Error(
-      "SelectInputDropdownContent must be placed inside a DropdownContent component.",
-    );
-  }
-
-  const { close } = contextValue;
-  return (
-    <ul>
-      {options.map((option, index) => {
-        const handleClick = () => {
-          select(index);
-          close();
-        };
-
-        return (
-          <li
-            key={index}
-            className="cursor-pointer px-4 py-2 transition-colors hover:bg-gray-50"
-            onClick={handleClick}
-          >
-            {option}
-          </li>
-        );
-      })}
-    </ul>
   );
 }
 

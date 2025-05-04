@@ -1,4 +1,5 @@
 import { findStudentById } from "@/db/queries/students";
+import { notFound } from "next/navigation";
 
 interface Parameters {
   studentId: string;
@@ -9,6 +10,8 @@ export async function GET(
   { params }: { params: Promise<Parameters> },
 ) {
   const { studentId } = await params;
-  const a = await findStudentById(studentId);
-  return Response.json(a);
+  const data = await findStudentById(studentId);
+
+  if (!data) notFound();
+  return Response.json(data);
 }

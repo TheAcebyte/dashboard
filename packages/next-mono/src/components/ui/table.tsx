@@ -3,9 +3,7 @@
 import { cn } from "@/lib/utils";
 import { ComponentProps, ReactNode, createContext, useContext } from "react";
 
-type TableRowVariant = "header" | "body";
-
-const tableRowStyles: Record<TableRowVariant, { row: string; cell: string }> = {
+const tableRowStyles = {
   header: {
     row: "flex rounded-l-full rounded-r-full bg-gray-50",
     cell: "text-gray-500 font-medium px-8 py-1",
@@ -14,7 +12,9 @@ const tableRowStyles: Record<TableRowVariant, { row: string; cell: string }> = {
     row: "border-b border-gray-200",
     cell: "text-gray-900 px-8 py-6",
   },
-};
+} satisfies Record<string, { row: string; cell: string }>;
+
+type TableRowVariant = keyof typeof tableRowStyles;
 
 const tableContext = createContext(true);
 const tableRowContext = createContext<TableRowVariant | null>(null);

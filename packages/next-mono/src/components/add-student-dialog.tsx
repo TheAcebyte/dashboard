@@ -60,7 +60,7 @@ function AddStudentDialogContent() {
       <header className="flex items-center justify-between border-b border-gray-300 px-8 py-4">
         <h1 className="text-xl font-semibold text-zinc-900">Add Student</h1>
         <X
-          className="cursor-pointer text-zinc-900 hover:text-zinc-800"
+          className="cursor-pointer text-zinc-900 hover:text-zinc-700"
           onClick={close}
         />
       </header>
@@ -99,7 +99,10 @@ function AddStudentDialogContent() {
           label="Group"
           setValue={register("group")}
           error={errors?.group?.[0]}
-          options={["API-1", "API-2", "Cycle"]}
+          options={[
+            { id: "API-1", label: "API-1" },
+            { id: "API-2", label: "API-2" },
+          ]}
         />
         <div className="mt-8 flex gap-4 self-stretch">
           <Button

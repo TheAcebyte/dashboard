@@ -76,7 +76,7 @@ export function PaginationControl({
           "transition-colors",
           isOnFirstPage
             ? "text-gray-400"
-            : "cursor-pointer text-zinc-900 hover:text-zinc-800",
+            : "cursor-pointer text-zinc-900 hover:text-zinc-700",
         )}
         onClick={gotoPreviousPage}
       />
@@ -99,7 +99,7 @@ export function PaginationControl({
           "transition-colors",
           isOnLastPage
             ? "text-gray-400"
-            : "cursor-pointer text-zinc-900 hover:text-zinc-800",
+            : "cursor-pointer text-zinc-900 hover:text-zinc-700",
         )}
         onClick={gotoNextPage}
       />

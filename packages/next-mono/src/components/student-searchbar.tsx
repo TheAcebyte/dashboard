@@ -1,21 +1,22 @@
 "use client";
 
-import {
-  Dropdown,
-  DropdownContent,
-  DropdownTrigger,
-  dropdownContext,
-} from "@/components/ui/dropdown";
+import Select, { selectContext } from "@/components/ui/select";
+import { studentFilterOptions } from "@/constants/filters";
 import { cn } from "@/lib/utils";
-import { Search } from "lucide-react";
-import { ChevronDown } from "lucide-react";
-import { useContext } from "react";
+import { useStudentSearchStore } from "@/stores/student-search-store";
+import { Search, X } from "lucide-react";
+import { type ChangeEvent, useContext } from "react";
 
 interface Props {
   className?: string;
 }
 
 export default function StudentSearchbar({ className }: Props) {
+  const { setSearchField, searchTerm, setSearchTerm } = useStudentSearchStore();
+  const clearSearchTerm = () => setSearchTerm("");
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
+    setSearchTerm(e.target.value);
+
   return (
     <div
       className={cn(
@@ -23,42 +24,40 @@ export default function StudentSearchbar({ className }: Props) {
         className,
       )}
     >
-      <Search className="text-zinc-900" />
+      {searchTerm == "" ? (
+        <Search className="text-zinc-900" />
+      ) : (
+        <X
+          className="cursor-pointer text-zinc-900 hover:text-zinc-700"
+          onClick={clearSearchTerm}
+        />
+      )}
       <input
         type="text"
         placeholder="Search for students"
-        className="min-w-0 flex-1 outline-none placeholder:text-gray-400"
+        className="min-w-0 flex-1 text-zinc-900 outline-none placeholder:text-gray-400"
+        value={searchTerm}
+        onChange={handleChange}
       />
-      <Dropdown className="py-2">
-        <DropdownTrigger>
-          <StudentSearchbarDropdownTrigger />
-        </DropdownTrigger>
-        <DropdownContent
-          align="right"
-          className="w-[100px] rounded-2xl border border-gray-300 bg-white"
-        >
-          Fill this up yeah dawg do yo thing
-        </DropdownContent>
-      </Dropdown>
+      <Select
+        options={studentFilterOptions}
+        offsetX={16}
+        setValue={setSearchField}
+        className="gap-2"
+      >
+        <SelectLabel />
+      </Select>
     </div>
   );
 }
 
-function StudentSearchbarDropdownTrigger() {
-  const contextValue = useContext(dropdownContext);
-  if (!contextValue) {
+function SelectLabel() {
+  const option = useContext(selectContext);
+  if (!option) {
     throw new Error(
-      "StudentSearchbarDropdownTrigger must be placed inside a DropdownTrigger component.",
+      "SelectInputLabel must be placed inside a Select component.",
     );
   }
 
-  const { active } = contextValue;
-  return (
-    <div className="flex cursor-pointer items-center gap-2 font-medium text-zinc-900">
-      <p>By Name</p>
-      <ChevronDown
-        className={cn("size-5 transition-transform", active && "rotate-180")}
-      />
-    </div>
-  );
+  return <p className="py-2 font-medium">By {option}</p>;
 }
