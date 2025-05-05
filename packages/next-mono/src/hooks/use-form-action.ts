@@ -8,13 +8,10 @@ export default function useFormAction<T extends z.ZodRawShape, R>(
   schema: z.ZodObject<T>,
 ) {
   type FormFields = z.infer<typeof schema>;
-  type FormFieldErrors =
-    | z.inferFlattenedErrors<typeof schema>["fieldErrors"]
-    | null;
-
+  type FormFieldErrors = z.inferFlattenedErrors<typeof schema>["fieldErrors"];
   const defaultFields = init(schema);
   const [fields, setFields] = useState<FormFields>(defaultFields);
-  const [errors, setErrors] = useState<FormFieldErrors>(null);
+  const [errors, setErrors] = useState<FormFieldErrors | null>(null);
   const [response, setResponse] = useState<R | null>(null);
 
   const register =

@@ -1,15 +1,17 @@
-import { create } from "zustand";
+import useValidateParamState from "@/hooks/use-validate-param-state";
+import { z } from "zod";
 
-export type TableLayout = "list" | "card";
+const tableLayoutEnum = z.enum(["list", "card"]);
 
-interface TableLayoutStore {
-  tableLayout: TableLayout;
-  setTableLayout: (tableLayout: TableLayout) => void;
+export default function useTableLayoutStore() {
+  const [tableLayout, pushTableLayout] = useValidateParamState(
+    "view",
+    tableLayoutEnum,
+    "list",
+  );
+
+  return {
+    tableLayout: tableLayout,
+    setTableLayout: pushTableLayout,
+  };
 }
-
-export const useTableLayoutStore = create<TableLayoutStore>((set) => ({
-  tableLayout: "list",
-  setTableLayout: (tableLayout: TableLayout) => {
-    set({ tableLayout });
-  },
-}));

@@ -2,7 +2,7 @@ import { robotoMono } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import {
   type KeyboardEvent,
-  MouseEvent,
+  type MouseEvent,
   type ReactNode,
   type RefObject,
   createContext,

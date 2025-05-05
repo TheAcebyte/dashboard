@@ -26,7 +26,7 @@ export default function AddStudentDialog() {
   return (
     <Dialog>
       <DialogTrigger
-        className={cn(buttonStyles.solid, "flex items-center gap-2")}
+        className={cn(buttonStyles.solid, "flex h-full items-center gap-2")}
       >
         Add
         <Plus />

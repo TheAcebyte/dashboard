@@ -11,23 +11,23 @@ import { StudentFilterField } from "@/constants/filters";
 import type { StudentColumns } from "@/db/schema/students";
 import usePagination from "@/hooks/use-pagination";
 import { getAge } from "@/lib/utils";
-import { useStudentSearchStore } from "@/stores/student-search-store";
+import useStudentSearchStore from "@/stores/student-search-store";
 import { useEffect, useState } from "react";
 
 const studentEndpoint = new URL("/api/students", cst.APP_URL);
 
 export default function StudentTable() {
-  const { searchField, searchTerm } = useStudentSearchStore();
-  const [queryParameters, setQueryParameters] =
+  const { searchField, searchQuery } = useStudentSearchStore();
+  const [queryParams, setQueryParams] =
     useState<Partial<Record<StudentFilterField, string>>>();
   useEffect(() => {
-    setQueryParameters({ [searchField]: searchTerm });
-  }, [searchField, searchTerm]);
+    setQueryParams({ [searchField]: searchQuery });
+  }, [searchField, searchQuery]);
 
   const response = usePagination<StudentColumns>(
     studentEndpoint,
-    5,
-    queryParameters,
+    4,
+    queryParams,
   );
   if (!response) return null;
 
@@ -54,7 +54,7 @@ export default function StudentTable() {
                     src={entry.pictureUrl}
                     className="size-12 min-h-12 min-w-12"
                   />
-                  <p className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+                  <p className="overflow-hidden overflow-ellipsis">
                     {fullName}
                   </p>
                 </div>

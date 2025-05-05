@@ -1,20 +1,24 @@
-import type { StudentFilterField } from "@/constants/filters";
-import { create } from "zustand";
+import { studentFilterOptions } from "@/constants/filters";
+import useParamState from "@/hooks/use-param-state";
+import useValidateParamState from "@/hooks/use-validate-param-state";
+import { z } from "zod";
 
-interface StudentSearchStore {
-  searchField: StudentFilterField;
-  setSearchField: (searchField: StudentFilterField) => void;
-  searchTerm: string;
-  setSearchTerm: (searchTerm: string) => void;
+const studentFilterFieldEnum = z.enum(
+  studentFilterOptions.map((option) => option.id),
+);
+
+export default function useStudentSearchStore() {
+  const [searchField, pushSearchField] = useValidateParamState(
+    "field",
+    studentFilterFieldEnum,
+    "name",
+  );
+  const [searchQuery, pushSearchQuery] = useParamState("query", "");
+
+  return {
+    searchField: searchField,
+    setSearchField: pushSearchField,
+    searchQuery: searchQuery,
+    setSearchQuery: pushSearchQuery,
+  };
 }
-
-export const useStudentSearchStore = create<StudentSearchStore>((set) => ({
-  searchTerm: "",
-  setSearchField: (searchField: StudentFilterField) => {
-    set({ searchField });
-  },
-  searchField: "name",
-  setSearchTerm: (searchTerm: string) => {
-    set({ searchTerm });
-  },
-}));

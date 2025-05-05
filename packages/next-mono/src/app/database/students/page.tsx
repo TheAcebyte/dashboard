@@ -8,10 +8,12 @@ export default function Page() {
   return (
     <div className="mt-16 flex flex-col gap-8">
       <DatabaseTabSelector selected="students" />
-      <div className="mb-4 flex gap-8">
+      <div className="mb-4 flex flex-col gap-4 lg:flex-row lg:gap-8">
         <StudentSearchbar className="flex-1" />
-        <TableLayoutSelector />
-        <AddStudentDialog />
+        <div className="flex justify-between gap-8">
+          <TableLayoutSelector />
+          <AddStudentDialog />
+        </div>
       </div>
       <StudentTable />
     </div>

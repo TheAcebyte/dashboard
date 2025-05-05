@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "@/components/ui/button";
-import { useTableLayoutStore } from "@/stores/table-layout-store";
+import useTableLayoutStore from "@/stores/table-layout-store";
 import { LayoutGrid, LayoutList } from "lucide-react";
 
 export default function TableLayoutSelector() {
