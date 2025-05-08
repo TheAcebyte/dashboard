@@ -2,8 +2,9 @@
 
 import { cn } from "@/lib/utils";
 import {
+  type MouseEvent as ReactMouseEvent,
   type ReactNode,
-  RefObject,
+  type RefObject,
   createContext,
   useContext,
   useEffect,
@@ -60,8 +61,13 @@ export function DropdownTrigger({ className, children }: DropdownTriggerProps) {
   }
 
   const { toggle } = contextValue;
+  const handleClick = (e: ReactMouseEvent) => {
+    toggle();
+    e.stopPropagation();
+  };
+
   return (
-    <button type="button" className={className} onClick={toggle}>
+    <button type="button" className={className} onClick={handleClick}>
       {children}
     </button>
   );
@@ -89,7 +95,7 @@ export function DropdownContent({
     );
   }
 
-  const { active, toggle, ref } = contextValue;
+  const { active, close, ref } = contextValue;
   const [isTopHalf, setTopHalf] = useState(false);
   const dropdownContentRef = useRef<HTMLDivElement>(null);
 
@@ -100,13 +106,13 @@ export function DropdownContent({
         dropdownContentRef.current &&
         !dropdownContentRef.current.contains(e.target as Node)
       ) {
-        toggle();
+        close();
       }
     };
     const updateDropdownPosition = () => {
       if (!ref.current) return;
       const { y } = ref.current.getBoundingClientRect();
-      const halfHeight = document.body.offsetHeight / 2;
+      const halfHeight = window.innerHeight / 2;
       setTopHalf(y < halfHeight);
     };
 
@@ -123,7 +129,7 @@ export function DropdownContent({
   return (
     <div
       className={cn(
-        "transition-dropdown absolute w-max overflow-hidden",
+        "transition-dropdown absolute z-10 w-max overflow-hidden",
         active
           ? "scale-100 opacity-100"
           : "pointer-events-none scale-95 opacity-0",

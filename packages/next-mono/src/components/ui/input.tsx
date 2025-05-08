@@ -1,31 +1,32 @@
 "use client";
 
 import { OTPInput, OTPInputSlot } from "@/components/ui/otp-input";
-import Select, {
-  type SelectOption,
-  selectContext,
-} from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+import Select, { type SelectOption } from "@/components/ui/select";
+import { cn, range } from "@/lib/utils";
 import { Upload, User } from "lucide-react";
-import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { type ChangeEvent, useEffect, useRef, useState } from "react";
 
 interface TextInputProps {
   id: string;
   label: string;
   placeholder?: string;
-  error?: string;
+  value: string;
   setValue: (value: string) => void;
+  error?: string;
+  className?: string;
 }
 
 export function TextInput({
   id,
   label,
   placeholder,
+  value,
   setValue,
   error,
+  className,
 }: TextInputProps) {
   return (
-    <div className="flex w-full flex-col gap-2">
+    <div className={cn("flex w-full flex-col gap-2", className)}>
       <label htmlFor={id} className="font-medium text-zinc-600">
         {label}
       </label>
@@ -37,6 +38,7 @@ export function TextInput({
           "rounded-full border border-gray-300 px-4 py-2 text-zinc-900 outline-none placeholder:text-gray-400 focus-visible:border-gray-500",
           error && "border-red-700",
         )}
+        value={value}
         onChange={(e) => setValue(e.target.value)}
       />
       {error && <p className="text-sm font-medium text-red-700">{error}</p>}
@@ -46,17 +48,26 @@ export function TextInput({
 
 interface OTPInputProps {
   label: string;
-  error?: string;
+  value: string;
   setValue: (value: string) => void;
+  error?: string;
+  className?: string;
 }
 
-export function CNEInput({ label, setValue, error }: OTPInputProps) {
+export function CNEInput({
+  label,
+  value,
+  setValue,
+  error,
+  className,
+}: OTPInputProps) {
   return (
-    <div className="flex w-full flex-col gap-2">
+    <div className={cn("flex w-full flex-col gap-2", className)}>
       <label className="font-medium text-zinc-600">{label}</label>
       <OTPInput
         slots={10}
-        register={setValue}
+        value={value}
+        setValue={setValue}
         className={cn(
           "rounded-full border border-gray-300 px-4 py-2 text-zinc-900 outline-none placeholder:text-gray-400 focus-within:border-gray-500",
           error && "border-red-700",
@@ -64,76 +75,74 @@ export function CNEInput({ label, setValue, error }: OTPInputProps) {
       >
         <OTPInputSlot index={0} pattern={/^[A-Z]$/} placeholder="J" />
         <span className="mx-2 text-gray-300">-</span>
-        <OTPInputSlot index={1} pattern={/^[0-9]$/} placeholder="0" />
-        <OTPInputSlot index={2} pattern={/^[0-9]$/} placeholder="0" />
-        <OTPInputSlot index={3} pattern={/^[0-9]$/} placeholder="0" />
-        <OTPInputSlot index={4} pattern={/^[0-9]$/} placeholder="0" />
-        <OTPInputSlot index={5} pattern={/^[0-9]$/} placeholder="0" />
-        <OTPInputSlot index={6} pattern={/^[0-9]$/} placeholder="0" />
-        <OTPInputSlot index={7} pattern={/^[0-9]$/} placeholder="0" />
-        <OTPInputSlot index={8} pattern={/^[0-9]$/} placeholder="0" />
-        <OTPInputSlot index={9} pattern={/^[0-9]$/} placeholder="0" />
+        {range(1, 10).map((i) => (
+          <OTPInputSlot key={i} index={i} pattern={/^[0-9]$/} placeholder="0" />
+        ))}
       </OTPInput>
       {error && <p className="text-sm font-medium text-red-700">{error}</p>}
     </div>
   );
 }
 
-export function DateInput({ label, setValue, error }: OTPInputProps) {
-  const registerDate = (euLocaleDate: string) => {
-    const day = euLocaleDate.slice(0, 2);
-    const month = euLocaleDate.slice(2, 4);
-    const year = euLocaleDate.slice(4);
-    const usLocaleDate = `${month}/${day}/${year}`;
-    setValue(usLocaleDate);
-  };
-
+export function DateInput({
+  label,
+  value,
+  setValue,
+  error,
+  className,
+}: OTPInputProps) {
   return (
-    <div className="flex w-full flex-col gap-2">
+    <div className={cn("flex w-full flex-col gap-2", className)}>
       <label className="font-medium text-zinc-600">{label}</label>
       <OTPInput
         slots={8}
-        register={registerDate}
+        value={value}
+        setValue={setValue}
         className={cn(
           "rounded-full border border-gray-300 px-4 py-2 text-zinc-900 outline-none placeholder:text-gray-400 focus-within:border-gray-500",
           error && "border-red-700",
         )}
       >
-        <OTPInputSlot index={0} pattern={/[0-9]/} placeholder="d" />
-        <OTPInputSlot index={1} pattern={/[0-9]/} placeholder="d" />
+        <OTPInputSlot index={0} pattern={/^[0-9]$/} placeholder="d" />
+        <OTPInputSlot index={1} pattern={/^[0-9]$/} placeholder="d" />
         <span className="mx-2 text-gray-300">/</span>
-        <OTPInputSlot index={2} pattern={/[0-9]/} placeholder="M" />
-        <OTPInputSlot index={3} pattern={/[0-9]/} placeholder="M" />
+        <OTPInputSlot index={2} pattern={/^[0-9]$/} placeholder="M" />
+        <OTPInputSlot index={3} pattern={/^[0-9]$/} placeholder="M" />
         <span className="mx-2 text-gray-300">/</span>
-        <OTPInputSlot index={4} pattern={/[0-9]/} placeholder="y" />
-        <OTPInputSlot index={5} pattern={/[0-9]/} placeholder="y" />
-        <OTPInputSlot index={6} pattern={/[0-9]/} placeholder="y" />
-        <OTPInputSlot index={7} pattern={/[0-9]/} placeholder="y" />
+        <OTPInputSlot index={4} pattern={/^[0-9]$/} placeholder="y" />
+        <OTPInputSlot index={5} pattern={/^[0-9]$/} placeholder="y" />
+        <OTPInputSlot index={6} pattern={/^[0-9]$/} placeholder="y" />
+        <OTPInputSlot index={7} pattern={/^[0-9]$/} placeholder="y" />
       </OTPInput>
       {error && <p className="text-sm font-medium text-red-700">{error}</p>}
     </div>
   );
 }
 
-interface SelectInputProps {
-  options: SelectOption[];
+interface SelectInputProps<T extends SelectOption[]> {
+  options: T;
   label: string;
   placeholder?: string;
+  value: T[number]["id"];
+  setValue: (value: T[number]["id"]) => void;
   error?: string;
-  setValue: (value: string) => void;
+  className?: string;
 }
 
-export function SelectInput({
+export function SelectInput<T extends SelectOption[]>({
   options,
   label,
-  error,
+  value,
   setValue,
-}: SelectInputProps) {
+  error,
+  className,
+}: SelectInputProps<T>) {
   return (
-    <div className="flex w-full flex-col gap-2">
+    <div className={cn("flex w-full flex-col gap-2", className)}>
       <label className="font-medium text-zinc-600">{label}</label>
       <Select
         options={options}
+        value={value}
         setValue={setValue}
         className={cn(
           "w-full rounded-full border border-gray-300 px-4 focus-within:border-gray-500",
@@ -146,17 +155,15 @@ export function SelectInput({
 }
 
 interface ImageInputProps {
+  value: File;
   setValue: (value: File) => void;
+  error?: string;
 }
 
-export function ImageInput({ setValue }: ImageInputProps) {
+export function ImageInput({ value, setValue, error }: ImageInputProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [image, setImage] = useState<File>();
   const [imageUrl, setImageUrl] = useState<string>("");
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    setImage(e.target.files[0]);
-    setValue(e.target.files[0]);
-  };
 
   useEffect(() => {
     if (!image) return;
@@ -165,9 +172,32 @@ export function ImageInput({ setValue }: ImageInputProps) {
     return () => URL.revokeObjectURL(newImageUrl);
   }, [image]);
 
+  useEffect(() => {
+    if (!inputRef.current) return;
+    setImage(value);
+    if (value) {
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(value);
+      inputRef.current.files = dataTransfer.files;
+    } else {
+      // This clears the file input from any file
+      inputRef.current.value = "";
+      setImageUrl("");
+    }
+  }, [value]);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    setImage(e.target.files[0]);
+    setValue(e.target.files[0]);
+  };
+
   return (
     <div
-      className="relative size-[100px] rounded-full border border-gray-300 bg-gray-100 p-8"
+      className={cn(
+        "relative size-[100px] rounded-full border border-gray-300 bg-gray-100 p-8",
+        error && "border-red-700",
+      )}
       style={{
         backgroundImage: `url(${imageUrl})`,
         backgroundSize: "cover",
@@ -175,11 +205,18 @@ export function ImageInput({ setValue }: ImageInputProps) {
       }}
     >
       {!imageUrl && <User width={32} height={32} className="text-gray-500" />}
-      <div className="absolute right-0 bottom-0 overflow-hidden rounded-full border border-gray-300 bg-white p-2 transition-colors hover:bg-gray-50">
-        <Upload width={18} height={18} />
+      <div
+        className={cn(
+          "absolute right-0 bottom-0 overflow-hidden rounded-full border border-gray-300 bg-white p-2",
+          error && "border-red-700",
+        )}
+      >
+        <Upload width={18} height={18} className="text-gray-500" />
         <input
           type="file"
+          accept="image/*"
           className="absolute inset-0 size-full cursor-pointer text-[0px] opacity-0"
+          ref={inputRef}
           onChange={handleChange}
         />
       </div>

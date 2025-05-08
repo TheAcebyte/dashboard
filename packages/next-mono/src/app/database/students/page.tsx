@@ -1,3 +1,5 @@
+"use client";
+
 import AddStudentDialog from "@/components/add-student-dialog";
 import DatabaseTabSelector from "@/components/database-tab-selector";
 import StudentSearchbar from "@/components/student-searchbar";

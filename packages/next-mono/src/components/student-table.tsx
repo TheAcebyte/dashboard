@@ -1,5 +1,6 @@
 "use client";
 
+import StudentTableActions from "@/components/student-table-actions";
 import Avatar from "@/components/ui/avatar";
 import {
   PaginationControl,
@@ -8,7 +9,7 @@ import {
 import { Table, TableCell, TableRow } from "@/components/ui/table";
 import { cst } from "@/constants";
 import { StudentFilterField } from "@/constants/filters";
-import type { StudentColumns } from "@/db/schema/students";
+import type { PaginatedStudentRecord } from "@/db/queries/students";
 import usePagination from "@/hooks/use-pagination";
 import { getAge } from "@/lib/utils";
 import useStudentSearchStore from "@/stores/student-search-store";
@@ -24,44 +25,47 @@ export default function StudentTable() {
     setQueryParams({ [searchField]: searchQuery });
   }, [searchField, searchQuery]);
 
-  const response = usePagination<StudentColumns>(
+  const paginate = usePagination<PaginatedStudentRecord>(
     studentEndpoint,
     4,
     queryParams,
   );
-  if (!response) return null;
+  if (!paginate) return null;
+  const { response, gotoPage } = paginate;
+  const { page, limit, count, total, data } = response;
 
-  const { page, limit, count, total, data, gotoPage } = response;
   return (
     <div className="flex flex-col gap-12">
       <Table>
         <TableRow variant="header">
-          <TableCell weight={2}>Name</TableCell>
-          <TableCell weight={2}>CNE</TableCell>
-          <TableCell>Age</TableCell>
-          <TableCell>Group</TableCell>
+          <TableCell weight={4}>Name</TableCell>
+          <TableCell weight={3}>CNE</TableCell>
+          <TableCell weight={2}>Age</TableCell>
+          <TableCell weight={2}>Group</TableCell>
+          <TableCell className="flex justify-center">Actions</TableCell>
         </TableRow>
-        {data.map((entry, index) => {
-          const fullName = `${entry.firstName} ${entry.lastName}`;
-          const birthDate = new Date(entry.birthDate);
+        {data.map((record, index) => {
+          const fullName = `${record.firstName} ${record.lastName}`;
+          const birthDate = new Date(record.birthDate);
           const age = getAge(birthDate);
 
           return (
             <TableRow key={index}>
-              <TableCell weight={2}>
+              <TableCell weight={4}>
                 <div className="flex items-center gap-4">
                   <Avatar
-                    src={entry.pictureUrl}
+                    src={record.pictureUrl}
                     className="size-12 min-h-12 min-w-12"
                   />
-                  <p className="overflow-hidden overflow-ellipsis">
-                    {fullName}
-                  </p>
+                  <p>{fullName}</p>
                 </div>
               </TableCell>
-              <TableCell weight={2}>{entry.cne}</TableCell>
-              <TableCell>{age}</TableCell>
-              <TableCell>{entry.group}</TableCell>
+              <TableCell weight={3}>{record.cne}</TableCell>
+              <TableCell weight={2}>{age}</TableCell>
+              <TableCell weight={2}>{record.group}</TableCell>
+              <TableCell className="flex justify-center">
+                <StudentTableActions record={record} />
+              </TableCell>
             </TableRow>
           );
         })}

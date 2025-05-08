@@ -9,12 +9,17 @@ export const studentSchema = z.object({
   birthDate: z
     .string()
     .nonempty("Date is required.")
-    .refine((usLocaleDate) => {
+    .refine((euLocaleDate) => {
+      const day = euLocaleDate.slice(0, 2);
+      const month = euLocaleDate.slice(2, 4);
+      const year = euLocaleDate.slice(4);
+      const usLocaleDate = `${month}/${day}/${year}`;
       const date = new Date(usLocaleDate);
       return !isNaN(date.getDate());
     }, "Invalid date."),
-  group: z.string().nonempty("Group is required."),
-  file: z.instanceof(File),
+  groupId: z.string().nonempty("Group is required."),
+  file: z
+    .instanceof(File, { message: "File is required." })
 });
 
 export type StudentFields = z.infer<typeof studentSchema>;

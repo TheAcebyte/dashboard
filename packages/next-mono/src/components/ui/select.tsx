@@ -24,6 +24,7 @@ export const selectContext = createContext<string | null>(null);
 interface SelectProps<T extends SelectOption[]> {
   options: T;
   offsetX?: number;
+  value: T[number]["id"];
   setValue: (value: T[number]["id"]) => void;
   className?: string;
   children?: ReactNode;
@@ -32,19 +33,26 @@ interface SelectProps<T extends SelectOption[]> {
 export default function Select<T extends SelectOption[]>({
   options,
   offsetX,
+  value,
+  setValue,
   className,
   children,
-  setValue,
 }: SelectProps<T>) {
-  const [selected, setSelected] = useState<number>(0);
+  if (options.length == 0) {
+    throw new Error("List of options cannot be empty.");
+  }
+
+  const [selected, setSelected] = useState(0);
   const select = (index: number) => {
     setSelected(index);
     setValue(options[index].id);
   };
 
   useEffect(() => {
-    setValue(options[selected].id);
-  }, []);
+    const valueIndex = options.findIndex((option) => option.id == value);
+    const newSelected = valueIndex == -1 ? 0 : valueIndex;
+    select(newSelected);
+  }, [value]);
 
   return (
     <Dropdown className={className}>
@@ -116,7 +124,7 @@ function SelectDropdownContent({ options, select }: SelectDropdownContent) {
         return (
           <li
             key={index}
-            className="cursor-pointer px-4 py-2 transition-colors hover:bg-gray-50"
+            className="cursor-pointer px-4 py-2 text-zinc-900 transition-colors hover:bg-gray-50 hover:text-zinc-700"
             onClick={handleClick}
           >
             {option.label}

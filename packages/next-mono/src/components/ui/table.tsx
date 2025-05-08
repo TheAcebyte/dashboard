@@ -10,9 +10,9 @@ const tableRowStyles = {
   },
   body: {
     row: "border-b border-gray-200",
-    cell: "text-gray-900 px-8 py-6",
+    cell: "text-zinc-900 px-8 py-6",
   },
-} satisfies Record<string, { row: string; cell: string }>;
+} as const satisfies Record<string, { row: string; cell: string }>;
 
 type TableRowVariant = keyof typeof tableRowStyles;
 
@@ -26,7 +26,7 @@ interface TableProps {
 
 export function Table({ className, children }: TableProps) {
   return (
-    <ul className={className}>
+    <ul className={cn("whitespace-nowrap", className)}>
       <tableContext.Provider value={true}>{children}</tableContext.Provider>
     </ul>
   );
@@ -79,11 +79,7 @@ export function TableCell({ weight = 1, className, children }: TableCellProps) {
 
   return (
     <div
-      className={cn(
-        "overflow-hidden overflow-ellipsis whitespace-nowrap",
-        tableRowStyles[contextValue].cell,
-        className,
-      )}
+      className={cn(tableRowStyles[contextValue].cell, className)}
       style={{
         gridColumn: `span ${weight}`,
       }}

@@ -1,8 +1,5 @@
-"use client";
-
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
 
 interface Props {
   src: string;
@@ -11,18 +8,8 @@ interface Props {
 }
 
 export default function Avatar({ src, alt, className }: Props) {
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
-  const imageRef = useRef<HTMLImageElement>(null);
-
-  useEffect(() => {
-    if (!imageRef.current) return;
-    setWidth(imageRef.current.naturalWidth);
-    setHeight(imageRef.current.naturalHeight);
-  }, []);
-
   return (
-    <Dialog>
+    <Dialog id={`avatar-${src}`}>
       <DialogTrigger>
         <img
           src={src}
@@ -31,7 +18,6 @@ export default function Avatar({ src, alt, className }: Props) {
             "cursor-pointer rounded-full border border-gray-300 object-cover",
             className,
           )}
-          ref={imageRef}
         />
       </DialogTrigger>
       <DialogContent>

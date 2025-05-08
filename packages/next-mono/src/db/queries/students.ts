@@ -1,5 +1,6 @@
 import type { StudentFilterField } from "@/constants/filters";
 import { db } from "@/db";
+import { groups } from "@/db/schema/groups";
 import { studentPictures, students } from "@/db/schema/students";
 import { and, count, eq, like, or, sql } from "drizzle-orm";
 
@@ -24,7 +25,65 @@ function buildStudentFilterCondition(
           filter.age,
         )
       : undefined,
+    filter.group ? like(groups.name, `${filter.group}%`) : undefined,
   );
+}
+
+export function findStudentById(id: string) {
+  return db.query.students.findFirst({ where: eq(students.studentId, id) });
+}
+
+export function findStudentByCNE(cne: string) {
+  return db.query.students.findFirst({ where: eq(students.cne, cne) });
+}
+
+export function findStudentsWithPagination(page: number, limit: number) {
+  const offset = (page - 1) * limit;
+  return db
+    .select({
+      studentId: students.studentId,
+      firstName: students.firstName,
+      lastName: students.lastName,
+      cne: students.cne,
+      birthDate: students.birthDate,
+      groupId: groups.groupId,
+      group: groups.name,
+      pictureUrl: students.pictureUrl,
+    })
+    .from(students)
+    .innerJoin(groups, eq(students.groupId, groups.groupId))
+    .offset(offset)
+    .limit(limit);
+}
+
+export function findStudentsWithFilteredPagination(
+  filter: Partial<Record<StudentFilterField, string>>,
+  page: number,
+  limit: number,
+) {
+  const offset = (page - 1) * limit;
+  return db
+    .select({
+      studentId: students.studentId,
+      firstName: students.firstName,
+      lastName: students.lastName,
+      cne: students.cne,
+      birthDate: students.birthDate,
+      group: groups.name,
+      pictureUrl: students.pictureUrl,
+    })
+    .from(students)
+    .innerJoin(groups, eq(students.groupId, groups.groupId))
+    .where(buildStudentFilterCondition(filter))
+    .offset(offset)
+    .limit(limit);
+}
+
+export function findStudentPictureById(id: string) {
+  return db.query.studentPictures.findFirst({
+    columns: { picture: true },
+    where: eq(studentPictures.studentId, id),
+  });
 }
 
 export async function getStudentCount() {
@@ -40,40 +99,11 @@ export async function getStudentCountWithFilter(
   const [{ count: totalCount }] = await db
     .select({ count: count() })
     .from(students)
+    .innerJoin(groups, eq(students.groupId, groups.groupId))
     .where(buildStudentFilterCondition(filter));
   return totalCount;
 }
 
-export function findStudentById(id: string) {
-  return db.query.students.findFirst({ where: eq(students.studentId, id) });
-}
-
-export function findStudentByCNE(cne: string) {
-  return db.query.students.findFirst({ where: eq(students.cne, cne) });
-}
-
-export function findStudentsWithPagination(page: number, limit: number) {
-  const offset = (page - 1) * limit;
-  return db.select().from(students).offset(offset).limit(limit);
-}
-
-export function findStudentsWithFilteredPagination(
-  filter: Partial<Record<StudentFilterField, string>>,
-  page: number,
-  limit: number,
-) {
-  const offset = (page - 1) * limit;
-  return db
-    .select()
-    .from(students)
-    .where(buildStudentFilterCondition(filter))
-    .offset(offset)
-    .limit(limit);
-}
-
-export function findStudentPictureById(id: string) {
-  return db.query.studentPictures.findFirst({
-    columns: { picture: true },
-    where: eq(studentPictures.studentId, id),
-  });
-}
+export type PaginatedStudentRecord = Awaited<
+  ReturnType<typeof findStudentsWithPagination>
+>[number];

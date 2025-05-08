@@ -1,3 +1,4 @@
+import { groups } from "@/db/schema/groups";
 import { blob, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const students = sqliteTable("students", {
@@ -6,7 +7,7 @@ export const students = sqliteTable("students", {
   lastName: text("last_name").notNull(),
   cne: text("cne").notNull().unique(),
   birthDate: integer("birth_date").notNull(),
-  group: text("group").notNull(),
+  groupId: text("group_id").notNull().references(() => groups.groupId),
   pictureUrl: text("picture_url").notNull(),
 });
 
@@ -16,5 +17,3 @@ export const studentPictures = sqliteTable("student_pictures", {
     .references(() => students.studentId),
   picture: blob("picture", { mode: "buffer" }).notNull(),
 });
-
-export type StudentColumns = typeof students.$inferSelect;

@@ -1,5 +1,5 @@
 import { robotoMono } from "@/lib/fonts";
-import { cn } from "@/lib/utils";
+import { cn, padRightArray } from "@/lib/utils";
 import {
   type KeyboardEvent,
   type MouseEvent,
@@ -7,16 +7,18 @@ import {
   type RefObject,
   createContext,
   useContext,
+  useEffect,
   useRef,
   useState,
 } from "react";
 
-type InputArray = (HTMLInputElement | null)[];
+type OTPSlotArray = (HTMLInputElement | null)[];
 
 type OTPContext = {
-  inputArray: RefObject<InputArray>;
+  otpSlotArray: RefObject<OTPSlotArray>;
   focus: (index: number) => void;
   focusAndClear: (index: number) => void;
+  input: string[];
   setSlot: (index: number, value: string) => void;
 };
 
@@ -24,62 +26,72 @@ const otpContext = createContext<OTPContext | null>(null);
 
 interface OTPInputProps {
   slots: number;
+  value: string;
+  setValue: (value: string) => void;
   className?: string;
   children?: ReactNode;
-  register?: (value: string) => void;
 }
 
 export function OTPInput({
   slots,
-  register,
+  value,
+  setValue,
   className,
   children,
 }: OTPInputProps) {
   if (slots <= 0) {
-    throw new Error("Number of slots must be greater than zero.");
+    throw new Error("Number of slots must be strictly positive.");
   }
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const [value, setValue] = useState<string[]>(new Array(slots).fill(""));
-  const inputArray = useRef<InputArray>(new Array(slots).fill(null));
+  const otpSlotArray = useRef<OTPSlotArray>(new Array(slots).fill(null));
+  const [input, setInput] = useState<string[]>(new Array(slots).fill(""));
 
-  const focus = (index: number) => inputArray.current[index]?.focus();
-  const focusAndClear = (index: number) => {
-    if (!inputArray.current[index]) return;
-    inputArray.current[index].value = "";
-    inputArray.current[index].focus();
+  useEffect(() => {
+    const splitValue = value.slice(0, slots).split("");
+    padRightArray(splitValue, "", slots);
+    setInput(splitValue);
+  }, [value]);
+
+  const focus = (index: number) => {
+    if (index < 0) index = 0;
+    else if (index > slots) index = slots - 1;
+    otpSlotArray.current[index]?.focus();
   };
 
-  const setSlot = (index: number, key: string) => {
-    const leftSlots = value.slice(0, index);
-    const rightSlots = value.slice(index + 1);
-    const newValue = [...leftSlots, key, ...rightSlots];
-    setValue(newValue);
-    if (register) register(newValue.join(""));
+  const focusAndClear = (index: number) => {
+    if (index < 0 || index >= slots - 1 || !otpSlotArray.current[index]) return;
+    otpSlotArray.current[index].value = "";
+    otpSlotArray.current[index].focus();
   };
 
   const focusLastFilledSlot = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target != containerRef.current) return;
     let foundFilledSlot = false;
     for (let i = slots - 1; i >= 0; i--) {
-      if (inputArray.current[i]?.value != "") {
-        if (i < slots - 1) {
-          inputArray.current[i + 1]?.focus();
-        } else {
-          inputArray.current[i]?.focus();
-        }
+      if (otpSlotArray.current[i]?.value != "") {
+        if (i < slots - 1) focus(i + 1);
+        else focus(i);
         foundFilledSlot = true;
         break;
       }
     }
+    if (!foundFilledSlot) focus(0);
+  };
 
-    if (!foundFilledSlot) inputArray.current[0]?.focus();
+  const setSlot = (index: number, key: string) => {
+    const leftSlots = value.slice(0, index);
+    const rightSlots = value.slice(index + 1);
+    const newInput = [...leftSlots, key, ...rightSlots];
+    setInput(newInput);
+    setValue(newInput.join(""));
   };
 
   const contextValue = {
-    inputArray,
+    otpSlotArray,
     focus,
     focusAndClear,
+    input,
     setSlot,
   };
 
@@ -98,6 +110,7 @@ interface OTPInputSlotProps {
   index: number;
   pattern: RegExp;
   placeholder?: string;
+  value?: string;
   className?: string;
 }
 
@@ -114,13 +127,11 @@ export function OTPInputSlot({
     );
   }
 
-  const { inputArray, focus, focusAndClear, setSlot } = contextValue;
+  const { otpSlotArray, focus, focusAndClear, input, setSlot } = contextValue;
   const handleEvent = (e: KeyboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     const target = e.target as HTMLInputElement;
-    const value = target.value;
-
-    if (value == "") {
+    if (target.value == "") {
       switch (e.key) {
         case "ArrowLeft":
           focus(index - 1);
@@ -173,9 +184,11 @@ export function OTPInputSlot({
         className,
       )}
       ref={(el) => {
-        inputArray.current[index] = el;
+        otpSlotArray.current[index] = el;
       }}
+      value={input[index] ?? ""}
       onKeyDown={handleEvent}
+      onChange={(e) => setSlot(index, e.target.value)}
     />
   );
 }

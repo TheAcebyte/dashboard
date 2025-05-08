@@ -7,6 +7,10 @@ export const studentFilterOptions = [
   { id: "group", label: "Group" },
 ] as const satisfies SelectOption[];
 
-export const ids = studentFilterOptions.map((option) => option.id);
-
 export type StudentFilterField = (typeof studentFilterOptions)[number]["id"];
+
+export const groupFilterOptions = [
+  { id: "name", label: "Name" },
+] as const satisfies SelectOption[];
+
+export type GroupFilterField = (typeof groupFilterOptions)[number]["id"];

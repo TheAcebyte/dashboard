@@ -1,35 +1,37 @@
+import { z } from "zod";
+
 const defaultPage = 1;
 const defaultLimit = 10;
 
-type PaginatedFetchCallback<R> = (
+type PaginatedFetchCallback<T> = (
   limit: number,
   offset: number,
-) => Promise<R[]>;
+) => Promise<T[]>;
 
-export type PaginatedResponse<R> = {
+export type PaginatedResponse<T> = {
   page: number;
   limit: number;
   total: number;
   count: number;
-  data: R[];
+  data: T[];
   paging: {
     previous: string | null;
     next: string | null;
   };
 };
 
-type PaginatedResult<R> =
+type PaginatedResult<T> =
   | { success: false }
   | {
       success: true;
-      response: PaginatedResponse<R>;
+      response: PaginatedResponse<T>;
     };
 
-export default async function paginate<R>(
-  endpoint: string,
-  paginatedFetch: PaginatedFetchCallback<R>,
+export async function paginate<T>(
+  endpoint: string | URL,
+  paginatedFetch: PaginatedFetchCallback<T>,
   total: number,
-): Promise<PaginatedResult<R>> {
+): Promise<PaginatedResult<T>> {
   const url = new URL(endpoint);
   const parameters = {
     page: url.searchParams.get("page"),
@@ -65,4 +67,71 @@ export default async function paginate<R>(
       },
     },
   };
+}
+
+const paginatedResponseSchema = z.object({
+  page: z.number(),
+  limit: z.number(),
+  total: z.number(),
+  count: z.number(),
+  data: z.array(z.unknown()),
+  paging: z.object({
+    previous: z.union([z.string(), z.null()]),
+    next: z.union([z.string(), z.null()]),
+  }),
+});
+
+export async function fetchPage<T>(
+  endpoint: string | URL,
+  page: number,
+  limit: number,
+  signal?: AbortSignal,
+): Promise<PaginatedResponse<T>> {
+  const url = endpoint instanceof URL ? endpoint : new URL(endpoint);
+  url.searchParams.set("page", page.toString());
+  url.searchParams.set("limit", limit.toString());
+  const response = await fetch(url, { signal });
+  const paginated = await response.json();
+  const parseResult = paginatedResponseSchema.safeParse(paginated);
+  if (!parseResult.success) {
+    throw new Error("Failed to parse paginated response.");
+  }
+
+  return parseResult.data as PaginatedResponse<T>;
+}
+
+export async function fetchAllPages<T>(
+  endpoint: string | URL,
+  signal?: AbortSignal,
+) {
+  let currentEndpoint: string | null =
+    endpoint instanceof URL ? endpoint.toString() : endpoint;
+  const items: T[] = [];
+
+  while (currentEndpoint) {
+    const response = await fetch(currentEndpoint, { signal });
+    const paginated = await response.json();
+    const parseResult = paginatedResponseSchema.safeParse(paginated);
+    if (!parseResult.success) return items;
+
+    const data = parseResult.data.data as T[];
+    items.push(...data);
+    currentEndpoint = parseResult.data.paging.next;
+  }
+
+  return items;
+}
+
+export async function fetchNumberOfPages(
+  endpoint: string | URL,
+  limit: number,
+  signal?: AbortSignal,
+) {
+  const url = endpoint instanceof URL ? endpoint : new URL(endpoint);
+  const response = await fetch(url, { signal });
+  const paginated = await response.json();
+  const parseResult = paginatedResponseSchema.safeParse(paginated);
+  if (!parseResult.success) return 0;
+
+  return Math.ceil(paginated.total / limit);
 }

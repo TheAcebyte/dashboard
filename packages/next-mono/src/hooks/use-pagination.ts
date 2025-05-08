@@ -1,4 +1,9 @@
-import { PaginatedResponse } from "@/lib/paginate";
+import {
+  type PaginatedResponse,
+  fetchNumberOfPages,
+  fetchPage,
+} from "@/lib/paginate";
+import { useTableRefetchStore } from "@/stores/table-refetch-store";
 import { useEffect, useState } from "react";
 
 export default function usePagination<T>(
@@ -9,21 +14,39 @@ export default function usePagination<T>(
   const [response, setResponse] = useState<PaginatedResponse<T>>();
   const [page, setPage] = useState(1);
   const gotoPage = (page: number) => setPage(page);
+  const { volatile, refetch } = useTableRefetchStore();
 
   useEffect(() => {
     const url = new URL(endpoint);
-    url.searchParams.set("page", page.toString());
-    url.searchParams.set("limit", limit.toString());
-    if (parameters) {
-      for (const parameter in parameters) {
-        url.searchParams.set(parameter, parameters[parameter]);
-      }
+    for (const parameter in parameters) {
+      url.searchParams.set(parameter, parameters[parameter]);
     }
 
-    fetch(url)
-      .then((response) => response.json())
-      .then((paginated) => setResponse(paginated));
-  }, [page, parameters]);
+    const controller = new AbortController();
+    const fetchResponse = async () => {
+      const numberOfPages = await fetchNumberOfPages(
+        endpoint,
+        limit,
+        controller.signal,
+      );
+
+      if (page == 0 && numberOfPages == 1) {
+        setPage(1);
+        return;
+      }
+
+      if (page > numberOfPages) {
+        setPage(numberOfPages);
+        return;
+      }
+
+      const response = await fetchPage<T>(url, page, limit, controller.signal);
+      setResponse(response);
+    };
+
+    fetchResponse().catch((error) => console.log(error));
+    return () => controller.abort("Request aborted.");
+  }, [page, parameters, volatile]);
 
   useEffect(() => {
     setPage(1);
@@ -31,11 +54,14 @@ export default function usePagination<T>(
 
   if (!response) return null;
   return {
-    page: response.page,
-    limit: response.limit,
-    count: response.count,
-    total: response.total,
-    data: response.data,
+    response: {
+      page: response.page,
+      limit: response.limit,
+      count: response.count,
+      total: response.total,
+      data: response.data,
+    },
     gotoPage: gotoPage,
+    refetch: refetch,
   };
 }

@@ -1,4 +1,4 @@
-import { cn, iterate } from "@/lib/utils";
+import { cn, iterator } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { createContext, useContext } from "react";
 
@@ -53,8 +53,8 @@ export function PaginationControl({
   gotoPage,
 }: PaginationControlProps) {
   const lastPage = Math.ceil(total / limit);
-  const isOnFirstPage = page == 1;
-  const isOnLastPage = page == lastPage;
+  const isOnFirstPage = page <= 1;
+  const isOnLastPage = page >= lastPage;
   const gotoPreviousPage = () => {
     if (!isOnFirstPage) gotoPage(page - 1);
   };
@@ -136,7 +136,7 @@ export function SmallPageList() {
   }
 
   const { lastPage, currentPage, gotoPage } = contextValue;
-  return iterate(lastPage).map((_, index) => {
+  return iterator(lastPage).map((_, index) => {
     const page = index + 1;
     const isCurrentPage = page == currentPage;
 
@@ -166,7 +166,7 @@ export function LargePageListLeft() {
   const { lastPage, currentPage, gotoPage } = contextValue;
   return (
     <>
-      {iterate(5).map((_, index) => {
+      {iterator(5).map((_, index) => {
         const page = index + 1;
         const isCurrentPage = page == currentPage;
 
@@ -224,7 +224,7 @@ export function LargePageListRight() {
       >
         ...
       </li>
-      {iterate(5).map((_, index) => {
+      {iterator(5).map((_, index) => {
         const page = index + lastPage - 4;
         const isCurrentPage = page == currentPage;
 
@@ -269,7 +269,7 @@ export function LargePageListCenter() {
       >
         ...
       </li>
-      {iterate(3).map((_, index) => {
+      {iterator(3).map((_, index) => {
         const page = index + currentPage - 1;
         const isCurrentPage = page == currentPage;
 

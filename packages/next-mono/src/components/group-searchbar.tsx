@@ -1,9 +1,9 @@
 "use client";
 
 import Select, { selectContext } from "@/components/ui/select";
-import { studentFilterOptions } from "@/constants/filters";
+import { groupFilterOptions } from "@/constants/filters";
 import { cn } from "@/lib/utils";
-import useStudentSearchStore from "@/stores/student-search-store";
+import useGroupSearchStore from "@/stores/group-search-store";
 import { Search, X } from "lucide-react";
 import { type ChangeEvent, useContext } from "react";
 
@@ -11,9 +11,9 @@ interface Props {
   className?: string;
 }
 
-export default function StudentSearchbar({ className }: Props) {
+export default function GroupSearchbar({ className }: Props) {
   const { searchField, setSearchField, searchQuery, setSearchQuery } =
-    useStudentSearchStore();
+    useGroupSearchStore();
   const clearSearchQuery = () => setSearchQuery("");
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setSearchQuery(e.target.value);
@@ -35,13 +35,13 @@ export default function StudentSearchbar({ className }: Props) {
       )}
       <input
         type="text"
-        placeholder="Search for students"
+        placeholder="Search for groups"
         className="min-w-0 flex-1 text-zinc-900 outline-none placeholder:text-gray-400"
         value={searchQuery}
         onChange={handleChange}
       />
       <Select
-        options={studentFilterOptions}
+        options={groupFilterOptions}
         offsetX={16}
         value={searchField}
         setValue={setSearchField}

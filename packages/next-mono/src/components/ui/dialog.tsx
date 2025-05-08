@@ -1,5 +1,6 @@
 "use client";
 
+import useMounted from "@/hooks/use-mounted";
 import { cn } from "@/lib/utils";
 import {
   type ReactNode,
@@ -9,8 +10,10 @@ import {
   useRef,
   useState,
 } from "react";
+import { createPortal } from "react-dom";
 
 type DialogContext = {
+  key: string;
   active: boolean;
   open: () => void;
   close: () => void;
@@ -20,13 +23,15 @@ type DialogContext = {
 export const dialogContext = createContext<DialogContext | null>(null);
 
 interface DialogProps {
+  id: string;
   className?: string;
   children?: ReactNode;
 }
 
-export function Dialog({ className, children }: DialogProps) {
+export function Dialog({ id, className, children }: DialogProps) {
   const [active, setActive] = useState(false);
   const contextValue = {
+    key: id,
     active,
     open: () => setActive(true),
     close: () => setActive(false),
@@ -72,7 +77,7 @@ export function DialogContent({ className, children }: DialogContentProps) {
     throw new Error("DialogContent must be placed inside a Dialog component.");
   }
 
-  const { active, toggle } = contextValue;
+  const { key, active, close } = contextValue;
   const dialogContentRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!active) return;
@@ -81,30 +86,38 @@ export function DialogContent({ className, children }: DialogContentProps) {
         dialogContentRef.current &&
         !dialogContentRef.current.contains(e.target as Node)
       ) {
-        toggle();
+        close();
       }
     };
     document.addEventListener("click", hideDialog);
     return () => document.removeEventListener("click", hideDialog);
   }, [active]);
 
+  const mounted = useMounted();
   return (
-    <div
-      className={cn(
-        "fixed inset-0 z-10 h-screen w-screen bg-black/50 transition-opacity",
-        active ? "opacity-100" : "pointer-events-none opacity-0",
-      )}
-    >
-      <div
-        className={cn(
-          "absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transition-transform",
-          active ? "scale-100" : "scale-95",
-          className,
-        )}
-        ref={dialogContentRef}
-      >
-        {children}
-      </div>
-    </div>
+    mounted &&
+    createPortal(
+      <dialogContext.Provider value={contextValue}>
+        <div
+          className={cn(
+            "fixed inset-0 z-10 h-screen w-screen bg-black/50 transition-opacity",
+            active ? "opacity-100" : "pointer-events-none opacity-0",
+          )}
+        >
+          <div
+            className={cn(
+              "absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transition-transform",
+              active ? "scale-100" : "scale-95",
+              className,
+            )}
+            ref={dialogContentRef}
+          >
+            {children}
+          </div>
+        </div>
+      </dialogContext.Provider>,
+      document.body,
+      key,
+    )
   );
 }
