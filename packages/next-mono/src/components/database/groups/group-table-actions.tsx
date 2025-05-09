@@ -1,3 +1,5 @@
+import DeleteGroupDialog from "@/components/database/groups/delete-group-dialog";
+import EditGroupDialog from "@/components/database/groups/edit-group-dialog";
 import {
   Dropdown,
   DropdownContent,
@@ -5,9 +7,6 @@ import {
 } from "@/components/ui/dropdown";
 import { PaginatedGroupRecord } from "@/db/queries/groups";
 import { EllipsisVertical } from "lucide-react";
-
-import DeleteGroupDialog from "./delete-group-dialog";
-import EditGroupDialog from "./edit-group-dialog";
 
 interface Props {
   record: PaginatedGroupRecord;

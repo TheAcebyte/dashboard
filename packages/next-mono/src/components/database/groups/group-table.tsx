@@ -1,6 +1,6 @@
 "use client";
 
-import GroupTableActions from "@/components/group-table-actions";
+import GroupTableActions from "@/components/database/groups/group-table-actions";
 import {
   PaginationControl,
   PaginationStatus,

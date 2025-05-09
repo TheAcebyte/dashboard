@@ -1,8 +1,8 @@
-import AddStudentDialog from "@/components/add-student-dialog";
-import DataLayoutSelector from "@/components/data-layout-selector";
-import DatabaseTabSelector from "@/components/database-tab-selector";
-import StudentDataView from "@/components/student-data-view";
-import StudentSearchbar from "@/components/student-searchbar";
+import DataLayoutSelector from "@/components/database/data-layout-selector";
+import DatabaseTabSelector from "@/components/database/database-tab-selector";
+import AddStudentDialog from "@/components/database/students/add-student-dialog";
+import StudentDataView from "@/components/database/students/student-data-view";
+import StudentSearchbar from "@/components/database/students/student-searchbar";
 
 export default function Page() {
   return (

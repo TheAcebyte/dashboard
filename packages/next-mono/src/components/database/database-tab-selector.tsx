@@ -1,12 +1,14 @@
 import TabSelector, { type Tab } from "@/components/ui/tab-selector";
 
-const databaseTabs: Tab[] = [
+const databaseTabs = [
   { id: "students", name: "Students", route: "/database/students" },
   { id: "groups", name: "Groups", route: "/database/groups" },
-];
+] as const satisfies Tab[];
+
+type DatabaseTabId = (typeof databaseTabs)[number]["id"];
 
 interface Props {
-  selected: "students" | "groups";
+  selected: DatabaseTabId;
 }
 
 export default function DatabaseTabSelector({ selected }: Props) {

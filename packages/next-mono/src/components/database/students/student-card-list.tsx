@@ -1,7 +1,7 @@
 "use client";
 
+import StudentCard from "@/components/database/students/student-card";
 import Spinner from "@/components/spinner";
-import StudentCard from "@/components/student-card";
 import { cst } from "@/constants";
 import type { StudentFilterField } from "@/constants/filters";
 import type { PaginatedStudentRecord } from "@/db/queries/students";

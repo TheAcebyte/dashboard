@@ -1,7 +1,7 @@
-import AddGroupDialog from "@/components/add-group-dialog";
-import DatabaseTabSelector from "@/components/database-tab-selector";
-import GroupSearchbar from "@/components/group-searchbar";
-import GroupTable from "@/components/group-table";
+import AddGroupDialog from "@/components/database/groups/add-group-dialog";
+import DatabaseTabSelector from "@/components/database/database-tab-selector";
+import GroupSearchbar from "@/components/database/groups/group-searchbar";
+import GroupTable from "@/components/database/groups/group-table";
 
 export default function Page() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import StudentTableActions from "@/components/student-table-actions";
+import StudentTableActions from "@/components/database/students/student-table-actions";
 import Avatar from "@/components/ui/avatar";
 import {
   PaginationControl,

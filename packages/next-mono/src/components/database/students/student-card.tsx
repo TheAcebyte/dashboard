@@ -1,4 +1,4 @@
-import StudentCardActions from "@/components/student-card-actions";
+import StudentCardActions from "@/components/database/students/student-card-actions";
 import Avatar from "@/components/ui/avatar";
 import { cst } from "@/constants";
 import { PaginatedStudentRecord } from "@/db/queries/students";

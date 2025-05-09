@@ -1,5 +1,5 @@
-import DeleteStudentDialog from "@/components/delete-student-dialog";
-import EditStudentDialog from "@/components/edit-student-dialog";
+import DeleteStudentDialog from "@/components/database/students/delete-student-dialog";
+import EditStudentDialog from "@/components/database/students/edit-student-dialog";
 import {
   Dropdown,
   DropdownContent,
@@ -12,14 +12,14 @@ interface Props {
   record: PaginatedStudentRecord;
 }
 
-export default function StudentTableActions({ record }: Props) {
+export default function StudentCardActions({ record }: Props) {
   return (
-    <Dropdown>
-      <DropdownTrigger className="cursor-pointer text-zinc-900 transition-colors hover:text-zinc-700">
+    <Dropdown className="absolute right-8 bottom-0 translate-y-1/2">
+      <DropdownTrigger className="aspect-square cursor-pointer rounded-full border border-gray-300 bg-white p-2 text-zinc-900 transition-colors hover:text-zinc-700">
         <EllipsisVertical size={20} />
       </DropdownTrigger>
       <DropdownContent
-        align="center"
+        align="right"
         offsetY={8}
         className="rounded-xl border border-gray-300 bg-white"
       >
