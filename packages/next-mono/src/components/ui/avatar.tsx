@@ -4,10 +4,20 @@ import { cn } from "@/lib/utils";
 interface Props {
   src: string;
   alt?: string;
+  size?: number;
   className?: string;
 }
 
-export default function Avatar({ src, alt, className }: Props) {
+export default function Avatar({ src, alt, size, className }: Props) {
+  const imageStyle = !size
+    ? {}
+    : {
+        width: `${size}px`,
+        height: `${size}px`,
+        minWidth: `${size}px`,
+        minHeight: `${size}px`,
+      };
+
   return (
     <Dialog id={`avatar-${src}`}>
       <DialogTrigger>
@@ -15,9 +25,10 @@ export default function Avatar({ src, alt, className }: Props) {
           src={src}
           alt={alt}
           className={cn(
-            "cursor-pointer rounded-full border border-gray-300 object-cover",
+            "cursor-pointer rounded-full border border-gray-300 bg-gray-100 object-cover",
             className,
           )}
+          style={imageStyle}
         />
       </DialogTrigger>
       <DialogContent>

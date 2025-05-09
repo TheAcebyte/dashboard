@@ -1,11 +1,11 @@
 import { create } from "zustand";
 
-interface TableRefetchState {
+interface DataRefetchState {
   volatile: {};
   refetch: () => void;
 }
 
-export const useTableRefetchStore = create<TableRefetchState>()((set) => ({
+export const useDataRefetchStore = create<DataRefetchState>()((set) => ({
   volatile: {},
   refetch: () => set(() => ({ volatile: {} })),
 }));

@@ -1,6 +1,6 @@
 "use client";
 
-import editGroup from "@/actions/group/edit";
+import editGroup from "@/actions/group/edit-group";
 import { groupSchema } from "@/actions/group/validation";
 import Button from "@/components/ui/button";
 import {
@@ -12,7 +12,7 @@ import {
 import { TextInput } from "@/components/ui/input";
 import { PaginatedGroupRecord } from "@/db/queries/groups";
 import useFormAction from "@/hooks/use-form-action";
-import { useTableRefetchStore } from "@/stores/table-refetch-store";
+import { useDataRefetchStore } from "@/stores/data-refetch-store";
 import { CircleAlert, Pencil, X } from "lucide-react";
 import { useContext, useEffect } from "react";
 
@@ -22,8 +22,8 @@ interface Props {
 
 export default function EditGroupDialog({ record }: Props) {
   return (
-    <Dialog id={`edit-group-${record.groupId}`}>
-      <DialogTrigger className="flex cursor-pointer items-center gap-4 px-4 py-2 font-medium text-zinc-900 transition-colors hover:bg-gray-50 hover:text-zinc-700">
+    <Dialog id={`edit-group-${record.groupId}`} className="w-full">
+      <DialogTrigger className="flex w-full cursor-pointer items-center gap-4 bg-white px-4 py-2 font-medium text-zinc-900 transition-colors hover:bg-gray-50 hover:text-zinc-700">
         <Pencil size={20} />
         Edit
       </DialogTrigger>
@@ -43,7 +43,7 @@ function EditGroupDialogContent({ record }: Props) {
   }
 
   const { close } = contextValue;
-  const { refetch } = useTableRefetchStore();
+  const { refetch } = useDataRefetchStore();
 
   const editThisGroup = editGroup.bind(null, record.groupId);
   const { handleSubmit, fields, setters, response, errors, reset } =

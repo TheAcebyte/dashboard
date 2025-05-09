@@ -1,6 +1,6 @@
 "use client";
 
-import addStudent from "@/actions/student/add";
+import addStudent from "@/actions/student/add-student";
 import { studentSchema } from "@/actions/student/validation";
 import { buttonStyles } from "@/components/ui/button";
 import Button from "@/components/ui/button";
@@ -21,7 +21,7 @@ import useFetch from "@/hooks/use-fetch";
 import useFormAction from "@/hooks/use-form-action";
 import { fetchGroupOptions } from "@/lib/fetch";
 import { cn } from "@/lib/utils";
-import { useTableRefetchStore } from "@/stores/table-refetch-store";
+import { useDataRefetchStore } from "@/stores/data-refetch-store";
 import { CircleAlert, Plus, UsersRound, X } from "lucide-react";
 import Link from "next/link";
 import { useContext, useEffect } from "react";
@@ -51,7 +51,7 @@ function AddStudentDialogContent() {
   }
 
   const { close } = contextValue;
-  const { refetch } = useTableRefetchStore();
+  const { refetch } = useDataRefetchStore();
   const { data: groupOptions } = useFetch(fetchGroupOptions);
   const { handleSubmit, fields, setters, response, errors, reset } =
     useFormAction(addStudent, studentSchema);

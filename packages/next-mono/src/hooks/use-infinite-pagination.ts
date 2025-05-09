@@ -1,19 +1,22 @@
 import {
-  type PaginatedResponse,
+  type InfinitePaginatedResponse,
+  fetchNPages,
   fetchNumberOfPages,
-  fetchPage,
 } from "@/lib/paginate";
 import { useDataRefetchStore } from "@/stores/data-refetch-store";
 import { useEffect, useState } from "react";
 
-export default function usePagination<T>(
+/**
+ * This hook is shamelessly unoptimized. Instead of fetching data batch-by-batch,
+ * it fetches the first n-pages everytime one of the dependencies is mutated.
+ */
+export default function useInfinitePagination<T>(
   endpoint: string | URL,
   limit: number,
   parameters?: Record<string, string>,
 ) {
-  const [response, setResponse] = useState<PaginatedResponse<T>>();
+  const [response, setResponse] = useState<InfinitePaginatedResponse<T>>();
   const [page, setPage] = useState(1);
-  const gotoPage = (page: number) => setPage(page);
   const { volatile, refetch } = useDataRefetchStore();
 
   useEffect(() => {
@@ -40,7 +43,12 @@ export default function usePagination<T>(
         return;
       }
 
-      const response = await fetchPage<T>(url, page, limit, controller.signal);
+      const response = await fetchNPages<T>(
+        url,
+        page,
+        limit,
+        controller.signal,
+      );
       setResponse(response);
     };
 
@@ -52,16 +60,20 @@ export default function usePagination<T>(
     setPage(1);
   }, [parameters]);
 
+  const loadMore = () => {
+    setPage(page + 1);
+  };
+
   if (!response) return null;
   return {
     response: {
       page: response.page,
-      limit: response.limit,
-      count: response.count,
       total: response.total,
+      count: response.count,
+      remaining: response.remaining,
       data: response.data,
     },
-    gotoPage: gotoPage,
+    loadMore: loadMore,
     refetch: refetch,
   };
 }

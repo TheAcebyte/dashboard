@@ -20,6 +20,15 @@ export type PaginatedResponse<T> = {
   };
 };
 
+export type InfinitePaginatedResponse<T> = {
+  page: number;
+  limit: number;
+  total: number;
+  count: number;
+  remaining: number;
+  data: T[];
+};
+
 type PaginatedResult<T> =
   | { success: false }
   | {
@@ -87,7 +96,7 @@ export async function fetchPage<T>(
   limit: number,
   signal?: AbortSignal,
 ): Promise<PaginatedResponse<T>> {
-  const url = endpoint instanceof URL ? endpoint : new URL(endpoint);
+  const url = new URL(endpoint);
   url.searchParams.set("page", page.toString());
   url.searchParams.set("limit", limit.toString());
   const response = await fetch(url, { signal });
@@ -98,6 +107,47 @@ export async function fetchPage<T>(
   }
 
   return parseResult.data as PaginatedResponse<T>;
+}
+
+export async function fetchNPages<T>(
+  endpoint: string | URL,
+  n: number,
+  limit: number,
+  signal?: AbortSignal,
+): Promise<InfinitePaginatedResponse<T>> {
+  const url = new URL(endpoint);
+  url.searchParams.set("page", "1");
+  url.searchParams.set("limit", limit.toString());
+  let currentEndpoint: string | null = url.toString();
+  let page = 0;
+  let total = 0;
+  let count = 0;
+  const data: T[] = [];
+
+  while (currentEndpoint && page < n) {
+    const response = await fetch(currentEndpoint, { signal });
+    const paginated = await response.json();
+    const parseResult = paginatedResponseSchema.safeParse(paginated);
+    if (!parseResult.success) {
+      throw new Error("Failed to parse paginated response.");
+    }
+
+    currentEndpoint = parseResult.data.paging.next;
+    page = parseResult.data.page;
+    total = parseResult.data.total;
+    count += parseResult.data.count;
+    const items = parseResult.data.data as T[];
+    data.push(...items);
+  }
+
+  return {
+    page: n,
+    limit: limit,
+    total: total,
+    count: count,
+    remaining: total - count,
+    data: data,
+  };
 }
 
 export async function fetchAllPages<T>(
@@ -127,7 +177,7 @@ export async function fetchNumberOfPages(
   limit: number,
   signal?: AbortSignal,
 ) {
-  const url = endpoint instanceof URL ? endpoint : new URL(endpoint);
+  const url = new URL(endpoint);
   const response = await fetch(url, { signal });
   const paginated = await response.json();
   const parseResult = paginatedResponseSchema.safeParse(paginated);

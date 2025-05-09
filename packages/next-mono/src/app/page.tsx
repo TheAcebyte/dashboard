@@ -1,5 +1,5 @@
 "use client";
 
 export default function Page() {
-  return <p>Hello, World!</p>
+  return null;
 }

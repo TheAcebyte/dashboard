@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const routeRedirections = {
+  "/": "/database/students",
   "/attendance": "/attendance/students",
   "/database": "/database/students",
-};
+} as const;
 
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;

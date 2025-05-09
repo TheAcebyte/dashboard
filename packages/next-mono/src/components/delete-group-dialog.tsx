@@ -1,6 +1,6 @@
 "use client";
 
-import deleteGroup from "@/actions/group/delete";
+import deleteGroup from "@/actions/group/delete-group";
 import Button from "@/components/ui/button";
 import {
   Dialog,
@@ -11,7 +11,7 @@ import {
 import { PaginatedGroupRecord } from "@/db/queries/groups";
 import useFormAction from "@/hooks/use-form-action";
 import { cn } from "@/lib/utils";
-import { useTableRefetchStore } from "@/stores/table-refetch-store";
+import { useDataRefetchStore } from "@/stores/data-refetch-store";
 import { AlertTriangle, CircleAlert, Trash2, X } from "lucide-react";
 import { useContext, useEffect } from "react";
 import { z } from "zod";
@@ -22,8 +22,8 @@ interface Props {
 
 export default function DeleteGroupDialog({ record }: Props) {
   return (
-    <Dialog id={`delete-group-${record.groupId}`}>
-      <DialogTrigger className="flex cursor-pointer items-center gap-4 px-4 py-2 font-medium text-red-700 transition-colors hover:bg-gray-50 hover:text-red-500">
+    <Dialog id={`delete-group-${record.groupId}`} className="w-full">
+      <DialogTrigger className="flex w-full cursor-pointer items-center gap-4 bg-white px-4 py-2 font-medium text-red-700 transition-colors hover:bg-gray-50 hover:text-red-500">
         <Trash2 size={20} />
         Delete
       </DialogTrigger>
@@ -43,7 +43,7 @@ function DeleteGroupDialogContent({ record }: Props) {
   }
 
   const { close } = contextValue;
-  const { refetch } = useTableRefetchStore();
+  const { refetch } = useDataRefetchStore();
   const deleteThisGroup = deleteGroup.bind(null, record.groupId);
   const { handleSubmit, response } = useFormAction(
     deleteThisGroup,

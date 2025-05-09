@@ -1,7 +1,9 @@
 import { cst } from "@/constants";
 import { PaginatedGroupRecord } from "@/db/queries/groups";
-import { fetchAllPages } from "@/lib/paginate";
+import { PaginatedStudentRecord } from "@/db/queries/students";
+import { fetchAllPages, fetchPage } from "@/lib/paginate";
 
+const studentEndpoint = new URL("/api/students", cst.APP_URL);
 const groupEndpoint = new URL("/api/groups", cst.APP_URL);
 
 export async function fetchGroupOptions() {
@@ -20,4 +22,12 @@ export async function fetchPicture(
   const response = await fetch(pictureUrl);
   const blob = await response.blob();
   return new File([blob], options?.name ?? "unnamed", { type: options?.type });
+}
+
+export async function fetchStudentsFromGroup(group: string, n: number) {
+  const url = new URL(studentEndpoint);
+  url.searchParams.set("group", group.toString());
+  const response = await fetchPage<PaginatedStudentRecord>(url, 1, n + 1);
+
+  return { total: response.total, students: response.data };
 }

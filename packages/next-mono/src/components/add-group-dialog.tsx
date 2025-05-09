@@ -1,6 +1,6 @@
 "use client";
 
-import addGroup from "@/actions/group/add";
+import addGroup from "@/actions/group/add-group";
 import { groupSchema } from "@/actions/group/validation";
 import { buttonStyles } from "@/components/ui/button";
 import Button from "@/components/ui/button";
@@ -13,7 +13,7 @@ import {
 import { TextInput } from "@/components/ui/input";
 import useFormAction from "@/hooks/use-form-action";
 import { cn } from "@/lib/utils";
-import { useTableRefetchStore } from "@/stores/table-refetch-store";
+import { useDataRefetchStore } from "@/stores/data-refetch-store";
 import { CircleAlert, Plus, X } from "lucide-react";
 import { useContext, useEffect } from "react";
 
@@ -42,7 +42,7 @@ function AddGroupDialogContent() {
   }
 
   const { close } = contextValue;
-  const { refetch } = useTableRefetchStore();
+  const { refetch } = useDataRefetchStore();
   const { handleSubmit, fields, setters, response, errors, reset } =
     useFormAction(addGroup, groupSchema);
 

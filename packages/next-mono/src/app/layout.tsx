@@ -5,6 +5,7 @@ import { monaSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -18,13 +19,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn("bg-primary-bg antialiased", monaSans.className)}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <main className="flex w-full">
-            <Sidebar />
-            {children}
-          </main>
-          <ActionIcons />
-        </ThemeProvider>
+        <Suspense>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <main className="flex w-full">
+              <Sidebar />
+              {children}
+            </main>
+            <ActionIcons />
+          </ThemeProvider>
+        </Suspense>
       </body>
     </html>
   );

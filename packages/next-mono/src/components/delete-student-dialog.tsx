@@ -1,6 +1,6 @@
 "use client";
 
-import deleteStudent from "@/actions/student/delete";
+import deleteStudent from "@/actions/student/delete-student";
 import Button from "@/components/ui/button";
 import {
   Dialog,
@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { PaginatedStudentRecord } from "@/db/queries/students";
 import useFormAction from "@/hooks/use-form-action";
-import { useTableRefetchStore } from "@/stores/table-refetch-store";
+import { useDataRefetchStore } from "@/stores/data-refetch-store";
 import { AlertTriangle, CircleAlert, Trash2, X } from "lucide-react";
 import { useContext, useEffect } from "react";
 import { z } from "zod";
@@ -21,8 +21,8 @@ interface Props {
 
 export default function DeleteStudentDialog({ record }: Props) {
   return (
-    <Dialog id={`delete-student-${record.studentId}`}>
-      <DialogTrigger className="flex cursor-pointer items-center gap-4 px-4 py-2 font-medium text-red-700 transition-colors hover:bg-gray-50 hover:text-red-500">
+    <Dialog id={`delete-student-${record.studentId}`} className="w-full">
+      <DialogTrigger className="flex w-full cursor-pointer items-center gap-4 bg-white px-4 py-2 font-medium text-red-700 transition-colors hover:bg-gray-50 hover:text-red-500">
         <Trash2 size={20} />
         Delete
       </DialogTrigger>
@@ -42,7 +42,7 @@ function DeleteStudentDialogContent({ record }: Props) {
   }
 
   const { close } = contextValue;
-  const { refetch } = useTableRefetchStore();
+  const { refetch } = useDataRefetchStore();
   const deleteThisStudent = deleteStudent.bind(null, record.studentId);
   const { handleSubmit, response } = useFormAction(
     deleteThisStudent,

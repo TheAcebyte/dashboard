@@ -6,8 +6,8 @@ import {
 import { PaginatedGroupRecord } from "@/db/queries/groups";
 import { EllipsisVertical } from "lucide-react";
 
-import EditGroupDialog from "./edit-group-dialog";
 import DeleteGroupDialog from "./delete-group-dialog";
+import EditGroupDialog from "./edit-group-dialog";
 
 interface Props {
   record: PaginatedGroupRecord;

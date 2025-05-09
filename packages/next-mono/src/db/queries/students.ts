@@ -25,7 +25,7 @@ function buildStudentFilterCondition(
           filter.age,
         )
       : undefined,
-    filter.group ? like(groups.name, `${filter.group}%`) : undefined,
+    filter.group ? eq(groups.name, filter.group) : undefined,
   );
 }
 
@@ -69,6 +69,7 @@ export function findStudentsWithFilteredPagination(
       lastName: students.lastName,
       cne: students.cne,
       birthDate: students.birthDate,
+      groupId: groups.groupId,
       group: groups.name,
       pictureUrl: students.pictureUrl,
     })

@@ -39,7 +39,7 @@ export function Dialog({ id, className, children }: DialogProps) {
   };
 
   return (
-    <div className={cn("relative w-fit", className)}>
+    <div className={cn("relative h-full w-fit", className)}>
       <dialogContext.Provider value={contextValue}>
         {children}
       </dialogContext.Provider>

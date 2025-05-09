@@ -1,6 +1,6 @@
 "use client";
 
-import editStudent from "@/actions/student/edit";
+import editStudent from "@/actions/student/edit-student";
 import { studentSchema } from "@/actions/student/validation";
 import Button from "@/components/ui/button";
 import {
@@ -20,7 +20,7 @@ import { PaginatedStudentRecord } from "@/db/queries/students";
 import useFetch from "@/hooks/use-fetch";
 import useFormAction from "@/hooks/use-form-action";
 import { fetchGroupOptions, fetchPicture } from "@/lib/fetch";
-import { useTableRefetchStore } from "@/stores/table-refetch-store";
+import { useDataRefetchStore } from "@/stores/data-refetch-store";
 import { CircleAlert, Pencil, X } from "lucide-react";
 import { useContext, useEffect } from "react";
 
@@ -30,8 +30,8 @@ interface Props {
 
 export default function EditStudentDialog({ record }: Props) {
   return (
-    <Dialog id={`edit-student-${record.studentId}`}>
-      <DialogTrigger className="flex cursor-pointer items-center gap-4 px-4 py-2 font-medium text-zinc-900 transition-colors hover:bg-gray-50 hover:text-zinc-700">
+    <Dialog id={`edit-student-${record.studentId}`} className="w-full">
+      <DialogTrigger className="flex w-full cursor-pointer items-center gap-4 bg-white px-4 py-2 font-medium text-zinc-900 transition-colors hover:bg-gray-50 hover:text-zinc-700">
         <Pencil size={20} />
         Edit
       </DialogTrigger>
@@ -51,7 +51,7 @@ function EditStudentDialogContent({ record }: Props) {
   }
 
   const { close } = contextValue;
-  const { refetch } = useTableRefetchStore();
+  const { refetch } = useDataRefetchStore();
   const { data: groupOptions } = useFetch(fetchGroupOptions);
 
   const editThisStudent = editStudent.bind(null, record.studentId);
