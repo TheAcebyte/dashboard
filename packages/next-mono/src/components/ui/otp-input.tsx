@@ -1,5 +1,5 @@
 import { robotoMono } from "@/lib/fonts";
-import { cn, padRightArray } from "@/lib/utils";
+import { cn, padEndArray } from "@/lib/utils";
 import {
   type KeyboardEvent,
   type MouseEvent,
@@ -49,7 +49,7 @@ export function OTPInput({
 
   useEffect(() => {
     const splitValue = value.slice(0, slots).split("");
-    padRightArray(splitValue, "", slots);
+    padEndArray(splitValue, "", slots);
     setInput(splitValue);
   }, [value]);
 

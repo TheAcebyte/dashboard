@@ -10,6 +10,10 @@ function buildGroupFilterCondition(
   return filter.name ? like(groups.name, `${filter.name}%`) : undefined;
 }
 
+export function findAllGroups() {
+  return db.select().from(groups);
+}
+
 export function findGroupById(id: string) {
   return db.query.groups.findFirst({ where: eq(groups.groupId, id) });
 }

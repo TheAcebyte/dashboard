@@ -6,6 +6,8 @@ export default function useFetch<T>(callback: FetchCallback<T>) {
   const [data, setData] = useState<T>();
   const [error, setError] = useState<Error | null>();
   const [isLoading, setIsLoading] = useState(true);
+  const [volatile, setVolatile] = useState({});
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -20,7 +22,8 @@ export default function useFetch<T>(callback: FetchCallback<T>) {
     };
 
     fetchData();
-  }, [callback]);
+  }, [callback, volatile]);
 
-  return { data, error, isLoading };
+  const refetch = () => setVolatile({});
+  return { data, error, isLoading, refetch };
 }

@@ -15,6 +15,14 @@ export function getAge(birthday: Date) {
   return Math.abs(ageToDate.getUTCFullYear() - new Date(0).getUTCFullYear());
 }
 
+export function formatEuDate(date: Date) {
+  const day = date.getDate().toString().padStart(2, "0");
+  // JavaScript just had to mess it up at 1-indexed months
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const year = date.getFullYear().toString().padStart(4, "0");
+  return `${day}${month}${year}`;
+}
+
 export function iterator(n: number) {
   return [...Array(n)];
 }
@@ -28,7 +36,7 @@ export function range(start: number, end: number, step: number = 1) {
   return array;
 }
 
-export function padRightArray<T>(array: T[], value: T, length: number) {
+export function padEndArray<T>(array: T[], value: T, length: number) {
   for (let i = array.length; i < length; i++) {
     array.push(value);
   }

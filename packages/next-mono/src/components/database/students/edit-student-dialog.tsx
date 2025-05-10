@@ -20,6 +20,7 @@ import { PaginatedStudentRecord } from "@/db/queries/students";
 import useFetch from "@/hooks/use-fetch";
 import useFormAction from "@/hooks/use-form-action";
 import { fetchGroupOptions, fetchPicture } from "@/lib/fetch";
+import { formatEuDate } from "@/lib/utils";
 import { useDataRefetchStore } from "@/stores/data-refetch-store";
 import { CircleAlert, Pencil, X } from "lucide-react";
 import { useContext, useEffect } from "react";
@@ -56,19 +57,18 @@ function EditStudentDialogContent({ record }: Props) {
 
   const editThisStudent = editStudent.bind(null, record.studentId);
   const date = new Date(record.birthDate);
-  const day = date.getDate();
-  // JavaScript just had to mess it up at 0-indexed months
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-  const dateField = `${day}${month}${year}`;
-  const { handleSubmit, fields, setters, response, errors, reset } =
-    useFormAction(editThisStudent, studentSchema, {
+  const dateField = formatEuDate(date);
+  const { handleSubmit, fields, setters, response, errors } = useFormAction(
+    editThisStudent,
+    studentSchema,
+    {
       firstName: record.firstName,
       lastName: record.lastName,
       cne: record.cne,
       birthDate: dateField,
       groupId: record.groupId,
-    });
+    },
+  );
 
   useEffect(() => {
     fetchPicture(record.pictureUrl).then((file) => setters.file(file));

@@ -1,4 +1,4 @@
-export type VoidCallback<T> = (args: T) => void;
+export type VoidCallback<T = unknown> = (args: T) => void;
 
 export type Timeout = ReturnType<typeof setTimeout>;
 

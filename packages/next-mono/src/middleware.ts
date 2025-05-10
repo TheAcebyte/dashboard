@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const routeRedirections = {
   "/": "/database/students",
-  "/attendance": "/attendance/students",
+  "/attendance": "/attendance/active",
   "/database": "/database/students",
 } as const;
 

@@ -24,6 +24,7 @@ export const selectContext = createContext<string | null>(null);
 interface SelectProps<T extends SelectOption[]> {
   options: T;
   offsetX?: number;
+  offsetY?: number;
   value: T[number]["id"];
   setValue: (value: T[number]["id"]) => void;
   className?: string;
@@ -33,6 +34,7 @@ interface SelectProps<T extends SelectOption[]> {
 export default function Select<T extends SelectOption[]>({
   options,
   offsetX,
+  offsetY,
   value,
   setValue,
   className,
@@ -64,7 +66,7 @@ export default function Select<T extends SelectOption[]>({
       <DropdownContent
         align="right"
         offsetX={offsetX}
-        offsetY={8}
+        offsetY={offsetY ?? 8}
         className="rounded-xl border border-gray-300 bg-white"
       >
         <SelectDropdownContent options={options} select={select} />

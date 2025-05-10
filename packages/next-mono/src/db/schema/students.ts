@@ -7,13 +7,15 @@ export const students = sqliteTable("students", {
   lastName: text("last_name").notNull(),
   cne: text("cne").notNull().unique(),
   birthDate: integer("birth_date").notNull(),
-  groupId: text("group_id").notNull().references(() => groups.groupId),
+  groupId: text("group_id")
+    .notNull()
+    .references(() => groups.groupId),
   pictureUrl: text("picture_url").notNull(),
 });
 
 export const studentPictures = sqliteTable("student_pictures", {
   studentId: text("student_id")
     .primaryKey()
-    .references(() => students.studentId),
+    .references(() => students.studentId, { onDelete: "cascade" }),
   picture: blob("picture", { mode: "buffer" }).notNull(),
 });
