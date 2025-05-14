@@ -10,9 +10,9 @@ import {
   dialogContext,
 } from "@/components/ui/dialog";
 import { TextInput } from "@/components/ui/input";
-import { PaginatedGroupRecord } from "@/db/queries/groups";
+import type { PaginatedGroupRecord } from "@/db/queries/groups";
 import useFormAction from "@/hooks/use-form-action";
-import { useDataRefetchStore } from "@/stores/data-refetch-store";
+import { useTableRefetchStore } from "@/stores/refetch-store";
 import { CircleAlert, Pencil, X } from "lucide-react";
 import { useContext, useEffect } from "react";
 
@@ -43,10 +43,9 @@ function EditGroupDialogContent({ record }: Props) {
   }
 
   const { close } = contextValue;
-  const { refetch } = useDataRefetchStore();
-
+  const { refetch } = useTableRefetchStore();
   const editThisGroup = editGroup.bind(null, record.groupId);
-  const { handleSubmit, fields, setters, response, errors, reset } =
+  const { handleSubmit, fields, setters, response, errors } =
     useFormAction(editThisGroup, groupSchema, { name: record.name });
 
   useEffect(() => {

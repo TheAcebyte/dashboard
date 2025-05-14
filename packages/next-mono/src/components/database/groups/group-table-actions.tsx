@@ -5,7 +5,7 @@ import {
   DropdownContent,
   DropdownTrigger,
 } from "@/components/ui/dropdown";
-import { PaginatedGroupRecord } from "@/db/queries/groups";
+import type { PaginatedGroupRecord } from "@/db/queries/groups";
 import { EllipsisVertical } from "lucide-react";
 
 interface Props {

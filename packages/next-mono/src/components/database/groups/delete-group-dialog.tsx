@@ -8,11 +8,11 @@ import {
   DialogTrigger,
   dialogContext,
 } from "@/components/ui/dialog";
-import { PaginatedGroupRecord } from "@/db/queries/groups";
+import type { PaginatedGroupRecord } from "@/db/queries/groups";
 import useFormAction from "@/hooks/use-form-action";
 import { cn } from "@/lib/utils";
-import { useDataRefetchStore } from "@/stores/data-refetch-store";
-import { AlertTriangle, CircleAlert, Trash2, X } from "lucide-react";
+import { useTableRefetchStore } from "@/stores/refetch-store";
+import { AlertTriangle, CircleAlert, Trash2 } from "lucide-react";
 import { useContext, useEffect } from "react";
 import { z } from "zod";
 
@@ -43,7 +43,7 @@ function DeleteGroupDialogContent({ record }: Props) {
   }
 
   const { close } = contextValue;
-  const { refetch } = useDataRefetchStore();
+  const { refetch } = useTableRefetchStore();
   const deleteThisGroup = deleteGroup.bind(null, record.groupId);
   const { handleSubmit, response } = useFormAction(
     deleteThisGroup,

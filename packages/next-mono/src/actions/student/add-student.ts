@@ -44,6 +44,7 @@ export default async function addStudent(
     groupId: payload.groupId,
     pictureUrl: pictureUrl.toString(),
   });
+  
   await db.insert(studentPictures).values({
     studentId: studentId,
     picture: picture,

@@ -20,7 +20,7 @@ export const sessions = sqliteTable(
   (table) => [
     check(
       "status_check",
-      sql`${table.status} = 'active' OR ${table.status} = 'inactive'`,
+      sql`${table.status} = 'active' OR ${table.status} = 'ended'`,
     ),
   ],
 );

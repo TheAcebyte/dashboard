@@ -4,7 +4,13 @@ import { OTPInput, OTPInputSlot } from "@/components/ui/otp-input";
 import Select, { type SelectOption } from "@/components/ui/select";
 import { cn, range } from "@/lib/utils";
 import { Upload, User } from "lucide-react";
-import { type ChangeEvent, useEffect, useRef, useState } from "react";
+import {
+  type ChangeEvent,
+  KeyboardEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 interface TextInputProps {
   id: string;
@@ -219,6 +225,131 @@ export function ImageInput({ value, setValue, error }: ImageInputProps) {
           ref={inputRef}
           onChange={handleChange}
         />
+      </div>
+    </div>
+  );
+}
+
+const restrictedNumberInputKeys = ["e", "E", "+", "-"];
+
+interface OptionalUnitInputProps {
+  id: string;
+  unit: string;
+  label: string;
+  placeholder?: string;
+  value: number | null;
+  setValue: (value: number | null) => void;
+  error?: string;
+  className?: string;
+}
+
+export function OptionalUnitInput({
+  id,
+  unit,
+  label,
+  placeholder,
+  value,
+  setValue,
+  error,
+  className,
+}: OptionalUnitInputProps) {
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (restrictedNumberInputKeys.includes(e.key)) {
+      e.preventDefault();
+    }
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (setValue) {
+      const numericValue =
+        e.target.value.length == 0 ? null : parseFloat(e.target.value);
+      setValue(numericValue);
+    }
+  };
+
+  return (
+    <div className={cn("flex w-full flex-col gap-2", className)}>
+      <label htmlFor={id} className="font-medium text-zinc-600">
+        {label}
+      </label>
+      <div
+        className={cn(
+          "group flex items-center gap-4 rounded-full border border-gray-300 focus-within:border-gray-500",
+          error && "border-red-700",
+        )}
+      >
+        <input
+          id={id}
+          type="number"
+          placeholder={placeholder}
+          className="flex-1 px-4 py-2 text-zinc-900 outline-none placeholder:text-gray-400"
+          value={value ?? ""}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+        />
+        <p className="border-l border-gray-300 px-4 font-medium text-zinc-900 group-focus-within:border-gray-500">
+          {unit}
+        </p>
+      </div>
+      {error && <p className="text-sm font-medium text-red-700">{error}</p>}
+    </div>
+  );
+}
+
+interface MessageInputProps {
+  id: string;
+  rows?: number;
+  characterLimit?: number;
+  label: string;
+  placeholder?: string;
+  value: string;
+  setValue: (value: string) => void;
+  error?: string;
+  className?: string;
+}
+
+export function MessageInput({
+  id,
+  rows = 5,
+  characterLimit = 100,
+  label,
+  placeholder,
+  value,
+  setValue,
+  error,
+  className,
+}: MessageInputProps) {
+  const [characterCount, setCharacterCount] = useState(0);
+  useEffect(() => {
+    setCharacterCount(value.length);
+  }, [value]);
+
+  return (
+    <div className={cn("flex w-full flex-col gap-2", className)}>
+      <label htmlFor={id} className="font-medium text-zinc-600">
+        {label}
+      </label>
+      <textarea
+        id={id}
+        rows={rows}
+        placeholder={placeholder}
+        className={cn(
+          "resize-none rounded-2xl border border-gray-300 px-4 py-2 text-zinc-900 outline-none placeholder:text-gray-400 focus-visible:border-gray-500",
+          error && "border-red-700",
+        )}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+      <div className="flex flex-row-reverse justify-between">
+        <p
+          className={cn(
+            "text-sm font-medium",
+            characterCount <= characterLimit ? "text-gray-500" : "text-red-700",
+          )}
+        >
+          {characterCount}/{characterLimit}
+        </p>
+        {error && <p className="text-sm font-medium text-red-700">{error}</p>}
       </div>
     </div>
   );

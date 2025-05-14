@@ -17,7 +17,7 @@ export default function useValidateParamState<T extends z.ZodType>(
     const newParams = new URLSearchParams(params);
     newParams.set(key, value);
     const url = `${pathname}?${newParams.toString()}`;
-    router.replace(url);
+    router.replace(url, { scroll: false });
     setValue(value);
   };
 

@@ -21,7 +21,7 @@ import useFetch from "@/hooks/use-fetch";
 import useFormAction from "@/hooks/use-form-action";
 import { fetchGroupOptions } from "@/lib/fetch";
 import { cn } from "@/lib/utils";
-import { useDataRefetchStore } from "@/stores/data-refetch-store";
+import { useTableRefetchStore } from "@/stores/refetch-store";
 import { CircleAlert, Plus, UsersRound, X } from "lucide-react";
 import Link from "next/link";
 import { useContext, useEffect } from "react";
@@ -51,7 +51,7 @@ function AddStudentDialogContent() {
   }
 
   const { close } = contextValue;
-  const { refetch } = useDataRefetchStore();
+  const { refetch } = useTableRefetchStore();
   const { data: groupOptions } = useFetch(fetchGroupOptions);
   const { handleSubmit, fields, setters, response, errors, reset } =
     useFormAction(addStudent, studentSchema);

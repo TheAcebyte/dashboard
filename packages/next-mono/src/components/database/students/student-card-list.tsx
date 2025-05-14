@@ -7,6 +7,7 @@ import type { StudentFilterField } from "@/constants/filters";
 import type { PaginatedStudentRecord } from "@/db/queries/students";
 import useInfinitePagination from "@/hooks/use-infinite-pagination";
 import { fetchGroupOptions, fetchStudentsFromGroup } from "@/lib/fetch";
+import { useTableRefetchStore } from "@/stores/refetch-store";
 import useStudentSearchStore from "@/stores/student-search-store";
 import { useEffect, useRef, useState } from "react";
 
@@ -26,10 +27,11 @@ export default function StudentCardList() {
     setQueryParams({ [searchField]: searchQuery });
   }, [searchField, searchQuery]);
 
+  const { refetchCounter } = useTableRefetchStore();
   const paginate = useInfinitePagination<PaginatedStudentRecord>(
     studentEndpoint,
     10,
-    queryParams,
+    { queryParams, refetchCounter },
   );
   const spinnerRef = useRef<HTMLDivElement>(null);
   const countDependency = paginate?.response.count;

@@ -11,6 +11,7 @@ import { GroupFilterField } from "@/constants/filters";
 import { PaginatedGroupRecord } from "@/db/queries/groups";
 import usePagination from "@/hooks/use-pagination";
 import useGroupSearchStore from "@/stores/group-search-store";
+import { useTableRefetchStore } from "@/stores/refetch-store";
 import { useEffect, useState } from "react";
 
 const groupEndpoint = new URL("/api/groups", cst.APP_URL);
@@ -23,11 +24,11 @@ export default function GroupTable() {
     setQueryParams({ [searchField]: searchQuery });
   }, [searchField, searchQuery]);
 
-  const paginate = usePagination<PaginatedGroupRecord>(
-    groupEndpoint,
-    4,
+  const { refetchCounter } = useTableRefetchStore();
+  const paginate = usePagination<PaginatedGroupRecord>(groupEndpoint, 4, {
     queryParams,
-  );
+    refetchCounter,
+  });
 
   if (!paginate) return null;
   const { response, gotoPage } = paginate;

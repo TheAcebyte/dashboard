@@ -3,7 +3,7 @@ import { z } from "zod";
 const defaultPage = 1;
 const defaultLimit = 10;
 
-type PaginatedFetchCallback<T> = (
+type PaginatedQueryCallback<T> = (
   limit: number,
   offset: number,
 ) => Promise<T[]>;
@@ -38,7 +38,7 @@ type PaginatedResult<T> =
 
 export async function paginate<T>(
   endpoint: string | URL,
-  paginatedFetch: PaginatedFetchCallback<T>,
+  paginatedQuery: PaginatedQueryCallback<T>,
   total: number,
 ): Promise<PaginatedResult<T>> {
   const url = new URL(endpoint);
@@ -53,7 +53,7 @@ export async function paginate<T>(
     return { success: false };
   }
 
-  const data = await paginatedFetch(page, limit);
+  const data = await paginatedQuery(page, limit);
   const count = data.length;
   const previousUrl = new URL(endpoint);
   const nextUrl = new URL(endpoint);

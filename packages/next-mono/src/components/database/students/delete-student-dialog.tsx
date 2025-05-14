@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { PaginatedStudentRecord } from "@/db/queries/students";
 import useFormAction from "@/hooks/use-form-action";
-import { useDataRefetchStore } from "@/stores/data-refetch-store";
+import { useTableRefetchStore } from "@/stores/refetch-store";
 import { AlertTriangle, CircleAlert, Trash2, X } from "lucide-react";
 import { useContext, useEffect } from "react";
 import { z } from "zod";
@@ -42,7 +42,7 @@ function DeleteStudentDialogContent({ record }: Props) {
   }
 
   const { close } = contextValue;
-  const { refetch } = useDataRefetchStore();
+  const { refetch } = useTableRefetchStore();
   const deleteThisStudent = deleteStudent.bind(null, record.studentId);
   const { handleSubmit, response } = useFormAction(
     deleteThisStudent,

@@ -2,17 +2,24 @@ import { useEffect, useState } from "react";
 
 type FetchCallback<T> = () => Promise<T>;
 
-export default function useFetch<T>(callback: FetchCallback<T>) {
+interface UseFetchOptions {
+  refetchCounter?: number;
+}
+
+export default function useFetch<T>(
+  callback: FetchCallback<T>,
+  options?: UseFetchOptions,
+) {
   const [data, setData] = useState<T>();
-  const [error, setError] = useState<Error | null>();
+  const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [volatile, setVolatile] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await callback();
         setData(data);
+        setError(null);
       } catch (e) {
         const error = e instanceof Error ? e : new Error(`${e}`);
         setError(error);
@@ -22,8 +29,7 @@ export default function useFetch<T>(callback: FetchCallback<T>) {
     };
 
     fetchData();
-  }, [callback, volatile]);
+  }, [callback, options?.refetchCounter]);
 
-  const refetch = () => setVolatile({});
-  return { data, error, isLoading, refetch };
+  return { data, error, isLoading };
 }

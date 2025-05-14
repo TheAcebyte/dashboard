@@ -1,3 +1,4 @@
+import ActiveSessionViewer from "@/components/attendance/active-session-viewer";
 import AttendanceTabPanel from "@/components/attendance/attendance-tab-panel";
 import { buttonStyles } from "@/components/ui/button";
 import { findAllGroups } from "@/db/queries/groups";
@@ -12,12 +13,12 @@ export default async function Page() {
   return (
     <div className="mt-16 flex flex-col gap-8">
       <AttendanceTabPanel selected="active" groups={groups} />
-      {noGroupsFound ? <NoGroupState /> : null}
+      {noGroupsFound ? <NoGroupState /> : <ActiveSessionViewer />}
     </div>
   );
 }
 
-export function NoGroupState() {
+function NoGroupState() {
   return (
     <div className="mx-auto mt-32 flex w-[400px] flex-col items-center">
       <div className="flex aspect-square items-center rounded-full border border-gray-300 bg-gray-50 px-6 text-zinc-900">

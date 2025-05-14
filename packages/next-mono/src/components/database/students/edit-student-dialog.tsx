@@ -19,9 +19,9 @@ import {
 import { PaginatedStudentRecord } from "@/db/queries/students";
 import useFetch from "@/hooks/use-fetch";
 import useFormAction from "@/hooks/use-form-action";
+import { formatDateToddMMyyyy } from "@/lib/date";
 import { fetchGroupOptions, fetchPicture } from "@/lib/fetch";
-import { formatEuDate } from "@/lib/utils";
-import { useDataRefetchStore } from "@/stores/data-refetch-store";
+import { useTableRefetchStore } from "@/stores/refetch-store";
 import { CircleAlert, Pencil, X } from "lucide-react";
 import { useContext, useEffect } from "react";
 
@@ -52,12 +52,12 @@ function EditStudentDialogContent({ record }: Props) {
   }
 
   const { close } = contextValue;
-  const { refetch } = useDataRefetchStore();
+  const { refetch } = useTableRefetchStore();
   const { data: groupOptions } = useFetch(fetchGroupOptions);
 
   const editThisStudent = editStudent.bind(null, record.studentId);
   const date = new Date(record.birthDate);
-  const dateField = formatEuDate(date);
+  const dateField = formatDateToddMMyyyy(date, "");
   const { handleSubmit, fields, setters, response, errors } = useFormAction(
     editThisStudent,
     studentSchema,

@@ -48,6 +48,7 @@ export default async function editStudent(
       groupId: payload.groupId,
     })
     .where(eq(students.studentId, studentId));
+    
   await db
     .update(studentPictures)
     .set({

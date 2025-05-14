@@ -15,12 +15,28 @@ export function getAge(birthday: Date) {
   return Math.abs(ageToDate.getUTCFullYear() - new Date(0).getUTCFullYear());
 }
 
-export function formatEuDate(date: Date) {
-  const day = date.getDate().toString().padStart(2, "0");
-  // JavaScript just had to mess it up at 1-indexed months
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const year = date.getFullYear().toString().padStart(4, "0");
-  return `${day}${month}${year}`;
+export function getOrdinalSuffix(ordinal: number) {
+  switch (ordinal) {
+    case 1:
+      return "st";
+
+    case 2:
+      return "nd";
+
+    case 3:
+      return "rd";
+
+    default:
+      return "th";
+  }
+}
+
+export function onlyContainsCharacter(string: string, target: string) {
+  for (const character of string) {
+    if (character != target) return false;
+  }
+
+  return true;
 }
 
 export function iterator(n: number) {
@@ -42,4 +58,18 @@ export function padEndArray<T>(array: T[], value: T, length: number) {
   }
 
   return array;
+}
+
+export function mapRange(
+  value: number,
+  inMin: number,
+  inMax: number,
+  outMin: number,
+  outMax: number,
+) {
+  return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+}
+
+export function capitalize(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }

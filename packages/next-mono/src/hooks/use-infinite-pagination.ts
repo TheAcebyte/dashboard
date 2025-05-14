@@ -3,8 +3,12 @@ import {
   fetchNPages,
   fetchNumberOfPages,
 } from "@/lib/paginate";
-import { useDataRefetchStore } from "@/stores/data-refetch-store";
 import { useEffect, useState } from "react";
+
+interface UseInfinitePaginationOptions {
+  queryParams?: Record<string, string>;
+  refetchCounter?: number;
+}
 
 /**
  * This hook is shamelessly unoptimized. Instead of fetching data batch-by-batch,
@@ -13,16 +17,15 @@ import { useEffect, useState } from "react";
 export default function useInfinitePagination<T>(
   endpoint: string | URL,
   limit: number,
-  parameters?: Record<string, string>,
+  options?: UseInfinitePaginationOptions,
 ) {
   const [response, setResponse] = useState<InfinitePaginatedResponse<T>>();
   const [page, setPage] = useState(1);
-  const { volatile, refetch } = useDataRefetchStore();
 
   useEffect(() => {
     const url = new URL(endpoint);
-    for (const parameter in parameters) {
-      url.searchParams.set(parameter, parameters[parameter]);
+    for (const parameter in options?.queryParams) {
+      url.searchParams.set(parameter, options?.queryParams[parameter]);
     }
 
     const controller = new AbortController();
@@ -54,11 +57,11 @@ export default function useInfinitePagination<T>(
 
     fetchResponse().catch((error) => console.log(error));
     return () => controller.abort("Request aborted.");
-  }, [page, parameters, volatile]);
+  }, [page, options?.queryParams, options?.refetchCounter]);
 
   useEffect(() => {
     setPage(1);
-  }, [parameters]);
+  }, [options?.queryParams]);
 
   const loadMore = () => {
     setPage(page + 1);
@@ -74,6 +77,5 @@ export default function useInfinitePagination<T>(
       data: response.data,
     },
     loadMore: loadMore,
-    refetch: refetch,
   };
 }

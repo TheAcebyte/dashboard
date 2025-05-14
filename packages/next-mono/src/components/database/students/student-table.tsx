@@ -13,6 +13,7 @@ import type { PaginatedStudentRecord } from "@/db/queries/students";
 import usePagination from "@/hooks/use-pagination";
 import { getAge } from "@/lib/utils";
 import useStudentSearchStore from "@/stores/student-search-store";
+import { useTableRefetchStore } from "@/stores/refetch-store";
 import { useEffect, useState } from "react";
 
 const studentEndpoint = new URL("/api/students", cst.APP_URL);
@@ -24,12 +25,12 @@ export default function StudentTable() {
   useEffect(() => {
     setQueryParams({ [searchField]: searchQuery });
   }, [searchField, searchQuery]);
+  const { refetchCounter } = useTableRefetchStore();
 
-  const paginate = usePagination<PaginatedStudentRecord>(
-    studentEndpoint,
-    4,
+  const paginate = usePagination<PaginatedStudentRecord>(studentEndpoint, 4, {
     queryParams,
-  );
+    refetchCounter,
+  });
   if (!paginate) return null;
   const { response, gotoPage } = paginate;
   const { page, limit, count, total, data } = response;

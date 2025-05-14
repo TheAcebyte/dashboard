@@ -14,3 +14,12 @@ export const groupFilterOptions = [
 ] as const satisfies SelectOption[];
 
 export type GroupFilterField = (typeof groupFilterOptions)[number]["id"];
+
+export const sessionStudentFilterOptions = [
+  { id: "name", label: "Name" },
+  { id: "status", label: "Status" },
+  { id: "arrival_time", label: "Arrival Time" },
+] as const satisfies SelectOption[];
+
+export type SessionStudentFilterField =
+  (typeof sessionStudentFilterOptions)[number]["id"];

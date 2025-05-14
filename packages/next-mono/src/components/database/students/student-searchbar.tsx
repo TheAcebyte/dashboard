@@ -2,16 +2,11 @@
 
 import Select, { selectContext } from "@/components/ui/select";
 import { studentFilterOptions } from "@/constants/filters";
-import { cn } from "@/lib/utils";
 import useStudentSearchStore from "@/stores/student-search-store";
 import { Search, X } from "lucide-react";
 import { type ChangeEvent, useContext } from "react";
 
-interface Props {
-  className?: string;
-}
-
-export default function StudentSearchbar({ className }: Props) {
+export default function StudentSearchbar() {
   const { searchField, setSearchField, searchQuery, setSearchQuery } =
     useStudentSearchStore();
   const clearSearchQuery = () => setSearchQuery("");
@@ -19,12 +14,7 @@ export default function StudentSearchbar({ className }: Props) {
     setSearchQuery(e.target.value);
 
   return (
-    <div
-      className={cn(
-        "flex items-center gap-4 rounded-full border border-gray-300 px-4",
-        className,
-      )}
-    >
+    <div className="flex flex-1 items-center gap-4 rounded-full border border-gray-300 px-4">
       {searchQuery == "" ? (
         <Search className="text-zinc-900" />
       ) : (

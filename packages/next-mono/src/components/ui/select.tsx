@@ -126,7 +126,7 @@ function SelectDropdownContent({ options, select }: SelectDropdownContent) {
         return (
           <li
             key={index}
-            className="cursor-pointer px-4 py-2 text-zinc-900 transition-colors hover:bg-gray-50 hover:text-zinc-700"
+            className="cursor-pointer px-4 py-2 text-zinc-900 transition-colors hover:bg-gray-50"
             onClick={handleClick}
           >
             {option.label}

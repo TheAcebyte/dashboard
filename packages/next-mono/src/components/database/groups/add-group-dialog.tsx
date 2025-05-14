@@ -13,7 +13,7 @@ import {
 import { TextInput } from "@/components/ui/input";
 import useFormAction from "@/hooks/use-form-action";
 import { cn } from "@/lib/utils";
-import { useDataRefetchStore } from "@/stores/data-refetch-store";
+import { useTableRefetchStore } from "@/stores/refetch-store";
 import { CircleAlert, Plus, X } from "lucide-react";
 import { useContext, useEffect } from "react";
 
@@ -42,7 +42,7 @@ function AddGroupDialogContent() {
   }
 
   const { close } = contextValue;
-  const { refetch } = useDataRefetchStore();
+  const { refetch } = useTableRefetchStore();
   const { handleSubmit, fields, setters, response, errors, reset } =
     useFormAction(addGroup, groupSchema);
 
