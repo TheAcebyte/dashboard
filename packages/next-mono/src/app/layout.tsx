@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={cn("bg-primary-bg antialiased", monaSans.className)}>
         <Suspense>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             <main className="flex w-full">
               <Sidebar />
               {children}

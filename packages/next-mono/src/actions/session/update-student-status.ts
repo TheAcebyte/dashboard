@@ -4,9 +4,8 @@ import { db } from "@/db";
 import {
   findSessionById,
   findStudentWithinSessionById,
-  getSession,
 } from "@/db/queries/sessions";
-import { sessionStudents, sessions } from "@/db/schema/sessions";
+import { sessionStudents } from "@/db/schema/sessions";
 import { and, eq } from "drizzle-orm";
 
 export default async function updateStudentStatus(
@@ -24,7 +23,7 @@ export default async function updateStudentStatus(
     };
   }
 
-  const session = await getSession(sessionId);
+  const session = await findSessionById(sessionId);
   const arrivedAt = Date.now();
   const status =
     session.lateThreshold &&

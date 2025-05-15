@@ -26,7 +26,6 @@ export default function ActiveSessionViewer() {
   const { data } = useFetch(fetchActiveSession, {
     refetchCounter,
   });
-
   usePolling(refetch, pollingDelay);
 
   if (!data) return null;
@@ -54,7 +53,7 @@ function NoActiveSessionState({ group }: Props) {
   const sessionHistoryRoute = "/attendance/history?" + searchParams.toString();
 
   return (
-    <div className="mx-auto mt-32 flex flex-col items-center">
+    <div className="flex flex-col justify-center flex-1 items-center">
       <div className="flex aspect-square items-center rounded-full border border-gray-300 bg-gray-50 px-6 text-zinc-900">
         <Pencil size={24} />
       </div>

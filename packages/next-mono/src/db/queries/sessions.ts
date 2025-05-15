@@ -1,9 +1,18 @@
-import type { SessionStudentFilterField } from "@/constants/filters";
+import type {
+  SessionFilterField,
+  SessionStudentFilterField,
+} from "@/constants/filters";
 import { db } from "@/db";
 import { groups } from "@/db/schema/groups";
 import { sessionStudents, sessions } from "@/db/schema/sessions";
 import { students } from "@/db/schema/students";
 import { and, count, eq, like, or, sql } from "drizzle-orm";
+
+function buildSessionFilterCondition(
+  filter: Partial<Record<SessionFilterField, string>>,
+) {
+  return and(filter.group ? eq(groups.name, filter.group) : undefined);
+}
 
 function buildSessionStudentFilterCondition(
   filter: Partial<Record<SessionStudentFilterField, string>>,
@@ -25,18 +34,21 @@ function buildSessionStudentFilterCondition(
   );
 }
 
-export async function getSession(sessionId: string) {
+export async function findSessionById(sessionId: string) {
   const [session] = await db
     .select({
       sessionId: sessions.sessionId,
+      groupId: groups.groupId,
+      groupName: groups.name,
       status: sessions.status,
-      name: sessions.name,
+      sessionName: sessions.name,
       startedAt: sessions.startedAt,
       finishedAt: sessions.finishedAt,
       plannedDuration: sessions.plannedDuration,
       lateThreshold: sessions.lateThreshold,
     })
     .from(sessions)
+    .innerJoin(groups, eq(sessions.groupId, groups.groupId))
     .where(eq(sessions.sessionId, sessionId));
 
   const [stats] = await db
@@ -62,12 +74,6 @@ export async function getSession(sessionId: string) {
     lateStudentsCount: stats.lateStudentsCount ?? 0,
     excusedStudentsCount: stats.excusedStudentsCount ?? 0,
   };
-}
-
-export function findSessionById(sessionId: string) {
-  return db.query.sessions.findFirst({
-    where: eq(sessions.sessionId, sessionId),
-  });
 }
 
 export async function findStudentWithinSessionById(
@@ -100,7 +106,7 @@ export async function findActiveSessionByGroupId(groupId: string) {
     return { found: false as const };
   }
 
-  const session = await getSession(activeSession.sessionId);
+  const session = await findSessionById(activeSession.sessionId);
   return {
     found: true as const,
     session: session,
@@ -125,11 +131,49 @@ export async function findActiveSessionByStudentId(studentId: string) {
     return { found: false as const };
   }
 
-  const session = await getSession(activeSession.sessionId);
+  const session = await findSessionById(activeSession.sessionId);
   return {
     found: true as const,
     session: session,
   };
+}
+
+export async function findSessionsWithPagination(page: number, limit: number) {
+  const offset = (page - 1) * limit;
+  const sessionIdList = await db
+    .select({ sessionId: sessions.sessionId })
+    .from(sessions)
+    .limit(limit)
+    .offset(offset);
+
+  const sessionList = await Promise.all(
+    sessionIdList.map(
+      async ({ sessionId }) => await findSessionById(sessionId),
+    ),
+  );
+  return sessionList;
+}
+
+export async function findSessionsWithFilteredPagination(
+  filter: Partial<Record<SessionFilterField, string>>,
+  page: number,
+  limit: number,
+) {
+  const offset = (page - 1) * limit;
+  const sessionIdList = await db
+    .select({ sessionId: sessions.sessionId })
+    .from(sessions)
+    .innerJoin(groups, eq(groups.groupId, sessions.groupId))
+    .where(buildSessionFilterCondition(filter))
+    .limit(limit)
+    .offset(offset);
+
+  const sessionList = await Promise.all(
+    sessionIdList.map(
+      async ({ sessionId }) => await findSessionById(sessionId),
+    ),
+  );
+  return sessionList;
 }
 
 export function findSessionStudentsWithPagination(
@@ -194,6 +238,25 @@ export function findSessionStudentsWithFilteredPagination(
     .limit(limit);
 }
 
+export async function getSessionCount(sessionId: string) {
+  const [{ count: totalCount }] = await db
+    .select({ count: count() })
+    .from(sessions)
+    .where(eq(sessions.sessionId, sessionId));
+  return totalCount;
+}
+
+export async function getSessionCountWithFilter(
+  filter: Partial<Record<SessionFilterField, string>>,
+) {
+  const [{ count: totalCount }] = await db
+    .select({ count: count() })
+    .from(sessions)
+    .innerJoin(groups, eq(groups.groupId, sessions.groupId))
+    .where(buildSessionFilterCondition(filter));
+  return totalCount;
+}
+
 export async function getSessionStudentCount(sessionId: string) {
   const [{ count: totalCount }] = await db
     .select({ count: count() })
@@ -219,7 +282,7 @@ export async function getSessionStudentCountWithFilter(
   return totalCount;
 }
 
-export type Session = Awaited<ReturnType<typeof getSession>>;
+export type Session = Awaited<ReturnType<typeof findSessionById>>;
 
 export type ActiveSessionResponse = Awaited<
   ReturnType<typeof findActiveSessionByGroupId>
@@ -227,4 +290,8 @@ export type ActiveSessionResponse = Awaited<
 
 export type PaginatedSessionStudentRecord = Awaited<
   ReturnType<typeof findSessionStudentsWithPagination>
+>[number];
+
+export type PaginatedSessionRecord = Awaited<
+  ReturnType<typeof findSessionsWithPagination>
 >[number];

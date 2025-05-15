@@ -15,6 +15,12 @@ export const groupFilterOptions = [
 
 export type GroupFilterField = (typeof groupFilterOptions)[number]["id"];
 
+export const sessionFilterOptions = [
+  { id: "group", label: "Group" }
+] as const satisfies SelectOption[]
+
+export type SessionFilterField = (typeof sessionFilterOptions)[number]["id"]
+
 export const sessionStudentFilterOptions = [
   { id: "name", label: "Name" },
   { id: "status", label: "Status" },
