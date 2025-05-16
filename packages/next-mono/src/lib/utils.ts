@@ -1,3 +1,4 @@
+import type { Session } from "@/db/queries/sessions";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -72,4 +73,12 @@ export function mapRange(
 
 export function capitalize(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+export function getAttendanceRate(session: Session) {
+  const attendanceRate =
+    (session.presentStudentsCount + session.lateStudentsCount) /
+    (session.studentCount - session.absentStudentsCount);
+
+  return isNaN(attendanceRate) ? 0 : attendanceRate;
 }

@@ -11,7 +11,10 @@ import { and, count, eq, like, or, sql } from "drizzle-orm";
 function buildSessionFilterCondition(
   filter: Partial<Record<SessionFilterField, string>>,
 ) {
-  return and(filter.group ? eq(groups.name, filter.group) : undefined);
+  return and(
+    filter.group ? eq(groups.name, filter.group) : undefined,
+    filter.status ? eq(sessions.status, filter.status) : undefined,
+  );
 }
 
 function buildSessionStudentFilterCondition(

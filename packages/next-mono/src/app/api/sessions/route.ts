@@ -9,6 +9,7 @@ export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const filter = {
     group: requestUrl.searchParams.get("group") || undefined,
+    status: requestUrl.searchParams.get("status") || undefined,
   };
   const paginatedQuery = findSessionsWithFilteredPagination.bind(null, filter);
   const totalCount = await getSessionCountWithFilter(filter);
