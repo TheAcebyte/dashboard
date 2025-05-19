@@ -3,7 +3,7 @@
 import { cst } from "@/constants";
 import { PaginatedSessionRecord } from "@/db/queries/sessions";
 import useInfinitePagination from "@/hooks/use-infinite-pagination";
-import { getAttendanceRate } from "@/lib/utils";
+import { clamp, getAttendanceRate } from "@/lib/utils";
 import useAttendanceGroupStore from "@/stores/attendance-group-store";
 import { useEffect, useRef, useState } from "react";
 
@@ -12,16 +12,27 @@ const defaultLimit = 20;
 
 interface Props {
   height?: number;
-  entryRadius?: number;
+  lineWidth?: number;
+  entrySpacing?: number;
+  lineColor?: string;
+  gradientColorTop?: string;
+  gradientColorBottom?: string;
 }
 
 export default function SessionHistoryGraph({
   height = 400,
-  entryRadius = 10,
+  entrySpacing = 50,
+  lineWidth = 1,
+  lineColor = "oklch(52.7% 0.154 150.069)",
+  gradientColorTop = "rgba(123, 241, 168, 0.5)",
+  gradientColorBottom = "rgba(123, 241, 168, 0.1)",
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const offsetRef = useRef(0);
+  const mouseXRef = useRef(0);
   const { group } = useAttendanceGroupStore();
   const [queryParams, setQueryParams] = useState<Record<string, string>>();
+
   useEffect(() => {
     setQueryParams({ group: group, status: "ended" });
   }, [group]);
@@ -31,90 +42,191 @@ export default function SessionHistoryGraph({
     defaultLimit,
     { queryParams },
   );
-  const responseDependency = paginate?.response;
+
+  const clearCanvas = () => {
+    if (!canvasRef.current) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  };
+
+  const sessions = new Array(1000).fill(0).map(Math.random);
+
+  const getCoordinates = (index: number) => {
+    // if (!canvasRef.current || !paginate?.response) return [0, 0] as const;
+    if (!canvasRef.current || !sessions) return [0, 0] as const;
+    const canvas = canvasRef.current;
+    const offset = offsetRef.current;
+    const session = sessions[index];
+    const x = canvas.width - index * entrySpacing + offset;
+    // const y = canvas.height * (1 - getAttendanceRate(session));
+    const y = canvas.height * session;
+
+    return [x, y] as const;
+  };
+
+  const drawGraph = () => {
+    if (!canvasRef.current || !paginate?.response) return;
+    const canvas = canvasRef.current;
+    // const sessions = paginate.response.data;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const offset = offsetRef.current;
+    const mouseX = mouseXRef.current;
+    const scrolledEntries = offset / entrySpacing;
+    const startIndex = Math.max(Math.floor(scrolledEntries), 0);
+    const endIndex = Math.min(
+      Math.ceil(scrolledEntries + canvas.width / entrySpacing),
+      sessions.length - 1,
+    );
+    if (startIndex > endIndex) return;
+
+    // Draw grid lines
+    const gridLineWidth = 200;
+    const gridLineColor = "oklch(87.2% 0.01 258.338)";
+    const gridLineColumns = Math.floor(canvas.width / gridLineWidth) + 1;
+    for (let i = 0; i < gridLineColumns; i++) {
+      const x = canvas.width - i * gridLineWidth + (offset % gridLineWidth);
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, canvas.height);
+      ctx.strokeStyle = gridLineColor;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Adding the background gradient below the graph
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    gradient.addColorStop(0, gradientColorTop);
+    gradient.addColorStop(1, gradientColorBottom);
+
+    ctx.beginPath();
+    for (let i = startIndex; i <= endIndex; i++) {
+      const [x, y] = getCoordinates(i);
+      const firstPoint = i == startIndex;
+      const lastPoint = i == endIndex;
+      if (firstPoint) ctx.moveTo(x, canvas.height);
+      ctx.lineTo(x, y);
+      if (lastPoint) ctx.lineTo(x, canvas.height);
+    }
+    ctx.closePath();
+    ctx.fillStyle = gradient;
+    ctx.fill();
+
+    // Drawing the graph curve
+    ctx.beginPath();
+    for (let i = startIndex; i <= endIndex; i++) {
+      const [x, y] = getCoordinates(i);
+      const firstPoint = i == startIndex;
+      if (firstPoint) ctx.moveTo(x, y);
+      ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = lineColor;
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.stroke();
+
+    // Drawing the cursor
+    const cursorInnerRadius = 6;
+    const cursorOuterRadius = 10;
+    const [roundedMouseX, roundedMouseY] = getCoordinates(
+      clamp(
+        Math.round(
+          ((canvas.width - mouseX + offset) * sessions.length) /
+            (entrySpacing * (sessions.length - 1)),
+        ),
+        0,
+        sessions.length - 1,
+      ),
+    );
+
+    ctx.beginPath();
+    ctx.moveTo(roundedMouseX, 0);
+    ctx.lineTo(roundedMouseX, canvas.height);
+    ctx.strokeStyle = "black";
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(roundedMouseX, roundedMouseY, cursorOuterRadius, 0, 2 * Math.PI);
+    ctx.fillStyle = "white";
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(roundedMouseX, roundedMouseY, cursorInnerRadius, 0, 2 * Math.PI);
+    ctx.fillStyle = "black";
+    ctx.fill();
+  };
 
   useEffect(() => {
     if (!canvasRef.current) return;
     const canvas = canvasRef.current;
     const resizeCanvas = () => {
-      const width = canvas.getBoundingClientRect().width;
-      canvas.width = width;
+      canvas.width = canvas.clientWidth;
+      canvas.height = height;
+      drawGraph();
     };
 
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
     return () => window.removeEventListener("resize", resizeCanvas);
-  }, []);
+  }, [height, paginate?.response]);
 
   useEffect(() => {
-    if (!canvasRef.current || !paginate) return;
+    if (!canvasRef.current) return;
     const canvas = canvasRef.current;
-    const data = paginate.response.data;
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    let dragging = false;
+    let lastX = 0;
 
-    const getCanvasWidth = () => canvas.getBoundingClientRect().width;
-    let isClicking = false;
-    let previousPosition = getCanvasWidth();
-    let offset = 0;
-
-    const clearCanvas = () => {
-      const canvasWidth = getCanvasWidth();
-      ctx.clearRect(0, 0, canvasWidth, height);
-    };
-
-    const drawGraph = () => {
-      const canvasWidth = getCanvasWidth();
-      const shownEntries = Math.ceil(canvasWidth / (2 * entryRadius));
-      const start = Math.floor((offset * shownEntries) / canvasWidth);
-      const end = start + shownEntries;
-      const slicedData = data.slice(start, end);
-
-      clearCanvas();
-      ctx.beginPath();
-      slicedData.forEach((session, index) => {
-        const xValue = (shownEntries - 1 - index) * 2 * entryRadius;
-        const yValue = height * (1 - getAttendanceRate(session));
-        console.log(xValue, yValue);
-        ctx.lineTo(xValue, yValue);
-      });
-      ctx.strokeStyle = "black";
-      ctx.stroke();
+    const getMouseCoordinates = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.x - rect.left;
+      const y = e.y - rect.top;
+      mouseXRef.current = x;
+      return [x, y] as const;
     };
 
     const handleMouseDown = (e: MouseEvent) => {
-      isClicking = true;
-      previousPosition = e.x;
+      const [x] = getMouseCoordinates(e);
+      lastX = x;
+      dragging = true;
+      canvas.style.cursor = "grabbing";
+      document.body.style.cursor = "grabbing";
     };
+
     const handleMouseUp = () => {
-      isClicking = false;
+      dragging = false;
+      canvas.style.cursor = "grab";
+      document.body.style.cursor = "auto";
     };
+
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isClicking) return;
-      // Here, x-axis is increasing from right to left
-      offset += previousPosition - e.x;
-      previousPosition = e.x;
+      if (!dragging && e.target != canvas) return;
+      const [x] = getMouseCoordinates(e);
+      if (dragging) {
+        const dx = x - lastX;
+        lastX = x;
+        offsetRef.current += dx;
+      }
+      clearCanvas();
       drawGraph();
     };
 
     drawGraph();
     canvas.addEventListener("mousedown", handleMouseDown);
-    document.addEventListener("mouseup", handleMouseUp);
-    document.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("mousemove", handleMouseMove);
     return () => {
       canvas.removeEventListener("mousedown", handleMouseDown);
-      document.removeEventListener("mouseup", handleMouseUp);
-      document.removeEventListener("mousemove", handleMouseMove);
-      clearCanvas();
+      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [responseDependency]);
+  }, [paginate?.response]);
 
   return (
-    <canvas
-      height={height}
-      className="w-full bg-green-50"
-      ref={canvasRef}
-    ></canvas>
+    <canvas height={height} className="w-full cursor-grab" ref={canvasRef} />
   );
 }

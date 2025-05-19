@@ -12,7 +12,7 @@ const tagStyles = {
   present: "text-emerald-700 bg-emerald-50",
   absent: "text-red-700 bg-red-50",
   late: "text-orange-600 bg-orange-50",
-  excused: "text-cyan-700 bg-cyan-50",
+  excused: "text-cyan-700 bg-cyan-50 hover:text-cyan-600",
 } as const satisfies Record<StudentStatus, string>;
 
 interface Props {
@@ -31,7 +31,7 @@ export default function StudentStatusTag({
   return status != "excused" ? (
     <p
       className={cn(
-        "w-fit rounded-full px-2 text-sm font-medium",
+        "w-fit rounded-full px-2 text-sm font-medium transition-colors",
         tagStyles[status],
         className,
       )}

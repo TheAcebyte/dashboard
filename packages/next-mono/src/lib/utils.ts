@@ -78,7 +78,17 @@ export function capitalize(string: string) {
 export function getAttendanceRate(session: Session) {
   const attendanceRate =
     (session.presentStudentsCount + session.lateStudentsCount) /
-    (session.studentCount - session.absentStudentsCount);
+    (session.studentCount - session.excusedStudentsCount);
 
   return isNaN(attendanceRate) ? 0 : attendanceRate;
+}
+
+export function round(value: number, near: number) {
+  return Math.round(value / near) * near;
+}
+
+export function clamp(value: number, min: number, max: number) {
+  if (value <= min) return min;
+  if (value >= max) return max;
+  return value;
 }

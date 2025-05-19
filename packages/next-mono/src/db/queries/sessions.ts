@@ -6,7 +6,7 @@ import { db } from "@/db";
 import { groups } from "@/db/schema/groups";
 import { sessionStudents, sessions } from "@/db/schema/sessions";
 import { students } from "@/db/schema/students";
-import { and, count, eq, like, or, sql } from "drizzle-orm";
+import { and, count, desc, eq, like, or, sql } from "drizzle-orm";
 
 function buildSessionFilterCondition(
   filter: Partial<Record<SessionFilterField, string>>,
@@ -146,6 +146,7 @@ export async function findSessionsWithPagination(page: number, limit: number) {
   const sessionIdList = await db
     .select({ sessionId: sessions.sessionId })
     .from(sessions)
+    .orderBy(desc(sessions.startedAt))
     .limit(limit)
     .offset(offset);
 
@@ -168,6 +169,7 @@ export async function findSessionsWithFilteredPagination(
     .from(sessions)
     .innerJoin(groups, eq(groups.groupId, sessions.groupId))
     .where(buildSessionFilterCondition(filter))
+    .orderBy(desc(sessions.startedAt))
     .limit(limit)
     .offset(offset);
 
