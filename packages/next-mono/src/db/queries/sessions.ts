@@ -243,6 +243,26 @@ export function findSessionStudentsWithFilteredPagination(
     .limit(limit);
 }
 
+export function findLatestPresentOrLateStudents(limit: number) {
+  return db
+    .select({
+      sessionId: sessions.sessionId,
+      studentId: students.studentId,
+      groupId: groups.groupId,
+      firstName: students.firstName,
+      lastName: students.lastName,
+      pictureUrl: students.pictureUrl,
+      arrivedAt: sessionStudents.arrivedAt,
+      groupName: groups.name,
+    })
+    .from(sessionStudents)
+    .innerJoin(sessions, eq(sessions.sessionId, sessionStudents.sessionId))
+    .innerJoin(students, eq(students.studentId, sessionStudents.studentId))
+    .innerJoin(groups, eq(groups.groupId, sessions.groupId))
+    .orderBy(desc(sessionStudents.arrivedAt))
+    .limit(limit);
+}
+
 export async function getSessionCount(sessionId: string) {
   const [{ count: totalCount }] = await db
     .select({ count: count() })
