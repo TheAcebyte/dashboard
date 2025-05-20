@@ -32,7 +32,7 @@ export default function SessionAttendanceCard({ session }: Props) {
       <div className="mt-6 flex flex-col gap-4">
         <div className="flex justify-between gap-8">
           <h2 className="font-medium text-zinc-900">Attendance Rate</h2>
-          <p className="font-medium text-gray-500">{attendanceRate} %</p>
+          <p className="font-medium text-gray-500">{attendanceRate ?? 0} %</p>
         </div>
         <ProgressBar percentage={attendanceRate} />
       </div>

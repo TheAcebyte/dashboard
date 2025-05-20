@@ -57,11 +57,11 @@ export default function useInfinitePagination<T>(
 
     fetchResponse().catch((error) => console.log(error));
     return () => controller.abort("Request aborted.");
-  }, [page, options?.queryParams, options?.refetchCounter]);
+  }, [page, endpoint, options?.queryParams, options?.refetchCounter]);
 
   useEffect(() => {
     setPage(1);
-  }, [options?.queryParams]);
+  }, [endpoint, options?.queryParams]);
 
   const loadMore = () => {
     setPage(page + 1);

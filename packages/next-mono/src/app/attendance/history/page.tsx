@@ -1,5 +1,5 @@
 import AttendanceTabPanel from "@/components/attendance/attendance-tab-panel";
-import SessionHistoryViewer from "@/components/attendance/session-history.viewer";
+import SessionHistoryViewer from "@/components/attendance/session-history-viewer";
 import { findAllGroups } from "@/db/queries/groups";
 
 export default async function Page() {

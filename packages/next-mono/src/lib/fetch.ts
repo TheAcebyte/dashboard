@@ -6,6 +6,7 @@ import { fetchAllPages, fetchPage } from "@/lib/paginate";
 
 const studentEndpoint = new URL("/api/students", cst.APP_URL);
 const groupEndpoint = new URL("/api/groups", cst.APP_URL);
+const sessionEndpoint = new URL("/api/sessions", cst.APP_URL);
 
 export async function fetchPicture(
   pictureUrl: string,
@@ -39,6 +40,13 @@ export async function fetchGroupByName(name: string) {
   const response = await fetchPage<PaginatedGroupRecord>(url, 1, 1);
   const [group] = response.data;
   return group;
+}
+
+export async function fetchSessionById(sessionId: string) {
+  const url = new URL(`${sessionEndpoint}/${sessionId}`);
+  const response = await fetch(url);
+  const data = await response.json();
+  return data as Session;
 }
 
 export async function fetchActiveSessionByGroupId(groupId: string) {

@@ -49,11 +49,11 @@ export default function usePagination<T>(
 
     fetchResponse().catch((error) => console.log(error));
     return () => controller.abort("Request aborted.");
-  }, [page, options?.queryParams, options?.refetchCounter]);
+  }, [page, endpoint.toString(), options?.queryParams, options?.refetchCounter]);
 
   useEffect(() => {
     setPage(1);
-  }, [options?.queryParams]);
+  }, [endpoint.toString(), options?.queryParams]);
 
   if (!response) return null;
   return {

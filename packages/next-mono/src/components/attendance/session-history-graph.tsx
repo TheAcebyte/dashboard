@@ -5,10 +5,16 @@ import { PaginatedSessionRecord } from "@/db/queries/sessions";
 import useInfinitePagination from "@/hooks/use-infinite-pagination";
 import { clamp, getAttendanceRate } from "@/lib/utils";
 import useAttendanceGroupStore from "@/stores/attendance-group-store";
+import { useSelectedSessionStore } from "@/stores/selected-session-store";
 import { useEffect, useRef, useState } from "react";
 
 const sessionEndpoint = new URL("/api/sessions", cst.APP_URL);
 const defaultLimit = 20;
+
+interface Point {
+  x: number;
+  y: number;
+}
 
 interface Props {
   height?: number;
@@ -27,9 +33,6 @@ export default function SessionHistoryGraph({
   gradientColorTop = "rgba(123, 241, 168, 0.5)",
   gradientColorBottom = "rgba(123, 241, 168, 0.1)",
 }: Props) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const offsetRef = useRef(0);
-  const mouseXRef = useRef(0);
   const { group } = useAttendanceGroupStore();
   const [queryParams, setQueryParams] = useState<Record<string, string>>();
 
@@ -43,6 +46,13 @@ export default function SessionHistoryGraph({
     { queryParams },
   );
 
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const offsetRef = useRef(0);
+  const mouseXRef = useRef(0);
+  // const sessionIdRef = useRef(-1);
+  const sessionIdRef = useRef("");
+  const setSessionId = useSelectedSessionStore((state) => state.setSessionId);
+
   const clearCanvas = () => {
     if (!canvasRef.current) return;
     const canvas = canvasRef.current;
@@ -51,17 +61,19 @@ export default function SessionHistoryGraph({
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   };
 
-  const sessions = new Array(1000).fill(0).map(Math.random);
+  // const sessions = new Array(1000).fill(0).map(Math.random);
 
   const getCoordinates = (index: number) => {
-    // if (!canvasRef.current || !paginate?.response) return [0, 0] as const;
-    if (!canvasRef.current || !sessions) return [0, 0] as const;
+    if (!canvasRef.current || !paginate?.response) return [0, 0] as const;
+    // if (!canvasRef.current || !sessions) return [0, 0] as const;
     const canvas = canvasRef.current;
+    const sessions = paginate.response.data;
+
     const offset = offsetRef.current;
     const session = sessions[index];
     const x = canvas.width - index * entrySpacing + offset;
-    // const y = canvas.height * (1 - getAttendanceRate(session));
-    const y = canvas.height * session;
+    const y = canvas.height * (1 - getAttendanceRate(session));
+    // const y = canvas.height * session;
 
     return [x, y] as const;
   };
@@ -69,7 +81,7 @@ export default function SessionHistoryGraph({
   const drawGraph = () => {
     if (!canvasRef.current || !paginate?.response) return;
     const canvas = canvasRef.current;
-    // const sessions = paginate.response.data;
+    const sessions = paginate.response.data;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
@@ -81,6 +93,7 @@ export default function SessionHistoryGraph({
       Math.ceil(scrolledEntries + canvas.width / entrySpacing),
       sessions.length - 1,
     );
+    clearCanvas();
     if (startIndex > endIndex) return;
 
     // Draw grid lines
@@ -132,21 +145,23 @@ export default function SessionHistoryGraph({
     // Drawing the cursor
     const cursorInnerRadius = 6;
     const cursorOuterRadius = 10;
-    const [roundedMouseX, roundedMouseY] = getCoordinates(
-      clamp(
-        Math.round(
-          ((canvas.width - mouseX + offset) * sessions.length) /
-            (entrySpacing * (sessions.length - 1)),
-        ),
-        0,
-        sessions.length - 1,
+    const separatorColor = "oklch(21% 0.006 285.885)";
+    const nearestSessionIndex = clamp(
+      Math.round(
+        ((canvas.width - mouseX + offset) * sessions.length) /
+          (entrySpacing * (sessions.length - 1)),
       ),
+      0,
+      sessions.length - 1,
     );
+    // sessionIdRef.current = sessions[nearestSessionIndex];
+    sessionIdRef.current = sessions[nearestSessionIndex].sessionId;
+    const [roundedMouseX, roundedMouseY] = getCoordinates(nearestSessionIndex);
 
     ctx.beginPath();
     ctx.moveTo(roundedMouseX, 0);
     ctx.lineTo(roundedMouseX, canvas.height);
-    ctx.strokeStyle = "black";
+    ctx.strokeStyle = separatorColor;
     ctx.stroke();
 
     ctx.beginPath();
@@ -156,8 +171,16 @@ export default function SessionHistoryGraph({
 
     ctx.beginPath();
     ctx.arc(roundedMouseX, roundedMouseY, cursorInnerRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = "black";
+    ctx.fillStyle = separatorColor;
     ctx.fill();
+
+    // Drawing the x-axis
+    ctx.beginPath();
+    ctx.moveTo(0, canvas.height);
+    ctx.lineTo(canvas.width, canvas.height);
+    ctx.strokeStyle = separatorColor;
+    ctx.lineWidth = 2;
+    ctx.stroke();
   };
 
   useEffect(() => {
@@ -195,12 +218,14 @@ export default function SessionHistoryGraph({
       dragging = true;
       canvas.style.cursor = "grabbing";
       document.body.style.cursor = "grabbing";
+      drawGraph();
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (e: MouseEvent) => {
       dragging = false;
       canvas.style.cursor = "grab";
       document.body.style.cursor = "auto";
+      if (e.target == canvas) setSessionId(sessionIdRef.current);
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -211,7 +236,6 @@ export default function SessionHistoryGraph({
         lastX = x;
         offsetRef.current += dx;
       }
-      clearCanvas();
       drawGraph();
     };
 
