@@ -19,7 +19,7 @@ import usePagination from "@/hooks/use-pagination";
 import { formatDateToHHmm } from "@/lib/date";
 import { capitalize } from "@/lib/utils";
 import { useSessionRefetchStore } from "@/stores/refetch-store";
-import useStudentSearchStore from "@/stores/student-search-store";
+import useSessionStudentSearchStore from "@/stores/session-student-search-store";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -31,14 +31,14 @@ export default function SessionStudentTable({ session }: Props) {
     `/api/sessions/${session.sessionId}/students`,
     cst.APP_URL,
   );
-  const { searchField, searchQuery } = useStudentSearchStore();
+  const { searchField, searchQuery } = useSessionStudentSearchStore();
   const [queryParams, setQueryParams] =
     useState<Partial<Record<SessionStudentFilterField, string>>>();
   useEffect(() => {
     setQueryParams({ [searchField]: searchQuery });
   }, [searchField, searchQuery]);
-  const { refetchCounter } = useSessionRefetchStore();
 
+  const { refetchCounter } = useSessionRefetchStore();
   const paginate = usePagination<PaginatedSessionStudentRecord>(endpoint, 4, {
     queryParams,
     refetchCounter,
@@ -68,10 +68,7 @@ export default function SessionStudentTable({ session }: Props) {
             <TableRow key={index}>
               <TableCell weight={4}>
                 <div className="flex items-center gap-4">
-                  <Avatar
-                    src={record.pictureUrl}
-                    className="size-12 min-h-12 min-w-12"
-                  />
+                  <Avatar src={record.pictureUrl} size={48} />
                   <p>{fullName}</p>
                 </div>
               </TableCell>

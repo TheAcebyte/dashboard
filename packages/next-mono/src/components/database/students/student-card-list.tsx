@@ -37,9 +37,9 @@ export default function StudentCardList() {
   const countDependency = paginate?.response.count;
 
   useEffect(() => {
+    if (!spinnerRef.current) return;
     const spinner = spinnerRef.current;
-    if (!spinner) return;
-    
+
     const observer = new IntersectionObserver((entries) => {
       const [spinnerEntry] = entries;
       if (spinnerEntry.isIntersecting) {
@@ -49,6 +49,7 @@ export default function StudentCardList() {
     });
 
     observer.observe(spinner);
+    return () => observer.unobserve(spinner);
   }, [countDependency]);
 
   const [groupStudents, setGroupStudents] = useState<GroupStudents>({});

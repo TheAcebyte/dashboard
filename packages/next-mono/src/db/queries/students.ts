@@ -46,9 +46,9 @@ export function findStudentsWithPagination(page: number, limit: number) {
       lastName: students.lastName,
       cne: students.cne,
       birthDate: students.birthDate,
+      pictureUrl: students.pictureUrl,
       groupId: groups.groupId,
       group: groups.name,
-      pictureUrl: students.pictureUrl,
     })
     .from(students)
     .innerJoin(groups, eq(students.groupId, groups.groupId))

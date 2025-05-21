@@ -4,7 +4,7 @@ import { cst } from "@/constants";
 import { PaginatedStudentRecord } from "@/db/queries/students";
 import Link from "next/link";
 
-const displayClassmatesThreshold = 2;
+const displayClassmatesThreshold = 5;
 const studentCardListUrl = new URL("/database/students?view=card", cst.APP_URL);
 
 interface Props {
@@ -24,7 +24,8 @@ export default function StudentCard({ record, classmates, remaining }: Props) {
       <div className="relative h-[80px] rounded-2xl bg-gray-100">
         <Avatar
           src={record.pictureUrl}
-          className="absolute bottom-0 left-8 size-[100px] min-h-[100px] min-w-[100px] translate-y-1/2 border-3 border-white"
+          size={100}
+          className="absolute bottom-0 left-8 translate-y-1/2 border-3 border-white"
         />
         <StudentCardActions record={record} />
       </div>

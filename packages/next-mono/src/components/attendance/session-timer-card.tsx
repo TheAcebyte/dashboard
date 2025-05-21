@@ -10,7 +10,9 @@ import { AlarmClock } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 interface Props {
-  session: Session;
+  sessionId: string;
+  startedAt: number;
+  plannedDuration: number;
   size?: number;
   thickness?: number;
   emptyColor?: string;
@@ -18,15 +20,14 @@ interface Props {
 }
 
 export default function SessionTimerCard({
-  session,
+  sessionId,
+  startedAt,
+  plannedDuration,
   size = 200,
   thickness = 8,
   emptyColor = "#D1D5DB",
   fillColor = "#18181B",
 }: Props) {
-  const { startedAt, finishedAt, plannedDuration } = session;
-  if (!plannedDuration || finishedAt) return null;
-
   const roundedStartTime = Math.round(startedAt / 1000);
   const roundedDuration = Math.round(plannedDuration / 1000);
   const [remainingTime, setRemainingTime] = useState(1);
@@ -49,11 +50,11 @@ export default function SessionTimerCard({
       setRemainingTime(decreaseRemainingTime);
     }, 1000);
     return () => clearInterval(intervalId);
-  }, [session, visible]);
+  }, [startedAt, plannedDuration, visible]);
 
   useEffect(() => {
     if (remainingTime <= 0) {
-      endSession(session.sessionId);
+      endSession(sessionId);
       refetch();
     }
 

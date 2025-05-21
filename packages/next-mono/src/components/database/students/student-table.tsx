@@ -12,8 +12,8 @@ import { StudentFilterField } from "@/constants/filters";
 import type { PaginatedStudentRecord } from "@/db/queries/students";
 import usePagination from "@/hooks/use-pagination";
 import { getAge } from "@/lib/utils";
-import useStudentSearchStore from "@/stores/student-search-store";
 import { useTableRefetchStore } from "@/stores/refetch-store";
+import useStudentSearchStore from "@/stores/student-search-store";
 import { useEffect, useState } from "react";
 
 const studentEndpoint = new URL("/api/students", cst.APP_URL);
@@ -54,10 +54,7 @@ export default function StudentTable() {
             <TableRow key={index}>
               <TableCell weight={4}>
                 <div className="flex items-center gap-4">
-                  <Avatar
-                    src={record.pictureUrl}
-                    className="size-12 min-h-12 min-w-12"
-                  />
+                  <Avatar src={record.pictureUrl} size={48} />
                   <p>{fullName}</p>
                 </div>
               </TableCell>

@@ -23,6 +23,30 @@ export function formatDateToLong(date: Date) {
   return `${month} ${day}${ordinalSuffix}, ${year}`;
 }
 
+export function formatRelativeDay(date: Date) {
+  const now = new Date();
+  const input = new Date(date);
+  now.setHours(0, 0, 0, 0);
+  input.setHours(0, 0, 0, 0);
+  const differenceInMs = now.getTime() - input.getTime();
+  const differenceInDays = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
+
+  switch (differenceInDays) {
+    case -1:
+      return "Yesterday";
+
+    case 0:
+      return "Today";
+
+    case 1:
+      return "Tomorrow";
+
+    default:
+      const day = date.toLocaleDateString("en-uk", { weekday: "long" });
+      return day;
+  }
+}
+
 export function splitTimeFromSeconds(seconds: number) {
   let temp = seconds;
   const hours = Math.floor(temp / 3600);

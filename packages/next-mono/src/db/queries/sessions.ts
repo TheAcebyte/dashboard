@@ -6,7 +6,7 @@ import { db } from "@/db";
 import { groups } from "@/db/schema/groups";
 import { sessionStudents, sessions } from "@/db/schema/sessions";
 import { students } from "@/db/schema/students";
-import { and, count, desc, eq, like, or, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, gte, like, or, sql } from "drizzle-orm";
 
 function buildSessionFilterCondition(
   filter: Partial<Record<SessionFilterField, string>>,
@@ -197,6 +197,8 @@ export function findSessionStudentsWithPagination(
       status: sessionStudents.studentStatus,
       excuse: sessionStudents.studentExcuse,
       arrivedAt: sessionStudents.arrivedAt,
+      groupId: groups.groupId,
+      groupName: groups.name,
     })
     .from(sessions)
     .innerJoin(
@@ -204,6 +206,7 @@ export function findSessionStudentsWithPagination(
       eq(sessionStudents.sessionId, sessions.sessionId),
     )
     .innerJoin(students, eq(students.studentId, sessionStudents.studentId))
+    .innerJoin(groups, eq(groups.groupId, sessions.groupId))
     .where(eq(sessions.sessionId, sessionId))
     .offset(offset)
     .limit(limit);
@@ -226,6 +229,8 @@ export function findSessionStudentsWithFilteredPagination(
       status: sessionStudents.studentStatus,
       excuse: sessionStudents.studentExcuse,
       arrivedAt: sessionStudents.arrivedAt,
+      groupId: groups.groupId,
+      groupName: groups.name,
     })
     .from(sessions)
     .innerJoin(
@@ -233,6 +238,7 @@ export function findSessionStudentsWithFilteredPagination(
       eq(sessionStudents.sessionId, sessions.sessionId),
     )
     .innerJoin(students, eq(students.studentId, sessionStudents.studentId))
+    .innerJoin(groups, eq(groups.groupId, sessions.groupId))
     .where(
       and(
         eq(sessions.sessionId, sessionId),
@@ -243,23 +249,40 @@ export function findSessionStudentsWithFilteredPagination(
     .limit(limit);
 }
 
-export function findLatestPresentOrLateStudents(limit: number) {
+export function findActiveStudentsSinceDateWithPagination(
+  since: Date | number,
+  page: number,
+  limit: number,
+) {
+  since = since instanceof Date ? since.getDate() : since;
+  const offset = (page - 1) * limit;
   return db
     .select({
       sessionId: sessions.sessionId,
       studentId: students.studentId,
-      groupId: groups.groupId,
       firstName: students.firstName,
       lastName: students.lastName,
       pictureUrl: students.pictureUrl,
+      status: sessionStudents.studentStatus,
       arrivedAt: sessionStudents.arrivedAt,
+      groupId: groups.groupId,
       groupName: groups.name,
     })
     .from(sessionStudents)
     .innerJoin(sessions, eq(sessions.sessionId, sessionStudents.sessionId))
     .innerJoin(students, eq(students.studentId, sessionStudents.studentId))
     .innerJoin(groups, eq(groups.groupId, sessions.groupId))
-    .orderBy(desc(sessionStudents.arrivedAt))
+    .where(
+      and(
+        gte(sessionStudents.arrivedAt, since),
+        or(
+          eq(sessionStudents.studentStatus, "present"),
+          eq(sessionStudents.studentStatus, "late"),
+        ),
+      ),
+    )
+    .orderBy(asc(sessionStudents.arrivedAt))
+    .offset(offset)
     .limit(limit);
 }
 
@@ -307,16 +330,43 @@ export async function getSessionStudentCountWithFilter(
   return totalCount;
 }
 
+export async function getActiveStudentsSinceDateCount(since: Date | number) {
+  since = since instanceof Date ? since.getDate() : since;
+  const [{ count: totalCount }] = await db
+    .select({
+      count: count(),
+    })
+    .from(sessionStudents)
+    .innerJoin(sessions, eq(sessions.sessionId, sessionStudents.sessionId))
+    .innerJoin(students, eq(students.studentId, sessionStudents.studentId))
+    .innerJoin(groups, eq(groups.groupId, sessions.groupId))
+    .where(
+      and(
+        gte(sessionStudents.arrivedAt, since),
+        or(
+          eq(sessionStudents.studentStatus, "present"),
+          eq(sessionStudents.studentStatus, "late"),
+        ),
+      ),
+    );
+
+  return totalCount;
+}
+
 export type Session = Awaited<ReturnType<typeof findSessionById>>;
 
 export type ActiveSessionResponse = Awaited<
   ReturnType<typeof findActiveSessionByGroupId>
 >;
 
+export type PaginatedSessionRecord = Awaited<
+  ReturnType<typeof findSessionsWithPagination>
+>[number];
+
 export type PaginatedSessionStudentRecord = Awaited<
   ReturnType<typeof findSessionStudentsWithPagination>
 >[number];
 
-export type PaginatedSessionRecord = Awaited<
-  ReturnType<typeof findSessionsWithPagination>
+export type PaginatedActiveStudentRecord = Awaited<
+  ReturnType<typeof findActiveStudentsSinceDateWithPagination>
 >[number];

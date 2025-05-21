@@ -17,7 +17,7 @@ export function getAge(birthday: Date) {
 }
 
 export function getOrdinalSuffix(ordinal: number) {
-  switch (ordinal) {
+  switch (ordinal % 10) {
     case 1:
       return "st";
 

@@ -11,7 +11,13 @@ export default function SessionCardList({ session }: Props) {
   return (
     <div className="flex flex-wrap items-start gap-8">
       <SessionAttendanceCard session={session} />
-      <SessionTimerCard session={session} />
+      {session.plannedDuration && !session.finishedAt && (
+        <SessionTimerCard
+          sessionId={session.sessionId}
+          startedAt={session.startedAt}
+          plannedDuration={session.plannedDuration}
+        />
+      )}
       <SessionScheduleCard session={session} />
     </div>
   );
