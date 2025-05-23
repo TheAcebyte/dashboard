@@ -7,7 +7,6 @@ import {
   clamp,
   getAttendanceRate,
   mapRange,
-  renderHTMLToCanvas,
 } from "@/lib/utils";
 import useAttendanceGroupStore from "@/stores/attendance-group-store";
 import { useSelectedSessionStore } from "@/stores/selected-session-store";
