@@ -13,5 +13,6 @@ export async function GET(
   const data = await findStudentPictureById(studentId);
 
   if (!data) notFound();
+  // @ts-expect-error
   return new Response(data.picture);
 }

@@ -159,6 +159,7 @@ export async function fetchAllPages<T>(
   const items: T[] = [];
 
   while (currentEndpoint) {
+    console.log(currentEndpoint);
     const response = await fetch(currentEndpoint, { signal });
     const paginated = await response.json();
     const parseResult = paginatedResponseSchema.safeParse(paginated);

@@ -1,5 +1,6 @@
 "use client";
 
+import Avatar from "@/components/ui/avatar";
 import { buttonStyles } from "@/components/ui/button";
 import {
   Dropdown,
@@ -16,8 +17,6 @@ import { cn } from "@/lib/utils";
 import { Bell, BellOff } from "lucide-react";
 import { CheckCheck } from "lucide-react";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-
-import Avatar from "./ui/avatar";
 
 const activeStudentEndpoint = new URL("/api/students/active", cst.APP_URL);
 const pollingDelay = 5000;

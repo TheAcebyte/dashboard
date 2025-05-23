@@ -42,7 +42,7 @@ function EndSessionDialogContent({ sessionId }: Props) {
 
   const { close } = contextValue;
   const { refetch } = useSessionRefetchStore();
-  const endThisSession = endSession.bind(null, sessionId);
+  const endThisSession = endSession.bind(null, sessionId, true);
   const { handleSubmit, response } = useFormAction(
     endThisSession,
     z.object({}),

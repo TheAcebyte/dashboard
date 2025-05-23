@@ -92,3 +92,28 @@ export function clamp(value: number, min: number, max: number) {
   if (value >= max) return max;
   return value;
 }
+
+export function renderHTMLToCanvas(
+  canvas: HTMLCanvasElement,
+  html: string,
+  x: number,
+  y: number,
+) {
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}">
+    <foreignObject width="100%" height="100%">
+      <div xmlns="http://www.w3.org/1999/xhtml">${html}</div>
+    </foreignObject>
+  </svg>`;
+  const svgBlob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+  const svgObjectUrl = URL.createObjectURL(svgBlob);
+
+  const image = new Image();
+  image.addEventListener("load", function () {
+    ctx.drawImage(image, x, y);
+    URL.revokeObjectURL(svgObjectUrl);
+  });
+  image.src = svgObjectUrl;
+}

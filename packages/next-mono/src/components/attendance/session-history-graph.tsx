@@ -3,18 +3,19 @@
 import { cst } from "@/constants";
 import { PaginatedSessionRecord } from "@/db/queries/sessions";
 import useInfinitePagination from "@/hooks/use-infinite-pagination";
-import { clamp, getAttendanceRate } from "@/lib/utils";
+import {
+  clamp,
+  getAttendanceRate,
+  mapRange,
+  renderHTMLToCanvas,
+} from "@/lib/utils";
 import useAttendanceGroupStore from "@/stores/attendance-group-store";
 import { useSelectedSessionStore } from "@/stores/selected-session-store";
 import { useEffect, useRef, useState } from "react";
 
 const sessionEndpoint = new URL("/api/sessions", cst.APP_URL);
 const defaultLimit = 20;
-
-interface Point {
-  x: number;
-  y: number;
-}
+const maxCanvasWidth = 1080;
 
 interface Props {
   height?: number;
@@ -31,7 +32,7 @@ export default function SessionHistoryGraph({
   lineWidth = 1,
   lineColor = "oklch(52.7% 0.154 150.069)",
   gradientColorTop = "rgba(123, 241, 168, 0.5)",
-  gradientColorBottom = "rgba(123, 241, 168, 0.1)",
+  gradientColorBottom = "rgba(123, 241, 168, 0.05)",
 }: Props) {
   const { group } = useAttendanceGroupStore();
   const [queryParams, setQueryParams] = useState<Record<string, string>>();
@@ -48,10 +49,15 @@ export default function SessionHistoryGraph({
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const offsetRef = useRef(0);
-  const mouseXRef = useRef(0);
-  // const sessionIdRef = useRef(-1);
+  const mouseXRef = useRef(maxCanvasWidth);
   const sessionIdRef = useRef("");
-  const setSessionId = useSelectedSessionStore((state) => state.setSessionId);
+  const { sessionId, setSessionId } = useSelectedSessionStore();
+
+  useEffect(() => {
+    if (!paginate || sessionId) return;
+    const [{ sessionId: firstSessionId }] = paginate.response.data;
+    setSessionId(firstSessionId);
+  }, [paginate?.response]);
 
   const clearCanvas = () => {
     if (!canvasRef.current) return;
@@ -61,19 +67,22 @@ export default function SessionHistoryGraph({
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   };
 
-  // const sessions = new Array(1000).fill(0).map(Math.random);
-
   const getCoordinates = (index: number) => {
     if (!canvasRef.current || !paginate?.response) return [0, 0] as const;
-    // if (!canvasRef.current || !sessions) return [0, 0] as const;
     const canvas = canvasRef.current;
     const sessions = paginate.response.data;
 
     const offset = offsetRef.current;
     const session = sessions[index];
+    const cursorOuterRadius = 10;
     const x = canvas.width - index * entrySpacing + offset;
-    const y = canvas.height * (1 - getAttendanceRate(session));
-    // const y = canvas.height * session;
+    const y = mapRange(
+      1 - getAttendanceRate(session),
+      0,
+      1,
+      cursorOuterRadius,
+      canvas.height - cursorOuterRadius,
+    );
 
     return [x, y] as const;
   };
@@ -94,11 +103,11 @@ export default function SessionHistoryGraph({
       sessions.length - 1,
     );
     clearCanvas();
-    if (startIndex > endIndex) return;
 
     // Draw grid lines
-    const gridLineWidth = 200;
+    const separatorColor = "oklch(21% 0.006 285.885)";
     const gridLineColor = "oklch(87.2% 0.01 258.338)";
+    const gridLineWidth = 200;
     const gridLineColumns = Math.floor(canvas.width / gridLineWidth) + 1;
     for (let i = 0; i < gridLineColumns; i++) {
       const x = canvas.width - i * gridLineWidth + (offset % gridLineWidth);
@@ -115,64 +124,65 @@ export default function SessionHistoryGraph({
     gradient.addColorStop(0, gradientColorTop);
     gradient.addColorStop(1, gradientColorBottom);
 
-    ctx.beginPath();
-    for (let i = startIndex; i <= endIndex; i++) {
-      const [x, y] = getCoordinates(i);
-      const firstPoint = i == startIndex;
-      const lastPoint = i == endIndex;
-      if (firstPoint) ctx.moveTo(x, canvas.height);
-      ctx.lineTo(x, y);
-      if (lastPoint) ctx.lineTo(x, canvas.height);
+    if (startIndex <= endIndex) {
+      ctx.beginPath();
+      for (let i = startIndex; i <= endIndex; i++) {
+        const [x, y] = getCoordinates(i);
+        const firstPoint = i == startIndex;
+        const lastPoint = i == endIndex;
+        if (firstPoint) ctx.moveTo(x, canvas.height);
+        ctx.lineTo(x, y);
+        if (lastPoint) ctx.lineTo(x, canvas.height);
+      }
+      ctx.closePath();
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // Drawing the graph curve
+      ctx.beginPath();
+      for (let i = startIndex; i <= endIndex; i++) {
+        const [x, y] = getCoordinates(i);
+        const firstPoint = i == startIndex;
+        if (firstPoint) ctx.moveTo(x, y);
+        ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = lineColor;
+      ctx.lineWidth = lineWidth;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.stroke();
+
+      // Drawing the cursor
+      const cursorInnerRadius = 4;
+      const cursorOuterRadius = 6;
+      const nearestSessionIndex = clamp(
+        Math.round(
+          ((canvas.width - mouseX + offset) * sessions.length) /
+            (entrySpacing * (sessions.length - 1)),
+        ),
+        0,
+        sessions.length - 1,
+      );
+      sessionIdRef.current = sessions[nearestSessionIndex].sessionId;
+      const [roundedMouseX, roundedMouseY] =
+        getCoordinates(nearestSessionIndex);
+
+      ctx.beginPath();
+      ctx.moveTo(roundedMouseX, 0);
+      ctx.lineTo(roundedMouseX, canvas.height);
+      ctx.strokeStyle = separatorColor;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(roundedMouseX, roundedMouseY, cursorOuterRadius, 0, 2 * Math.PI);
+      ctx.fillStyle = separatorColor;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(roundedMouseX, roundedMouseY, cursorInnerRadius, 0, 2 * Math.PI);
+      ctx.fillStyle = "white";
+      ctx.fill();
     }
-    ctx.closePath();
-    ctx.fillStyle = gradient;
-    ctx.fill();
-
-    // Drawing the graph curve
-    ctx.beginPath();
-    for (let i = startIndex; i <= endIndex; i++) {
-      const [x, y] = getCoordinates(i);
-      const firstPoint = i == startIndex;
-      if (firstPoint) ctx.moveTo(x, y);
-      ctx.lineTo(x, y);
-    }
-    ctx.strokeStyle = lineColor;
-    ctx.lineWidth = lineWidth;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.stroke();
-
-    // Drawing the cursor
-    const cursorInnerRadius = 6;
-    const cursorOuterRadius = 10;
-    const separatorColor = "oklch(21% 0.006 285.885)";
-    const nearestSessionIndex = clamp(
-      Math.round(
-        ((canvas.width - mouseX + offset) * sessions.length) /
-          (entrySpacing * (sessions.length - 1)),
-      ),
-      0,
-      sessions.length - 1,
-    );
-    // sessionIdRef.current = sessions[nearestSessionIndex];
-    sessionIdRef.current = sessions[nearestSessionIndex].sessionId;
-    const [roundedMouseX, roundedMouseY] = getCoordinates(nearestSessionIndex);
-
-    ctx.beginPath();
-    ctx.moveTo(roundedMouseX, 0);
-    ctx.lineTo(roundedMouseX, canvas.height);
-    ctx.strokeStyle = separatorColor;
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(roundedMouseX, roundedMouseY, cursorOuterRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = "white";
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.arc(roundedMouseX, roundedMouseY, cursorInnerRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = separatorColor;
-    ctx.fill();
 
     // Drawing the x-axis
     ctx.beginPath();

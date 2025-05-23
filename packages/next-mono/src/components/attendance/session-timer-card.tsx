@@ -47,17 +47,17 @@ export default function SessionTimerCard({
     setRemainingTime(clampedRemainingTime);
 
     const intervalId = setInterval(() => {
-      setRemainingTime(decreaseRemainingTime);
+      if (remainingTime <= 0) {
+        endSession(sessionId);
+        refetch();
+      } else {
+        setRemainingTime(decreaseRemainingTime);
+      }
     }, 1000);
     return () => clearInterval(intervalId);
   }, [startedAt, plannedDuration, visible]);
 
   useEffect(() => {
-    if (remainingTime <= 0) {
-      endSession(sessionId);
-      refetch();
-    }
-
     if (!canvasRef.current) return;
     const ctx = canvasRef.current.getContext("2d");
     if (!ctx) return;
