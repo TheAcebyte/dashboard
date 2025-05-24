@@ -1,7 +1,7 @@
 "use client";
 
 import addGroup from "@/actions/group/add-group";
-import { groupSchema } from "@/actions/group/validation";
+import { getGroupSchema } from "@/actions/group/validation";
 import { buttonStyles } from "@/components/ui/button";
 import Button from "@/components/ui/button";
 import {
@@ -47,6 +47,7 @@ function AddGroupDialogContent() {
   const t = useTranslations("database-page");
   const { close } = contextValue;
   const { refetch } = useTableRefetchStore();
+  const groupSchema = getGroupSchema(t);
   const { handleSubmit, fields, setters, response, errors, reset } =
     useFormAction(addGroup, groupSchema);
 

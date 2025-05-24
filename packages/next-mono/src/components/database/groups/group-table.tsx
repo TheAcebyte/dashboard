@@ -12,11 +12,14 @@ import { PaginatedGroupRecord } from "@/db/queries/groups";
 import usePagination from "@/hooks/use-pagination";
 import useGroupSearchStore from "@/stores/group-search-store";
 import { useTableRefetchStore } from "@/stores/refetch-store";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 const groupEndpoint = new URL("/api/groups", cst.APP_URL);
 
 export default function GroupTable() {
+  const t = useTranslations("database-page");
+
   const { searchField, searchQuery } = useGroupSearchStore();
   const [queryParams, setQueryParams] =
     useState<Partial<Record<GroupFilterField, string>>>();
@@ -38,9 +41,11 @@ export default function GroupTable() {
     <div className="flex flex-col gap-12">
       <Table>
         <TableRow variant="header">
-          <TableCell weight={3}>Name</TableCell>
-          <TableCell weight={2}>Student Count</TableCell>
-          <TableCell className="flex justify-center">Actions</TableCell>
+          <TableCell weight={3}>{t("group-column-name")}</TableCell>
+          <TableCell weight={2}>{t("group-column-student-count")}</TableCell>
+          <TableCell className="flex justify-center">
+            {t("group-column-actions")}
+          </TableCell>
         </TableRow>
         {data.map((record, index) => {
           return (

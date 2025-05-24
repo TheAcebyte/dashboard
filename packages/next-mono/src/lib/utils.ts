@@ -1,4 +1,5 @@
 import type { Session } from "@/db/queries/sessions";
+import type { TranslationFunction } from "@/types/utils";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 

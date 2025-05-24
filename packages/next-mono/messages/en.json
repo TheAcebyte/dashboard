@@ -14,9 +14,19 @@
     "students": "Students",
     "groups": "Groups",
     "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
     "cancel": "Cancel",
+    "confirm": "Confirm",
     "group-searchbar-placeholder": "Search for groups",
     "group-dialog-name-label": "Name",
-    "group-dialog-name-placeholder": "Group name"
+    "group-dialog-name-placeholder": "Group name",
+    "group-column-name": "Name",
+    "group-column-student-count": "Student Count",
+    "group-column-actions": "Actions",
+    "group-dialog-edit-title": "Edit Group",
+    "group-dialog-delete-title": "Delete Group",
+    "group-dialog-delete-confirm": "Are you sure you want to delete this group?",
+    "group-dialog-delete-nonempty": "Only empty groups can be deleted."
   }
 }

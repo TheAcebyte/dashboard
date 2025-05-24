@@ -1,7 +1,7 @@
 "use client";
 
 import editGroup from "@/actions/group/edit-group";
-import { groupSchema } from "@/actions/group/validation";
+import { getGroupSchema } from "@/actions/group/validation";
 import Button from "@/components/ui/button";
 import {
   Dialog,
@@ -14,6 +14,7 @@ import type { PaginatedGroupRecord } from "@/db/queries/groups";
 import useFormAction from "@/hooks/use-form-action";
 import { useTableRefetchStore } from "@/stores/refetch-store";
 import { CircleAlert, Pencil, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useContext, useEffect } from "react";
 
 interface Props {
@@ -21,11 +22,12 @@ interface Props {
 }
 
 export default function EditGroupDialog({ record }: Props) {
+  const t = useTranslations("database-page");
   return (
     <Dialog id={`edit-group-${record.groupId}`} className="w-full">
       <DialogTrigger className="flex w-full cursor-pointer items-center gap-4 bg-white px-4 py-2 font-medium text-zinc-900 transition-colors hover:bg-gray-50 hover:text-zinc-700">
         <Pencil size={20} />
-        Edit
+        {t("edit")}
       </DialogTrigger>
       <DialogContent>
         <EditGroupDialogContent record={record} />
@@ -42,11 +44,16 @@ function EditGroupDialogContent({ record }: Props) {
     );
   }
 
+  const t = useTranslations("database-page");
   const { close } = contextValue;
   const { refetch } = useTableRefetchStore();
   const editThisGroup = editGroup.bind(null, record.groupId);
-  const { handleSubmit, fields, setters, response, errors } =
-    useFormAction(editThisGroup, groupSchema, { name: record.name });
+  const groupSchema = getGroupSchema(t);
+  const { handleSubmit, fields, setters, response, errors } = useFormAction(
+    editThisGroup,
+    groupSchema,
+    { name: record.name },
+  );
 
   useEffect(() => {
     if (response?.success) {
@@ -58,7 +65,9 @@ function EditGroupDialogContent({ record }: Props) {
   return (
     <div className="w-[400px] rounded-2xl border border-gray-300 bg-white">
       <header className="flex items-center justify-between border-b border-gray-300 px-8 py-4">
-        <h1 className="text-xl font-semibold text-zinc-900">Edit Group</h1>
+        <h1 className="text-xl font-semibold text-zinc-900">
+          {t("group-dialog-edit-title")}
+        </h1>
         <X
           className="cursor-pointer text-zinc-900 hover:text-zinc-700"
           onClick={close}
@@ -67,8 +76,8 @@ function EditGroupDialogContent({ record }: Props) {
       <form className="flex flex-col items-center p-8" onSubmit={handleSubmit}>
         <TextInput
           id="name"
-          label="Name"
-          placeholder="Group name"
+          label={t("group-dialog-name-label")}
+          placeholder={t("group-dialog-name-placeholder")}
           value={fields.name}
           setValue={setters.name}
           error={errors.name}
@@ -80,10 +89,10 @@ function EditGroupDialogContent({ record }: Props) {
             className="flex-1"
             onClick={close}
           >
-            Cancel
+            {t("cancel")}
           </Button>
           <Button variant="solid" className="flex-1">
-            Edit
+            {t("edit")}
           </Button>
         </div>
         {response && !response.success && (
