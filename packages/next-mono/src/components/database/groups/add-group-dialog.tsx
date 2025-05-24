@@ -15,15 +15,18 @@ import useFormAction from "@/hooks/use-form-action";
 import { cn } from "@/lib/utils";
 import { useTableRefetchStore } from "@/stores/refetch-store";
 import { CircleAlert, Plus, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useContext, useEffect } from "react";
 
 export default function AddGroupDialog() {
+  const t = useTranslations("database-page");
+
   return (
     <Dialog id="add-group">
       <DialogTrigger
         className={cn(buttonStyles.solid, "flex h-full items-center gap-2")}
       >
-        <p className="hidden lg:block">Add</p>
+        <p className="hidden lg:block">{t("add")}</p>
         <Plus />
       </DialogTrigger>
       <DialogContent>
@@ -41,6 +44,7 @@ function AddGroupDialogContent() {
     );
   }
 
+  const t = useTranslations("database-page");
   const { close } = contextValue;
   const { refetch } = useTableRefetchStore();
   const { handleSubmit, fields, setters, response, errors, reset } =
@@ -66,8 +70,8 @@ function AddGroupDialogContent() {
       <form className="flex flex-col items-center p-8" onSubmit={handleSubmit}>
         <TextInput
           id="name"
-          label="Name"
-          placeholder="Group name"
+          label={t("group-dialog-name-label")}
+          placeholder={t("group-dialog-name-placeholder")}
           value={fields.name}
           setValue={setters.name}
           error={errors.name}
@@ -79,10 +83,10 @@ function AddGroupDialogContent() {
             className="flex-1"
             onClick={close}
           >
-            Cancel
+            {t("cancel")}
           </Button>
           <Button variant="solid" className="flex-1">
-            Add
+            {t("add")}
           </Button>
         </div>
         {response && !response.success && (

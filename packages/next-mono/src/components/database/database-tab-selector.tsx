@@ -1,17 +1,25 @@
+"use client";
+
 import TabSelector, { type Tab } from "@/components/ui/tab-selector";
+import { TranslationFunction } from "@/types/utils";
+import { useTranslations } from "next-intl";
 
-const databaseTabs = [
-  { id: "students", name: "Students", route: "/database/students" },
-  { id: "groups", name: "Groups", route: "/database/groups" },
-] as const satisfies Tab[];
+const getDatabaseTabs = (t: TranslationFunction) => {
+  return [
+    { id: "students", name: t("students"), route: "/database/students" },
+    { id: "groups", name: t("groups"), route: "/database/groups" },
+  ] as const satisfies Tab[];
+};
 
-type DatabaseTabId = (typeof databaseTabs)[number]["id"];
+type DatabaseTabId = ReturnType<typeof getDatabaseTabs>[number]["id"];
 
 interface Props {
   selected: DatabaseTabId;
 }
 
 export default function DatabaseTabSelector({ selected }: Props) {
+  const t = useTranslations("database-page");
+  const databaseTabs = getDatabaseTabs(t);
   return (
     <div className="w-full border-b border-gray-300">
       <TabSelector tabs={databaseTabs} selected={selected} />

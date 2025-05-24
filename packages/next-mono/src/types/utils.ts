@@ -1,3 +1,5 @@
+import { type Messages, createTranslator } from "next-intl";
+
 export type VoidCallback<T = unknown> = (args: T) => void;
 
 export type Timeout = ReturnType<typeof setTimeout>;
@@ -8,3 +10,5 @@ export type ServerActionResponse = {
   success: boolean;
   message: string;
 };
+
+export type TranslationFunction = ReturnType<typeof createTranslator<Messages>>;

@@ -1,6 +1,19 @@
 {
-  "database-layout": {
+  "sidebar": {
+    "attendance": "Présence",
+    "database": "Base de données",
+    "settings": "Paramètres"
+  },
+  "filters": {
+    "by": "Par",
+    "name": "Nom"
+  },
+  "database-page": {
     "title": "Base de données",
-    "subtitle": "Afficher et gérer la base de données."
+    "subtitle": "Afficher et gérer la base de données.",
+    "students": "Étudiants",
+    "groups": "Groupes",
+    "group-searchbar-placeholder": "Rechercher des groupes",
+    "add": "Ajouter"
   }
 }

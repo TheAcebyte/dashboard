@@ -5,7 +5,7 @@ export default async function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const t = await getTranslations("database-layout");
+  const t = await getTranslations("database-page");
 
   return (
     <section className="relative flex-1 px-8 py-16 sm:px-16">

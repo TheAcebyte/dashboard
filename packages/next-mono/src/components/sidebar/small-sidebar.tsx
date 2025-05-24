@@ -1,17 +1,23 @@
-import { navigationTabs } from "@/constants/navigation";
+"use client";
+
+import type { NavigationTab } from "@/constants/navigation";
+import { usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
-export default function SmallSidebar() {
+interface Props {
+  tabs: NavigationTab[];
+}
+
+export default function SmallSidebar({ tabs }: Props) {
   const pathname = usePathname();
 
   return (
     <div className="sticky top-0 flex flex-col items-center gap-16 p-4">
       <Image src="/logo.svg" alt="" width={32} height={32} />
       <ul className="flex flex-col gap-4">
-        {navigationTabs.map((tab, index) => {
+        {tabs.map((tab, index) => {
           const routeMatch = pathname.startsWith(tab.route);
           return (
             <li key={index}>

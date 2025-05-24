@@ -23,8 +23,8 @@ const pollingDelay = 5000;
 
 export default function Notifications() {
   const [students, setStudents] = useState<PaginatedActiveStudentRecord[]>([]);
-  const sinceDateRef = useRef(Date.now());
   const [firstUnseenIndex, setFirstUnseenIndex] = useState(0);
+  const sinceDateRef = useRef(Date.now());
 
   const fetchNewerActiveStudents = useCallback(() => {
     const url = new URL(activeStudentEndpoint);

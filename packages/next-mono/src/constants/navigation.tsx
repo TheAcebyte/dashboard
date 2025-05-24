@@ -1,14 +1,29 @@
+import type { TranslationFunction } from "@/types/utils";
 import { ChartNoAxesColumn, Database, Settings } from "lucide-react";
 import type { ReactNode } from "react";
 
-interface NavigationTab {
+export interface NavigationTab {
   name: string;
   icon: ReactNode;
   route: string;
 }
 
-export const navigationTabs: NavigationTab[] = [
-  { name: "Attendance", icon: <ChartNoAxesColumn />, route: "/attendance" },
-  { name: "Database", icon: <Database />, route: "/database" },
-  { name: "Settings", icon: <Settings />, route: "/settings" },
-] as const;
+export const getNavigationTabs = (t: TranslationFunction) => {
+  return [
+    {
+      name: t("attendance"),
+      icon: <ChartNoAxesColumn />,
+      route: "/attendance",
+    },
+    {
+      name: t("database"),
+      icon: <Database />,
+      route: "/database",
+    },
+    {
+      name: t("settings"),
+      icon: <Settings />,
+      route: "/settings",
+    },
+  ] as const satisfies NavigationTab[];
+};

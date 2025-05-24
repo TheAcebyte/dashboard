@@ -1,4 +1,5 @@
-import { SelectOption } from "@/components/ui/select";
+import type { SelectOption } from "@/components/ui/select";
+import type { TranslationFunction } from "@/types/utils";
 
 export const studentFilterOptions = [
   { id: "name", label: "Name" },
@@ -9,18 +10,20 @@ export const studentFilterOptions = [
 
 export type StudentFilterField = (typeof studentFilterOptions)[number]["id"];
 
-export const groupFilterOptions = [
-  { id: "name", label: "Name" },
-] as const satisfies SelectOption[];
+export const getGroupFilterOptions = (t: TranslationFunction) => {
+  return [{ id: "name", label: t("name") }] as const satisfies SelectOption[];
+};
 
-export type GroupFilterField = (typeof groupFilterOptions)[number]["id"];
+export type GroupFilterField = ReturnType<
+  typeof getGroupFilterOptions
+>[number]["id"];
 
 export const sessionFilterOptions = [
   { id: "group", label: "Group" },
   { id: "status", label: "Status" },
-] as const satisfies SelectOption[]
+] as const satisfies SelectOption[];
 
-export type SessionFilterField = (typeof sessionFilterOptions)[number]["id"]
+export type SessionFilterField = (typeof sessionFilterOptions)[number]["id"];
 
 export const sessionStudentFilterOptions = [
   { id: "name", label: "Name" },

@@ -1,6 +1,22 @@
 {
-  "database-layout": {
+  "sidebar": {
+    "attendance": "Attendance",
+    "database": "Database",
+    "settings": "Settings"
+  },
+  "filters": {
+    "by": "By",
+    "name": "Name"
+  },
+  "database-page": {
     "title": "Database",
-    "subtitle": "View and manage the system database."
+    "subtitle": "View and manage the system database.",
+    "students": "Students",
+    "groups": "Groups",
+    "add": "Add",
+    "cancel": "Cancel",
+    "group-searchbar-placeholder": "Search for groups",
+    "group-dialog-name-label": "Name",
+    "group-dialog-name-placeholder": "Group name"
   }
 }

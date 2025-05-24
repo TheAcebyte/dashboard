@@ -1,10 +1,11 @@
 "use client";
 
 import Select, { selectContext } from "@/components/ui/select";
-import { groupFilterOptions } from "@/constants/filters";
+import { getGroupFilterOptions } from "@/constants/filters";
 import { cn } from "@/lib/utils";
 import useGroupSearchStore from "@/stores/group-search-store";
 import { Search, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { type ChangeEvent, useContext } from "react";
 
 interface Props {
@@ -12,6 +13,10 @@ interface Props {
 }
 
 export default function GroupSearchbar({ className }: Props) {
+  const tPage = useTranslations("database-page");
+  const tFilters = useTranslations("filters");
+  const groupFilterOptions = getGroupFilterOptions(tFilters);
+
   const { searchField, setSearchField, searchQuery, setSearchQuery } =
     useGroupSearchStore();
   const clearSearchQuery = () => setSearchQuery("");
@@ -35,7 +40,7 @@ export default function GroupSearchbar({ className }: Props) {
       )}
       <input
         type="text"
-        placeholder="Search for groups"
+        placeholder={tPage("group-searchbar-placeholder")}
         className="min-w-0 flex-1 text-zinc-900 outline-none placeholder:text-gray-400"
         value={searchQuery}
         onChange={handleChange}
@@ -59,5 +64,10 @@ function SelectLabel() {
     throw new Error("SelectLabel must be placed inside a Select component.");
   }
 
-  return <p className="py-2 font-medium">By {option}</p>;
+  const t = useTranslations("filters");
+  return (
+    <p className="py-2 font-medium">
+      {t("by")} {option}
+    </p>
+  );
 }

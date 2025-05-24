@@ -1,20 +1,25 @@
 "use client";
 
 import Logo from "@/components/logo";
-import { navigationTabs } from "@/constants/navigation";
+import type { NavigationTab } from "@/constants/navigation";
+import { usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
-export default function LargeSidebar() {
+interface Props {
+  tabs: NavigationTab[];
+}
+
+export default function LargeSidebar({ tabs }: Props) {
   const pathname = usePathname();
+
   return (
     <div className="sticky top-0 flex flex-col gap-16">
       <div className="px-6 py-4">
         <Logo />
       </div>
       <ul className="flex flex-col gap-4">
-        {navigationTabs.map((tab, index) => {
+        {tabs.map((tab, index) => {
           const routeMatch = pathname.startsWith(tab.route);
           return (
             <li key={index}>
