@@ -1,7 +1,7 @@
 "use client";
 
 import addStudent from "@/actions/student/add-student";
-import { studentSchema } from "@/actions/student/validation";
+import { getStudentSchema } from "@/actions/student/validation";
 import { buttonStyles } from "@/components/ui/button";
 import Button from "@/components/ui/button";
 import {
@@ -23,16 +23,18 @@ import { fetchGroupOptions } from "@/lib/fetch";
 import { cn } from "@/lib/utils";
 import { useTableRefetchStore } from "@/stores/refetch-store";
 import { CircleAlert, Plus, UsersRound, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useContext, useEffect } from "react";
 
 export default function AddStudentDialog() {
+  const t = useTranslations("database-page");
   return (
     <Dialog id="add-student">
       <DialogTrigger
         className={cn(buttonStyles.solid, "flex h-full items-center gap-2")}
       >
-        Add
+        {t("add")}
         <Plus />
       </DialogTrigger>
       <DialogContent>
@@ -50,9 +52,11 @@ function AddStudentDialogContent() {
     );
   }
 
+  const t = useTranslations("database-page");
   const { close } = contextValue;
   const { refetch } = useTableRefetchStore();
   const { data: groupOptions } = useFetch(fetchGroupOptions);
+  const studentSchema = getStudentSchema(t);
   const { handleSubmit, fields, setters, response, errors, reset } =
     useFormAction(addStudent, studentSchema);
 
@@ -69,7 +73,9 @@ function AddStudentDialogContent() {
   return (
     <div className="rounded-2xl border border-gray-300 bg-white">
       <header className="flex items-center justify-between border-b border-gray-300 px-8 py-4">
-        <h1 className="text-xl font-semibold text-zinc-900">Add Student</h1>
+        <h1 className="text-xl font-semibold text-zinc-900">
+          {t("student-dialog-add-title")}
+        </h1>
         <X
           className="cursor-pointer text-zinc-900 hover:text-zinc-700"
           onClick={close}
@@ -87,36 +93,36 @@ function AddStudentDialogContent() {
         <div className="flex gap-8">
           <TextInput
             id="first-name"
-            label="First Name"
-            placeholder="Your first name"
+            label={t("student-dialog-first-name-label")}
+            placeholder={t("student-dialog-first-name-placeholder")}
             value={fields.firstName}
             setValue={setters.firstName}
             error={errors.firstName}
           />
           <TextInput
             id="last-name"
-            label="Last Name"
-            placeholder="Your last name"
+            label={t("student-dialog-last-name-label")}
+            placeholder={t("student-dialog-last-name-placeholder")}
             value={fields.lastName}
             setValue={setters.lastName}
             error={errors.lastName}
           />
         </div>
         <CNEInput
-          label="CNE"
+          label={t("student-dialog-cne-label")}
           value={fields.cne}
           setValue={setters.cne}
           error={errors.cne}
         />
         <DateInput
-          label="Date of Birth"
+          label={t("student-dialog-birthdate-label")}
           value={fields.birthDate}
           setValue={setters.birthDate}
           error={errors.birthDate}
         />
         <SelectInput
           options={groupOptions}
-          label="Group"
+          label={t("student-dialog-group-label")}
           value={fields.groupId}
           setValue={setters.groupId}
           error={errors.groupId}
@@ -128,10 +134,10 @@ function AddStudentDialogContent() {
             className="flex-1"
             onClick={close}
           >
-            Cancel
+            {t("cancel")}
           </Button>
           <Button variant="solid" className="flex-1">
-            Add
+            {t("add")}
           </Button>
         </div>
         {response && !response.success && (

@@ -1,12 +1,17 @@
 "use client";
 
 import Select, { selectContext } from "@/components/ui/select";
-import { studentFilterOptions } from "@/constants/filters";
+import { getStudentFilterOptions } from "@/constants/filters";
 import useStudentSearchStore from "@/stores/student-search-store";
 import { Search, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { type ChangeEvent, useContext } from "react";
 
 export default function StudentSearchbar() {
+  const tPage = useTranslations("database-page");
+  const tFilters = useTranslations("filters");
+  const studentFilterOptions = getStudentFilterOptions(tFilters);
+
   const { searchField, setSearchField, searchQuery, setSearchQuery } =
     useStudentSearchStore();
   const clearSearchQuery = () => setSearchQuery("");
@@ -25,7 +30,7 @@ export default function StudentSearchbar() {
       )}
       <input
         type="text"
-        placeholder="Search for students"
+        placeholder={tPage("student-searchbar-placeholder")}
         className="min-w-0 flex-1 text-zinc-900 outline-none placeholder:text-gray-400"
         value={searchQuery}
         onChange={handleChange}

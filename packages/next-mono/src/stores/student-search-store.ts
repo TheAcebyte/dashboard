@@ -1,16 +1,20 @@
-import { studentFilterOptions } from "@/constants/filters";
+import { getStudentFilterOptions } from "@/constants/filters";
 import useParamState from "@/hooks/use-param-state";
 import useValidateParamState from "@/hooks/use-validate-param-state";
+import type { TranslationFunction } from "@/types/utils";
+import { useTranslations } from "next-intl";
 import { z } from "zod";
 
-const studentFilterFieldEnum = z.enum(
-  studentFilterOptions.map((option) => option.id),
-);
+const getStudentFilterFieldEnum = (t: TranslationFunction<"filters">) => {
+  const studentFilterOptions = getStudentFilterOptions(t);
+  return z.enum(studentFilterOptions.map((option) => option.id));
+};
 
 export default function useStudentSearchStore() {
+  const t = useTranslations("filters");
   const [searchField, pushSearchField] = useValidateParamState(
     "field",
-    studentFilterFieldEnum,
+    getStudentFilterFieldEnum(t),
     "name",
   );
   const [searchQuery, pushSearchQuery] = useParamState("query", "");

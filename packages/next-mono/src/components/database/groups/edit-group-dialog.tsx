@@ -92,7 +92,7 @@ function EditGroupDialogContent({ record }: Props) {
             {t("cancel")}
           </Button>
           <Button variant="solid" className="flex-1">
-            {t("edit")}
+            {t("apply")}
           </Button>
         </div>
         {response && !response.success && (

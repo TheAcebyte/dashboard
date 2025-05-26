@@ -12,6 +12,7 @@ import { PaginatedStudentRecord } from "@/db/queries/students";
 import useFormAction from "@/hooks/use-form-action";
 import { useTableRefetchStore } from "@/stores/refetch-store";
 import { AlertTriangle, CircleAlert, Trash2, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useContext, useEffect } from "react";
 import { z } from "zod";
 
@@ -20,11 +21,12 @@ interface Props {
 }
 
 export default function DeleteStudentDialog({ record }: Props) {
+  const t = useTranslations("database-page");
   return (
     <Dialog id={`delete-student-${record.studentId}`} className="w-full">
       <DialogTrigger className="flex w-full cursor-pointer items-center gap-4 bg-white px-4 py-2 font-medium text-red-700 transition-colors hover:bg-gray-50 hover:text-red-500">
         <Trash2 size={20} />
-        Delete
+        {t("delete")}
       </DialogTrigger>
       <DialogContent>
         <DeleteStudentDialogContent record={record} />
@@ -41,6 +43,7 @@ function DeleteStudentDialogContent({ record }: Props) {
     );
   }
 
+  const t = useTranslations("database-page");
   const { close } = contextValue;
   const { refetch } = useTableRefetchStore();
   const deleteThisStudent = deleteStudent.bind(null, record.studentId);
@@ -62,10 +65,10 @@ function DeleteStudentDialogContent({ record }: Props) {
         <AlertTriangle size={28} />
       </div>
       <h1 className="mt-4 text-xl font-semibold text-zinc-900">
-        Delete Student
+        {t("student-dialog-delete-title")}
       </h1>
       <p className="mt-1 text-center font-medium text-gray-500">
-        Are you sure you want to delete this student?
+        {t("student-dialog-delete-confirm")}
       </p>
       <form className="mt-8 flex w-full flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex gap-4">
@@ -75,10 +78,10 @@ function DeleteStudentDialogContent({ record }: Props) {
             className="flex-1"
             onClick={close}
           >
-            Cancel
+            {t("cancel")}
           </Button>
           <Button variant="solid" className="flex-1">
-            Confirm
+            {t("confirm")}
           </Button>
         </div>
         {response && !response.success && (

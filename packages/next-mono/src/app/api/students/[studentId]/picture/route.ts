@@ -13,6 +13,6 @@ export async function GET(
   const data = await findStudentPictureById(studentId);
 
   if (!data) notFound();
-  // @ts-expect-error
+  // @ts-expect-error: Type error when sending picture as response body
   return new Response(data.picture);
 }

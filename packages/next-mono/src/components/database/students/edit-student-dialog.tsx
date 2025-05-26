@@ -1,7 +1,7 @@
 "use client";
 
 import editStudent from "@/actions/student/edit-student";
-import { studentSchema } from "@/actions/student/validation";
+import { getStudentSchema } from "@/actions/student/validation";
 import Button from "@/components/ui/button";
 import {
   Dialog,
@@ -23,6 +23,7 @@ import { formatDateToddMMyyyy } from "@/lib/date";
 import { fetchGroupOptions, fetchPicture } from "@/lib/fetch";
 import { useTableRefetchStore } from "@/stores/refetch-store";
 import { CircleAlert, Pencil, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useContext, useEffect } from "react";
 
 interface Props {
@@ -30,11 +31,12 @@ interface Props {
 }
 
 export default function EditStudentDialog({ record }: Props) {
+  const t = useTranslations("database-page");
   return (
     <Dialog id={`edit-student-${record.studentId}`} className="w-full">
       <DialogTrigger className="flex w-full cursor-pointer items-center gap-4 bg-white px-4 py-2 font-medium text-zinc-900 transition-colors hover:bg-gray-50 hover:text-zinc-700">
         <Pencil size={20} />
-        Edit
+        {t("edit")}
       </DialogTrigger>
       <DialogContent>
         <EditStudentDialogContent record={record} />
@@ -51,6 +53,7 @@ function EditStudentDialogContent({ record }: Props) {
     );
   }
 
+  const t = useTranslations("database-page");
   const { close } = contextValue;
   const { refetch } = useTableRefetchStore();
   const { data: groupOptions } = useFetch(fetchGroupOptions);
@@ -58,6 +61,7 @@ function EditStudentDialogContent({ record }: Props) {
   const editThisStudent = editStudent.bind(null, record.studentId);
   const date = new Date(record.birthDate);
   const dateField = formatDateToddMMyyyy(date, "");
+  const studentSchema = getStudentSchema(t);
   const { handleSubmit, fields, setters, response, errors } = useFormAction(
     editThisStudent,
     studentSchema,
@@ -85,7 +89,9 @@ function EditStudentDialogContent({ record }: Props) {
   return (
     <div className="rounded-2xl border border-gray-300 bg-white">
       <header className="flex items-center justify-between border-b border-gray-300 px-8 py-4">
-        <h1 className="text-xl font-semibold text-zinc-900">Edit Student</h1>
+        <h1 className="text-xl font-semibold text-zinc-900">
+          {t("student-dialog-edit-title")}
+        </h1>
         <X
           className="cursor-pointer text-zinc-900 hover:text-zinc-700"
           onClick={close}
@@ -103,36 +109,36 @@ function EditStudentDialogContent({ record }: Props) {
         <div className="flex gap-8">
           <TextInput
             id="first-name"
-            label="First Name"
-            placeholder="Your first name"
+            label={t("student-dialog-first-name-label")}
+            placeholder={t("student-dialog-first-name-placeholder")}
             value={fields.firstName}
             setValue={setters.firstName}
             error={errors.firstName}
           />
           <TextInput
             id="last-name"
-            label="Last Name"
-            placeholder="Your last name"
+            label={t("student-dialog-last-name-label")}
+            placeholder={t("student-dialog-last-name-placeholder")}
             value={fields.lastName}
             setValue={setters.lastName}
             error={errors.lastName}
           />
         </div>
         <CNEInput
-          label="CNE"
+          label={t("student-dialog-cne-label")}
           value={fields.cne}
           setValue={setters.cne}
           error={errors.cne}
         />
         <DateInput
-          label="Date of Birth"
+          label={t("student-dialog-birthdate-label")}
           value={fields.birthDate}
           setValue={setters.birthDate}
           error={errors.birthDate}
         />
         <SelectInput
           options={groupOptions}
-          label="Group"
+          label={t("student-dialog-group-label")}
           value={fields.groupId}
           setValue={setters.groupId}
           error={errors.groupId}
@@ -144,10 +150,10 @@ function EditStudentDialogContent({ record }: Props) {
             className="flex-1"
             onClick={close}
           >
-            Cancel
+            {t("cancel")}
           </Button>
           <Button variant="solid" className="flex-1">
-            Apply
+            {t("apply")}
           </Button>
         </div>
         {response && !response.success && (

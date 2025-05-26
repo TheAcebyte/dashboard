@@ -21,7 +21,7 @@ export default async function addGroup(
 
   const matchedGroup = await findGroupByName(payload.name);
   if (matchedGroup) {
-    return { success: false, message: "Name is already taken." };
+    return { success: false, message: t("group-action-error-duplicate-name") };
   }
 
   const groupId = randomUUID();
@@ -30,5 +30,5 @@ export default async function addGroup(
     name: payload.name,
   });
 
-  return { success: true, message: "Successfully added group." };
+  return { success: true, message: t("group-action-success-add") };
 }

@@ -2,7 +2,7 @@
 
 import {
   type StudentFields,
-  studentSchema,
+  getStudentSchema,
 } from "@/actions/student/validation";
 import { cst } from "@/constants";
 import { db } from "@/db";
@@ -10,18 +10,22 @@ import { findStudentByCNE } from "@/db/queries/students";
 import { studentPictures, students } from "@/db/schema/students";
 import type { ServerActionResponse } from "@/types/utils";
 import { randomUUID } from "crypto";
+import { getTranslations } from "next-intl/server";
 
 export default async function addStudent(
   payload: StudentFields,
 ): Promise<ServerActionResponse> {
+  const t = await getTranslations("database-page");
+  const studentSchema = getStudentSchema(t);
+
   const parseResult = studentSchema.safeParse(payload);
   if (!parseResult) {
-    return { success: false, message: "Serverside validation failed." };
+    return { success: false, message: t("student-action-error-validation") };
   }
 
   const matchedStudent = await findStudentByCNE(payload.cne);
   if (matchedStudent) {
-    return { success: false, message: "CNE is already taken." };
+    return { success: false, message: t("student-action-error-duplicate-cne") };
   }
 
   const day = payload.birthDate.slice(0, 2);
@@ -50,5 +54,13 @@ export default async function addStudent(
     picture: picture,
   });
 
-  return { success: true, message: "Successfully added student." };
+  await fetch(cst.FLASK_APP_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      studentId,
+      pictureUrl,
+    }),
+  });
+
+  return { success: true, message: t("student-action-success-add") };
 }

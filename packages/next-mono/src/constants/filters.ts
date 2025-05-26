@@ -1,14 +1,18 @@
 import type { SelectOption } from "@/components/ui/select";
 import type { TranslationFunction } from "@/types/utils";
 
-export const studentFilterOptions = [
-  { id: "name", label: "Name" },
-  { id: "age", label: "Age" },
-  { id: "cne", label: "CNE" },
-  { id: "group", label: "Group" },
-] as const satisfies SelectOption[];
+export const getStudentFilterOptions = (t: TranslationFunction<"filters">) => {
+  return [
+    { id: "name", label: t("name") },
+    { id: "age", label: t("age") },
+    { id: "cne", label: t("cne") },
+    { id: "group", label: t("group") },
+  ] as const satisfies SelectOption[];
+};
 
-export type StudentFilterField = (typeof studentFilterOptions)[number]["id"];
+export type StudentFilterField = ReturnType<
+  typeof getStudentFilterOptions
+>[number]["id"];
 
 export const getGroupFilterOptions = (t: TranslationFunction<"filters">) => {
   return [{ id: "name", label: t("name") }] as const satisfies SelectOption[];

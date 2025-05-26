@@ -62,7 +62,9 @@ function AddGroupDialogContent() {
   return (
     <div className="w-[400px] rounded-2xl border border-gray-300 bg-white">
       <header className="flex items-center justify-between border-b border-gray-300 px-8 py-4">
-        <h1 className="text-xl font-semibold text-zinc-900">Add Group</h1>
+        <h1 className="text-xl font-semibold text-zinc-900">
+          {t("group-dialog-add-title")}
+        </h1>
         <X
           className="cursor-pointer text-zinc-900 hover:text-zinc-700"
           onClick={close}

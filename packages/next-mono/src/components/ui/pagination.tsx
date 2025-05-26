@@ -1,5 +1,6 @@
 import { cn, iterator } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { createContext, useContext } from "react";
 
 interface PaginationStatusProps {
@@ -15,16 +16,17 @@ export function PaginationStatus({
   count,
   total,
 }: PaginationStatusProps) {
+  const t = useTranslations("pagination");
   const left = count == 0 ? 0 : (page - 1) * limit + 1;
   const right = count == 0 ? 0 : left + count - 1;
 
   return (
     <p className="font-medium text-gray-500">
-      Showing
+      {t("showing")}
       <span className="font-semibold text-zinc-900">
         {` ${left}-${right} `}
       </span>
-      of {total}
+      {t("of")} {total}
     </p>
   );
 }

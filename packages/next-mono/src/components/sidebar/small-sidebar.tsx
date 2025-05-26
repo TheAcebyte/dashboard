@@ -1,10 +1,9 @@
 "use client";
 
 import type { NavigationTab } from "@/constants/navigation";
-import { usePathname } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import Link from "next/link";
 
 interface Props {
   tabs: NavigationTab[];
