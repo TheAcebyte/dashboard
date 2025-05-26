@@ -4,7 +4,7 @@ import TabSelector, { type Tab } from "@/components/ui/tab-selector";
 import { TranslationFunction } from "@/types/utils";
 import { useTranslations } from "next-intl";
 
-const getDatabaseTabs = (t: TranslationFunction) => {
+const getDatabaseTabs = (t: TranslationFunction<"database-page">) => {
   return [
     { id: "students", name: t("students"), route: "/database/students" },
     { id: "groups", name: t("groups"), route: "/database/groups" },

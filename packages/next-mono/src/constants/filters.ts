@@ -10,7 +10,7 @@ export const studentFilterOptions = [
 
 export type StudentFilterField = (typeof studentFilterOptions)[number]["id"];
 
-export const getGroupFilterOptions = (t: TranslationFunction) => {
+export const getGroupFilterOptions = (t: TranslationFunction<"filters">) => {
   return [{ id: "name", label: t("name") }] as const satisfies SelectOption[];
 };
 

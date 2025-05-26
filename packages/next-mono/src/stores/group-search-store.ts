@@ -5,7 +5,7 @@ import type { TranslationFunction } from "@/types/utils";
 import { useTranslations } from "next-intl";
 import { z } from "zod";
 
-const getGroupFilterFieldEnum = (t: TranslationFunction) => {
+const getGroupFilterFieldEnum = (t: TranslationFunction<"filters">) => {
   const groupFilterOptions = getGroupFilterOptions(t);
   return z.enum(groupFilterOptions.map((option) => option.id));
 };

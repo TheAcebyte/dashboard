@@ -8,7 +8,7 @@ export interface NavigationTab {
   route: string;
 }
 
-export const getNavigationTabs = (t: TranslationFunction) => {
+export const getNavigationTabs = (t: TranslationFunction<"sidebar">) => {
   return [
     {
       name: t("attendance"),

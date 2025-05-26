@@ -1,4 +1,4 @@
-import { type Messages, createTranslator } from "next-intl";
+import { type Messages, type NamespaceKeys, useTranslations } from "next-intl";
 
 export type VoidCallback<T = unknown> = (args: T) => void;
 
@@ -11,4 +11,6 @@ export type ServerActionResponse = {
   message: string;
 };
 
-export type TranslationFunction = ReturnType<typeof createTranslator<Messages>>;
+export type TranslationFunction<T extends keyof Messages> = ReturnType<
+  typeof useTranslations<NamespaceKeys<Messages, T>>
+>;
