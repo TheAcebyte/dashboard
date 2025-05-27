@@ -12,6 +12,8 @@ import type { ServerActionResponse } from "@/types/utils";
 import { randomUUID } from "crypto";
 import { getTranslations } from "next-intl/server";
 
+const datasetEndpoint = new URL("/add_toDB", cst.FLASK_APP_URL);
+
 export default async function addStudent(
   payload: StudentFields,
 ): Promise<ServerActionResponse> {
@@ -54,7 +56,7 @@ export default async function addStudent(
     picture: picture,
   });
 
-  await fetch(cst.FLASK_APP_URL, {
+  await fetch(datasetEndpoint, {
     method: "POST",
     body: JSON.stringify({
       studentId,

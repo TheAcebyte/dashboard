@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils";
 import { useTableRefetchStore } from "@/stores/refetch-store";
 import { CircleAlert, Plus, UsersRound, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useContext, useEffect } from "react";
 
 export default function AddStudentDialog() {

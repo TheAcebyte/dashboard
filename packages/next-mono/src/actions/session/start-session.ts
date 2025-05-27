@@ -1,6 +1,6 @@
 "use server";
 
-import { SessionFields, sessionSchema } from "@/actions/session/validation";
+import { SessionFields, getSessionSchema } from "@/actions/session/validation";
 import { db } from "@/db";
 import { findGroupByName } from "@/db/queries/groups";
 import { sessionStudents, sessions } from "@/db/schema/sessions";
@@ -8,29 +8,31 @@ import { students } from "@/db/schema/students";
 import type { ServerActionResponse } from "@/types/utils";
 import { randomUUID } from "crypto";
 import { eq } from "drizzle-orm";
+import { getTranslations } from "next-intl/server";
 
 export default async function startSession(
   payload: SessionFields,
 ): Promise<ServerActionResponse> {
+  const t = await getTranslations("attendance-page");
+  const sessionSchema = getSessionSchema(t);
+
   const parseResult = sessionSchema.safeParse(payload);
   if (!parseResult) {
-    return { success: false, message: "Serverside validation failed." };
+    return { success: false, message: t("session-action-error-validation") };
   }
 
   const matchedGroup = await findGroupByName(payload.group);
   if (!matchedGroup) {
-    return { success: false, message: "Could not find session." };
+    return { success: false, message: t("session-action-error-not-found") };
   }
 
   const sessionId = randomUUID();
   const { groupId } = matchedGroup;
   const startedAt = Date.now();
-  const durationInMs = payload.duration
-    ? payload.duration * 60 * 1000
-    : undefined;
+  const durationInMs = payload.duration ? payload.duration * 60 * 1000 : null;
   const lateThresholdInMs = payload.lateThreshold
     ? payload.lateThreshold * 60 * 1000
-    : undefined;
+    : null;
 
   await db.insert(sessions).values({
     sessionId: sessionId,
@@ -58,5 +60,5 @@ export default async function startSession(
     );
   }
 
-  return { success: true, message: "Successfully started session." };
+  return { success: true, message: t("session-action-success-start") };
 }

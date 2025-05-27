@@ -7,6 +7,7 @@ import { splitTimeFromSeconds } from "@/lib/date";
 import { cn, mapRange, onlyContainsCharacter } from "@/lib/utils";
 import { useSessionRefetchStore } from "@/stores/refetch-store";
 import { AlarmClock } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
 interface Props {
@@ -28,6 +29,7 @@ export default function SessionTimerCard({
   emptyColor = "#D1D5DB",
   fillColor = "#18181B",
 }: Props) {
+  const t = useTranslations("attendance-page");
   const roundedStartTime = Math.round(startedAt / 1000);
   const roundedDuration = Math.round(plannedDuration / 1000);
   const [remainingTime, setRemainingTime] = useState(1);
@@ -99,7 +101,7 @@ export default function SessionTimerCard({
     <div className="rounded-2xl border border-gray-300 px-8 py-4">
       <header className="flex items-center gap-2 font-medium text-gray-500">
         <AlarmClock size={20} />
-        <h1>Time Remaining</h1>
+        <h1>{t("time-remaining")}</h1>
       </header>
       <div className="relative mt-8">
         <canvas width={size} height={size} ref={canvasRef}></canvas>

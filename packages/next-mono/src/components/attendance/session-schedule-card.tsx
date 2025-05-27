@@ -1,8 +1,10 @@
 "use client";
 
 import { Session } from "@/db/queries/sessions";
-import { formatDateToHHmm, formatDateToLong } from "@/lib/date";
+import { useLongDate } from "@/hooks/use-long-date";
+import { formatDateToHHmm } from "@/lib/date";
 import { Calendar } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import EndSessionDialog from "./end-session-modal";
 
@@ -11,6 +13,7 @@ interface SessionScheduleProps {
 }
 
 export default function SessionScheduleCard({ session }: SessionScheduleProps) {
+  const t = useTranslations("attendance-page");
   const startDate = new Date(session.startedAt);
   let endDate: Date | null = null;
   if (session.finishedAt) {
@@ -23,9 +26,13 @@ export default function SessionScheduleCard({ session }: SessionScheduleProps) {
     <div className="flex flex-col rounded-2xl border border-gray-300 px-8 py-4">
       <header className="flex items-center gap-2 font-medium text-gray-500">
         <Calendar size={20} />
-        <h1>Schedule</h1>
+        <h1>{t("schedule")}</h1>
       </header>
-      <Schedule startDate={startDate} endDate={endDate} />
+      {endDate ? (
+        <BoundedSchedule startDate={startDate} endDate={endDate} />
+      ) : (
+        <UnboundedSchedule startDate={startDate} />
+      )}
       {!session.finishedAt && (
         <EndSessionDialog sessionId={session.sessionId} />
       )}
@@ -33,26 +40,33 @@ export default function SessionScheduleCard({ session }: SessionScheduleProps) {
   );
 }
 
-interface ScheduleProps {
+interface UnboundedScheduleProps {
   startDate: Date;
-  endDate: Date | null;
 }
 
-function Schedule({ startDate, endDate }: ScheduleProps) {
+function UnboundedSchedule({ startDate }: UnboundedScheduleProps) {
   const startTime = formatDateToHHmm(startDate);
-  const startDateLong = formatDateToLong(startDate);
-  if (!endDate) {
-    return (
-      <div className="mt-4">
-        <p className="text-[32px] font-semibold text-zinc-900">{startTime}</p>
-        <p className="font-medium text-gray-500">{startDateLong}</p>
-      </div>
-    );
-  }
+  const startDateLong = useLongDate(startDate);
+  return (
+    <div className="mt-4">
+      <p className="text-[32px] font-semibold text-zinc-900">{startTime}</p>
+      <p className="font-medium text-gray-500">{startDateLong}</p>
+    </div>
+  );
+}
 
+interface BoundedScheduleProps {
+  startDate: Date;
+  endDate: Date;
+}
+
+function BoundedSchedule({ startDate, endDate }: BoundedScheduleProps) {
+  const startTime = formatDateToHHmm(startDate);
+  const startDateLong = useLongDate(startDate);
   const endTime = formatDateToHHmm(endDate);
-  const endDateLong = formatDateToLong(endDate);
+  const endDateLong = useLongDate(endDate);
   const isOnSameDay = startDateLong == endDateLong;
+
   if (isOnSameDay) {
     return (
       <div className="mt-4">

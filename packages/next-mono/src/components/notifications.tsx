@@ -11,17 +11,21 @@ import {
 import { cst } from "@/constants";
 import { PaginatedActiveStudentRecord } from "@/db/queries/sessions";
 import usePolling from "@/hooks/use-polling";
-import { formatDateToHHmm, formatRelativeDay } from "@/lib/date";
+import { formatRelativeDate } from "@/lib/date";
 import { fetchAllPages } from "@/lib/paginate";
 import { cn } from "@/lib/utils";
 import { Bell, BellOff } from "lucide-react";
 import { CheckCheck } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
 const activeStudentEndpoint = new URL("/api/students/active", cst.APP_URL);
 const pollingDelay = 5000;
 
 export default function Notifications() {
+  const t = useTranslations("notifications");
+  const format = useFormatter();
+
   const [students, setStudents] = useState<PaginatedActiveStudentRecord[]>([]);
   const [firstUnseenIndex, setFirstUnseenIndex] = useState(0);
   const sinceDateRef = useRef(Date.now());
@@ -60,7 +64,7 @@ export default function Notifications() {
         <header className="flex items-center justify-between gap-16 border-b border-gray-300 px-4 py-2">
           <div className="flex items-center gap-4">
             <h1 className="text-lg font-semibold text-zinc-900">
-              Notifications
+              {t("notifications")}
             </h1>
             <p className="aspect-square rounded-full bg-gray-50 p-1 text-sm font-semibold text-gray-500">
               {notificationCount}
@@ -86,7 +90,7 @@ export default function Notifications() {
               const fullName = `${student.firstName} ${student.lastName}`;
               // Since status is either present or late, arrivedAt is guaranteed to exist
               const arrivalDate = new Date(student.arrivedAt!);
-              const formattedDate = `${formatRelativeDay(arrivalDate)}, ${formatDateToHHmm(arrivalDate)}`;
+              const formattedDate = formatRelativeDate(arrivalDate, format);
 
               return (
                 <li
@@ -97,8 +101,8 @@ export default function Notifications() {
                     <Avatar src={student.pictureUrl} size={48} />
                     <div className="flex flex-col">
                       <p className="text-zinc-900">
-                        <span className="font-medium">{fullName}</span> checked
-                        in for{" "}
+                        <span className="font-medium">{fullName}</span>{" "}
+                        {t("checked-in-for")}{" "}
                         <span className="font-medium">
                           {student.groupName}.
                         </span>
@@ -150,16 +154,17 @@ function NotificationDropdownTrigger({ pending, readAll }: Props) {
 }
 
 function NoNotificationState() {
+  const t = useTranslations("notifications");
   return (
     <div className="flex flex-col items-center p-8">
       <div className="flex aspect-square items-center rounded-full border border-gray-300 bg-gray-50 px-6 text-zinc-900">
         <BellOff size={24} />
       </div>
       <h1 className="mt-4 text-lg font-semibold text-zinc-900">
-        No Notifications
+        {t("no-notification-title")}
       </h1>
       <p className="mt-1 font-medium text-gray-500">
-        Check back later for notifications.
+        {t("no-notification-subtitle")}
       </p>
     </div>
   );

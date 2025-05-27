@@ -3,8 +3,8 @@
 import Logo from "@/components/logo";
 import type { NavigationTab } from "@/constants/navigation";
 import { usePathname } from "@/i18n/navigation";
+import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 
 interface Props {
   tabs: NavigationTab[];

@@ -2,7 +2,8 @@ import StudentCardActions from "@/components/database/students/student-card-acti
 import Avatar from "@/components/ui/avatar";
 import { cst } from "@/constants";
 import { PaginatedStudentRecord } from "@/db/queries/students";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 const displayClassmatesThreshold = 5;
 const studentCardListUrl = new URL("/database/students?view=card", cst.APP_URL);
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export default function StudentCard({ record, classmates, remaining }: Props) {
+  const t = useTranslations("database-page");
   const fullName = `${record.firstName} ${record.lastName}`;
   const classmatesUrl = new URL(studentCardListUrl);
   classmatesUrl.searchParams.set("field", "group");
@@ -37,16 +39,24 @@ export default function StudentCard({ record, classmates, remaining }: Props) {
             gridTemplateColumns: "max-content max-content",
           }}
         >
-          <h2 className="font-medium text-gray-500">Name</h2>
+          <h2 className="font-medium text-gray-500">
+            {t("student-column-name")}
+          </h2>
           <p className="font-medium text-zinc-900">{fullName}</p>
-          <h2 className="font-medium text-gray-500">CNE</h2>
+          <h2 className="font-medium text-gray-500">
+            {t("student-column-cne")}
+          </h2>
           <p className="font-medium text-zinc-900">{record.cne}</p>
-          <h2 className="font-medium text-gray-500">Group</h2>
+          <h2 className="font-medium text-gray-500">
+            {t("student-column-group")}
+          </h2>
           <p className="font-medium text-zinc-900">{record.group}</p>
         </div>
         {classmates.length >= displayClassmatesThreshold && (
           <div className="flex flex-col gap-4">
-            <h2 className="font-medium text-zinc-900">Classmates</h2>
+            <h2 className="font-medium text-zinc-900">
+              {t("student-column-classmates")}
+            </h2>
             <div className="flex items-center gap-2">
               <ul className="flex">
                 {classmates.map((classmate, index) => (

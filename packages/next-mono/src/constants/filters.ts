@@ -27,12 +27,26 @@ export const sessionFilterOptions = [
   { id: "status", label: "Status" },
 ] as const satisfies SelectOption[];
 
-export type SessionFilterField = (typeof sessionFilterOptions)[number]["id"];
+export const getSessionFilterOptions = (t: TranslationFunction<"filters">) => {
+  return [
+    { id: "group", label: t("group") },
+    { id: "status", label: t("status") },
+  ] as const satisfies SelectOption[];
+};
 
-export const sessionStudentFilterOptions = [
-  { id: "name", label: "Name" },
-  { id: "status", label: "Status" },
-] as const satisfies SelectOption[];
+export type SessionFilterField = ReturnType<
+  typeof getSessionFilterOptions
+>[number]["id"];
 
-export type SessionStudentFilterField =
-  (typeof sessionStudentFilterOptions)[number]["id"];
+export const getSessionStudentFilterOptions = (
+  t: TranslationFunction<"filters">,
+) => {
+  return [
+    { id: "name", label: t("name") },
+    { id: "status", label: t("status") },
+  ] as const satisfies SelectOption[];
+};
+
+export type SessionStudentFilterField = ReturnType<
+  typeof getSessionStudentFilterOptions
+>[number]["id"];

@@ -12,6 +12,7 @@ import useFormAction from "@/hooks/use-form-action";
 import { cn } from "@/lib/utils";
 import { useSessionRefetchStore } from "@/stores/refetch-store";
 import { AlertTriangle, CircleAlert } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useContext, useEffect } from "react";
 import { z } from "zod";
 
@@ -21,7 +22,7 @@ interface Props {
 
 export default function EndSessionDialog({ sessionId }: Props) {
   return (
-    <Dialog id={`end-session-${sessionId}`} className="mt-8 w-full">
+    <Dialog id="end-session" className="mt-8 w-full">
       <DialogTrigger className={cn(buttonStyles.solid, "w-full px-8")}>
         End Session
       </DialogTrigger>
@@ -40,6 +41,7 @@ function EndSessionDialogContent({ sessionId }: Props) {
     );
   }
 
+  const t = useTranslations("attendance-page");
   const { close } = contextValue;
   const { refetch } = useSessionRefetchStore();
   const endThisSession = endSession.bind(null, sessionId, true);
@@ -60,9 +62,11 @@ function EndSessionDialogContent({ sessionId }: Props) {
       <div className="flex aspect-square items-center rounded-full border border-gray-300 bg-gray-50 px-6 text-zinc-900">
         <AlertTriangle size={28} />
       </div>
-      <h1 className="mt-4 text-xl font-semibold text-zinc-900">End Session</h1>
+      <h1 className="mt-4 text-xl font-semibold text-zinc-900">
+        {t("session-dialog-end-title")}
+      </h1>
       <p className="mt-1 text-center font-medium text-gray-500">
-        Are you sure you want to end this session?
+        {t("session-dialog-end-confirm")}
       </p>
       <form className="mt-8 flex w-full flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex gap-4 self-stretch">
@@ -72,10 +76,10 @@ function EndSessionDialogContent({ sessionId }: Props) {
             className="flex-1"
             onClick={close}
           >
-            Cancel
+            {t("cancel")}
           </Button>
           <Button variant="solid" className="flex-1">
-            Confirm
+            {t("confirm")}
           </Button>
         </div>
         {response && !response.success && (

@@ -7,11 +7,13 @@ import {
 } from "@/db/queries/sessions";
 import { sessionStudents } from "@/db/schema/sessions";
 import { and, eq } from "drizzle-orm";
+import { getTranslations } from "next-intl/server";
 
 export default async function updateStudentStatus(
   sessionId: string,
   studentId: string,
 ) {
+  const t = await getTranslations("attendance-page");
   const matchedStudent = await findStudentWithinSessionById(
     sessionId,
     studentId,
@@ -19,7 +21,7 @@ export default async function updateStudentStatus(
   if (!matchedStudent) {
     return {
       success: false,
-      message: "Could not find student within session.",
+      message: t("student-action-error-not-found"),
     };
   }
 
@@ -43,6 +45,6 @@ export default async function updateStudentStatus(
 
   return {
     success: true,
-    message: "Successfully updated student status.",
+    message: t("student-action-success-update-status"),
   };
 }

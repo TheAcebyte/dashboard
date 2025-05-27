@@ -5,8 +5,8 @@ import {
 } from "@/components/ui/dropdown";
 import type { StudentStatus } from "@/constants/student-status";
 import type { PaginatedSessionStudentRecord } from "@/db/queries/sessions";
-import { cn } from "@/lib/utils";
-import { ReactNode } from "react";
+import { capitalize, cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 const tagStyles = {
   present: "text-emerald-700 bg-emerald-50",
@@ -18,27 +18,30 @@ const tagStyles = {
 interface Props {
   record: PaginatedSessionStudentRecord;
   className?: string;
-  children?: ReactNode;
 }
 
 export default function StudentStatusTag({
   record,
   className,
-  children,
 }: Props) {
+  const t = useTranslations("attendance-page");
   const status = record.status as StudentStatus;
 
-  return status != "excused" ? (
-    <p
-      className={cn(
-        "w-fit rounded-full px-2 text-sm font-medium transition-colors",
-        tagStyles[status],
-        className,
-      )}
-    >
-      {children}
-    </p>
-  ) : (
+  if (status != "excused") {
+    return (
+      <p
+        className={cn(
+          "w-fit rounded-full px-2 text-sm font-medium transition-colors",
+          tagStyles[status],
+          className,
+        )}
+      >
+        {t(`status-${status}`)}
+      </p>
+    );
+  }
+
+  return (
     <Dropdown>
       <DropdownTrigger
         className={cn(
@@ -47,7 +50,7 @@ export default function StudentStatusTag({
           className,
         )}
       >
-        Excused
+        {t("status-excused")}
       </DropdownTrigger>
       <DropdownContent
         offsetY={8}

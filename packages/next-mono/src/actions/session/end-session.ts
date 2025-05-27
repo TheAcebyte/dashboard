@@ -4,16 +4,18 @@ import { db } from "@/db";
 import { findSessionById } from "@/db/queries/sessions";
 import { sessions } from "@/db/schema/sessions";
 import { eq } from "drizzle-orm";
+import { getTranslations } from "next-intl/server";
 
 export default async function endSession(
   sessionId: string,
   manual: boolean = false,
 ) {
+  const t = await getTranslations("attendance-page");
   const matchedSession = await findSessionById(sessionId);
   if (!matchedSession) {
     return {
       success: false,
-      message: "Could not find session.",
+      message: t("session-action-error-not-found"),
     };
   }
 
@@ -27,6 +29,6 @@ export default async function endSession(
 
   return {
     success: true,
-    message: "Successfully ended session.",
+    message: t("session-action-success-end"),
   };
 }

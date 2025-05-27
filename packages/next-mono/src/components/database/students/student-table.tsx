@@ -14,11 +14,13 @@ import usePagination from "@/hooks/use-pagination";
 import { getAge } from "@/lib/utils";
 import { useTableRefetchStore } from "@/stores/refetch-store";
 import useStudentSearchStore from "@/stores/student-search-store";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 const studentEndpoint = new URL("/api/students", cst.APP_URL);
 
 export default function StudentTable() {
+  const t = useTranslations("database-page");
   const { searchField, searchQuery } = useStudentSearchStore();
   const [queryParams, setQueryParams] =
     useState<Partial<Record<StudentFilterField, string>>>();
@@ -39,11 +41,13 @@ export default function StudentTable() {
     <div className="flex flex-col gap-12">
       <Table>
         <TableRow variant="header">
-          <TableCell weight={4}>Name</TableCell>
-          <TableCell weight={3}>CNE</TableCell>
-          <TableCell weight={2}>Age</TableCell>
-          <TableCell weight={2}>Group</TableCell>
-          <TableCell className="flex justify-center">Actions</TableCell>
+          <TableCell weight={4}>{t("student-column-name")}</TableCell>
+          <TableCell weight={3}>{t("student-column-cne")}</TableCell>
+          <TableCell weight={2}>{t("student-column-age")}</TableCell>
+          <TableCell weight={2}>{t("student-column-group")}</TableCell>
+          <TableCell className="flex justify-center">
+            {t("student-column-actions")}
+          </TableCell>
         </TableRow>
         {data.map((record, index) => {
           const fullName = `${record.firstName} ${record.lastName}`;

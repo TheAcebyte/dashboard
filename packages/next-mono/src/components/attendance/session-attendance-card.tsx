@@ -1,12 +1,15 @@
 import ProgressBar from "@/components/progress-bar";
 import { Session } from "@/db/queries/sessions";
 import { UsersRound } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface Props {
   session: Session;
 }
 
 export default function SessionAttendanceCard({ session }: Props) {
+  const t = useTranslations("attendance-page");
+
   const presentStudentsCount =
     session.presentStudentsCount + session.lateStudentsCount;
   const nonExcusedStudentsCount =
@@ -19,7 +22,7 @@ export default function SessionAttendanceCard({ session }: Props) {
     <div className="rounded-2xl border border-gray-300 px-8 py-4">
       <header className="flex items-center gap-2 font-medium text-gray-500">
         <UsersRound size={20} />
-        <h1>Attendants</h1>
+        <h1>{t("attendants")}</h1>
       </header>
       <div className="mt-4 flex items-end">
         <span className="text-[32px] leading-8 font-semibold text-zinc-900">
@@ -31,8 +34,10 @@ export default function SessionAttendanceCard({ session }: Props) {
       </div>
       <div className="mt-6 flex flex-col gap-4">
         <div className="flex justify-between gap-8">
-          <h2 className="font-medium text-zinc-900">Attendance Rate</h2>
-          <p className="font-medium text-gray-500">{attendanceRate ?? 0} %</p>
+          <h2 className="font-medium text-zinc-900">{t("attendance-rate")}</h2>
+          <p className="font-medium text-gray-500">
+            {isNaN(attendanceRate) ? 0 : attendanceRate} %
+          </p>
         </div>
         <ProgressBar percentage={attendanceRate} />
       </div>

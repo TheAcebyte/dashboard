@@ -1,12 +1,17 @@
 "use client";
 
 import Select, { selectContext } from "@/components/ui/select";
-import { sessionStudentFilterOptions } from "@/constants/filters";
+import { getSessionStudentFilterOptions } from "@/constants/filters";
 import useSessionStudentSearchStore from "@/stores/session-student-search-store";
 import { Search, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { type ChangeEvent, useContext } from "react";
 
 export default function SessionStudentSearchbar() {
+  const tPage = useTranslations("attendance-page");
+  const tFilters = useTranslations("filters");
+  const sessionStudentFilterOptions = getSessionStudentFilterOptions(tFilters);
+
   const { searchField, setSearchField, searchQuery, setSearchQuery } =
     useSessionStudentSearchStore();
   const clearSearchQuery = () => setSearchQuery("");
@@ -25,7 +30,7 @@ export default function SessionStudentSearchbar() {
       )}
       <input
         type="text"
-        placeholder="Search for students"
+        placeholder={tPage("student-searchbar-placeholder")}
         className="min-w-0 flex-1 text-zinc-900 outline-none placeholder:text-gray-400"
         value={searchQuery}
         onChange={handleChange}
@@ -49,5 +54,10 @@ function SelectLabel() {
     throw new Error("SelectLabel must be placed inside a Select component.");
   }
 
-  return <p className="py-2 font-medium">By {option}</p>;
+  const t = useTranslations("filters");
+  return (
+    <p className="py-2 font-medium">
+      {t("by")} {option}
+    </p>
+  );
 }

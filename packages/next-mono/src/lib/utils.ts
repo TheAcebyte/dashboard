@@ -17,6 +17,7 @@ export function getAge(birthday: Date) {
   return Math.abs(ageToDate.getUTCFullYear() - new Date(0).getUTCFullYear());
 }
 
+// Delete this out
 export function getOrdinalSuffix(ordinal: number) {
   switch (ordinal % 10) {
     case 1:
@@ -72,8 +73,9 @@ export function mapRange(
   return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
 }
 
-export function capitalize(string: string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+export function capitalize<T extends string>(string: T) {
+  const capitalized = string.charAt(0).toUpperCase() + string.slice(1);
+  return capitalized as Capitalize<T>;
 }
 
 export function getAttendanceRate(session: Session) {

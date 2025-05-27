@@ -1,4 +1,4 @@
-import { getOrdinalSuffix } from "@/lib/utils";
+import { DateFormatter } from "@/types/utils";
 
 export function formatDateToddMMyyyy(date: Date, separator: string = "/") {
   const day = date.getDate().toString().padStart(2, "0");
@@ -14,37 +14,28 @@ export function formatDateToHHmm(date: Date, separator: string = ":") {
   return hours + separator + minutes;
 }
 
-export function formatDateToLong(date: Date) {
-  const day = date.getDate();
-  const month = date.toLocaleString("en-uk", { month: "long" });
-  const year = date.getFullYear();
-  const ordinalSuffix = getOrdinalSuffix(day);
-
-  return `${month} ${day}${ordinalSuffix}, ${year}`;
+export function formatLongDate(format: DateFormatter, date: Date) {
+  return format.dateTime(date, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 }
 
-export function formatRelativeDay(date: Date) {
+export function formatRelativeDate(date: Date, format: DateFormatter) {
   const now = new Date();
   const input = new Date(date);
   now.setHours(0, 0, 0, 0);
   input.setHours(0, 0, 0, 0);
   const differenceInMs = now.getTime() - input.getTime();
-  const differenceInDays = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
+  const differenceInDays = Math.abs(
+    Math.floor(differenceInMs / (1000 * 60 * 60 * 24)),
+  );
 
-  switch (differenceInDays) {
-    case -1:
-      return "Yesterday";
-
-    case 0:
-      return "Today";
-
-    case 1:
-      return "Tomorrow";
-
-    default:
-      const day = date.toLocaleDateString("en-uk", { weekday: "long" });
-      return day;
+  if (differenceInDays <= 1) {
+    return `${format.relativeTime(date)}, ${formatDateToHHmm(date)}`;
   }
+  return formatLongDate(format, date);
 }
 
 export function splitTimeFromSeconds(seconds: number) {

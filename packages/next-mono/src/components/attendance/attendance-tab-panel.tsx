@@ -4,13 +4,17 @@ import Select from "@/components/ui/select";
 import TabSelector, { type Tab } from "@/components/ui/tab-selector";
 import { type GroupRecord } from "@/db/schema/groups";
 import useAttendanceGroupStore from "@/stores/attendance-group-store";
+import { TranslationFunction } from "@/types/utils";
+import { useTranslations } from "next-intl";
 
-const attendanceTabs = [
-  { id: "active", name: "Active", route: "/attendance/active" },
-  { id: "history", name: "History", route: "/attendance/history" },
-] as const satisfies Tab[];
+const getAttendanceTabs = (t: TranslationFunction<"attendance-page">) => {
+  return [
+    { id: "active", name: t("active"), route: "/attendance/active" },
+    { id: "history", name: t("history"), route: "/attendance/history" },
+  ] as const satisfies Tab[];
+};
 
-type AttendanceTabId = (typeof attendanceTabs)[number]["id"];
+type AttendanceTabId = ReturnType<typeof getAttendanceTabs>[number]["id"];
 
 interface Props {
   selected: AttendanceTabId;
@@ -18,6 +22,9 @@ interface Props {
 }
 
 export default function AttendanceTabPanel({ selected, groups }: Props) {
+  const t = useTranslations("attendance-page");
+  const attendanceTabs = getAttendanceTabs(t);
+
   const { group, setGroup } = useAttendanceGroupStore();
   const noGroupsFound = groups.length == 0;
   const groupOptions = groups.map(({ name }) => ({
@@ -30,7 +37,7 @@ export default function AttendanceTabPanel({ selected, groups }: Props) {
       <TabSelector tabs={attendanceTabs} selected={selected} />
       {!noGroupsFound && (
         <div className="flex items-center gap-4">
-          <h2 className="font-medium text-gray-500">Group</h2>
+          <h2 className="font-medium text-gray-500">{t("group")}</h2>
           <Select
             options={groupOptions}
             offsetY={16}

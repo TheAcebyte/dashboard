@@ -17,9 +17,9 @@ import type {
 } from "@/db/queries/sessions";
 import usePagination from "@/hooks/use-pagination";
 import { formatDateToHHmm } from "@/lib/date";
-import { capitalize } from "@/lib/utils";
 import { useSessionRefetchStore } from "@/stores/refetch-store";
 import useSessionStudentSearchStore from "@/stores/session-student-search-store";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -27,10 +27,12 @@ interface Props {
 }
 
 export default function SessionStudentTable({ session }: Props) {
+  const t = useTranslations("attendance-page");
   const endpoint = new URL(
     `/api/sessions/${session.sessionId}/students`,
     cst.APP_URL,
   );
+
   const { searchField, searchQuery } = useSessionStudentSearchStore();
   const [queryParams, setQueryParams] =
     useState<Partial<Record<SessionStudentFilterField, string>>>();
@@ -52,14 +54,15 @@ export default function SessionStudentTable({ session }: Props) {
     <div className="flex flex-col gap-12">
       <Table>
         <TableRow variant="header">
-          <TableCell weight={4}>Name</TableCell>
-          <TableCell weight={3}>Status</TableCell>
-          <TableCell weight={2}>Arrival Time</TableCell>
-          <TableCell className="flex justify-center">Actions</TableCell>
+          <TableCell weight={4}>{t("student-column-name")}</TableCell>
+          <TableCell weight={3}>{t("student-column-status")}</TableCell>
+          <TableCell weight={2}>{t("student-column-arrival-time")}</TableCell>
+          <TableCell className="flex justify-center">
+            {t("student-column-actions")}
+          </TableCell>
         </TableRow>
         {data.map((record, index) => {
           const fullName = `${record.firstName} ${record.lastName}`;
-          const status = record.status as StudentStatus;
           const arrivedAt = record.arrivedAt
             ? formatDateToHHmm(new Date(record.arrivedAt))
             : null;
@@ -73,9 +76,7 @@ export default function SessionStudentTable({ session }: Props) {
                 </div>
               </TableCell>
               <TableCell weight={3}>
-                <StudentStatusTag record={record}>
-                  {capitalize(status)}
-                </StudentStatusTag>
+                <StudentStatusTag record={record} />
               </TableCell>
               <TableCell weight={2}>{arrivedAt}</TableCell>
               <TableCell className="flex justify-center">

@@ -1,19 +1,28 @@
+import { TranslationFunction } from "@/types/utils";
 import { z } from "zod";
 
-export const sessionSchema = z.object({
-  group: z.string().nonempty("Group is required."),
-  name: z.string().nonempty("Name is required."),
-  duration: z.number().nullable(),
-  lateThreshold: z.number().nullable(),
-});
+export const getSessionSchema = (t: TranslationFunction<"attendance-page">) => {
+  return z.object({
+    group: z.string().nonempty(t("session-dialog-group-error-required")),
+    name: z.string().nonempty(t("session-dialog-name-error-required")),
+    duration: z.number().nullable(),
+    lateThreshold: z.number().nullable(),
+  });
+};
 
-export type SessionFields = z.infer<typeof sessionSchema>;
+export type SessionFields = z.infer<ReturnType<typeof getSessionSchema>>;
 
-export const excuseStudentSchema = z.object({
-  excuse: z
-    .string()
-    .nonempty("Excuse is required.")
-    .max(100, "Excuse is too long."),
-});
+export const getExcuseStudentSchema = (
+  t: TranslationFunction<"attendance-page">,
+) => {
+  return z.object({
+    excuse: z
+      .string()
+      .nonempty(t("student-dialog-excuse-error-required"))
+      .max(100, t("student-dialog-excuse-error-long")),
+  });
+};
 
-export type ExcuseStudentFields = z.infer<typeof excuseStudentSchema>;
+export type ExcuseStudentFields = z.infer<
+  ReturnType<typeof getExcuseStudentSchema>
+>;
