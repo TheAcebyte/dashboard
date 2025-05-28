@@ -73,7 +73,7 @@ export default function SessionHistoryGraph({
 
     const offset = offsetRef.current;
     const session = sessions[index];
-    const cursorOuterRadius = 10;
+    const cursorOuterRadius = 6;
     const x = canvas.width - index * entrySpacing + offset;
     const y = mapRange(
       1 - getAttendanceRate(session),

@@ -1,5 +1,4 @@
 import type { Session } from "@/db/queries/sessions";
-import type { TranslationFunction } from "@/types/utils";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -15,23 +14,6 @@ export function getAge(birthday: Date) {
   const ageDiffMs = Date.now() - birthday.getTime();
   const ageToDate = new Date(ageDiffMs);
   return Math.abs(ageToDate.getUTCFullYear() - new Date(0).getUTCFullYear());
-}
-
-// Delete this out
-export function getOrdinalSuffix(ordinal: number) {
-  switch (ordinal % 10) {
-    case 1:
-      return "st";
-
-    case 2:
-      return "nd";
-
-    case 3:
-      return "rd";
-
-    default:
-      return "th";
-  }
 }
 
 export function onlyContainsCharacter(string: string, target: string) {

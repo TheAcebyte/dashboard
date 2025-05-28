@@ -2,8 +2,8 @@ import StudentCardActions from "@/components/database/students/student-card-acti
 import Avatar from "@/components/ui/avatar";
 import { cst } from "@/constants";
 import { PaginatedStudentRecord } from "@/db/queries/students";
-import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 const displayClassmatesThreshold = 5;
 const studentCardListUrl = new URL("/database/students?view=card", cst.APP_URL);

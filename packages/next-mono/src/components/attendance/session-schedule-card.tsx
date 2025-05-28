@@ -1,12 +1,11 @@
 "use client";
 
+import EndSessionDialog from "@/components/attendance/end-session-modal";
 import { Session } from "@/db/queries/sessions";
 import { useLongDate } from "@/hooks/use-long-date";
 import { formatDateToHHmm } from "@/lib/date";
 import { Calendar } from "lucide-react";
 import { useTranslations } from "next-intl";
-
-import EndSessionDialog from "./end-session-modal";
 
 interface SessionScheduleProps {
   session: Session;

@@ -25,6 +25,14 @@ export default async function updateStudentStatus(
     };
   }
 
+  const { studentStatus } = matchedStudent;
+  if (studentStatus == "present" || studentStatus == "late") {
+    return {
+      success: true,
+      message: t("student-action-success-already-active"),
+    };
+  }
+
   const session = await findSessionById(sessionId);
   const arrivedAt = Date.now();
   const status =

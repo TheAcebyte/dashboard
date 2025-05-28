@@ -9,7 +9,6 @@ interface Props {
 
 export default function SessionAttendanceCard({ session }: Props) {
   const t = useTranslations("attendance-page");
-
   const presentStudentsCount =
     session.presentStudentsCount + session.lateStudentsCount;
   const nonExcusedStudentsCount =

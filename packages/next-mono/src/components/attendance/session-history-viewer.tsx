@@ -8,6 +8,7 @@ import useFetch from "@/hooks/use-fetch";
 import { fetchSessionById } from "@/lib/fetch";
 import { useSessionRefetchStore } from "@/stores/refetch-store";
 import { useSelectedSessionStore } from "@/stores/selected-session-store";
+import { useTranslations } from "next-intl";
 import { useCallback } from "react";
 
 export default function SessionHistoryViewer() {
@@ -20,6 +21,7 @@ export default function SessionHistoryViewer() {
 }
 
 function SelectedSessionDetails() {
+  const t = useTranslations("attendance-page");
   const { sessionId } = useSelectedSessionStore();
   const fetchSelectedSession = useCallback(async () => {
     if (!sessionId) return null;
@@ -31,10 +33,12 @@ function SelectedSessionDetails() {
   if (!sessionId || !data) return;
   return (
     <div>
-      <h1 className="mb-4 text-2xl font-semibold text-zinc-900">Session</h1>
+      <h1 className="mb-4 text-2xl font-semibold text-zinc-900">
+        {t("session")}
+      </h1>
       <SessionCardList session={data} />
       <h1 className="mt-16 mb-4 text-2xl font-semibold text-zinc-900">
-        Students
+        {t("students")}
       </h1>
       <div className="flex flex-col gap-8">
         <SessionStudentSearchbar />

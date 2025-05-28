@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useFormatter } from "use-intl";
 import type { Locale } from "use-intl";
 
-export function useLongDate(date: Date) {
+export function useLongDate(date: Date, refreshCounter?: number) {
   const locale = useLocale();
   const format = useFormatter();
   const [formattedDate, setFormattedDate] = useState("");
@@ -31,7 +31,7 @@ export function useLongDate(date: Date) {
     } else if (locale == "fr") {
       setFormattedDate(`${day} ${month} ${year}`);
     }
-  }, [date, locale, format]);
+  }, [date, refreshCounter, locale, format]);
 
   return formattedDate;
 }

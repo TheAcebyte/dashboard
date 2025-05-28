@@ -1,6 +1,7 @@
 "use client";
 
-import Avatar from "@/components/ui/avatar";
+import NoNotificationState from "@/components/notifications/no-notification-state";
+import NotificationEntry from "@/components/notifications/notification-entry";
 import { buttonStyles } from "@/components/ui/button";
 import {
   Dropdown,
@@ -11,12 +12,11 @@ import {
 import { cst } from "@/constants";
 import { PaginatedActiveStudentRecord } from "@/db/queries/sessions";
 import usePolling from "@/hooks/use-polling";
-import { formatRelativeDate } from "@/lib/date";
 import { fetchAllPages } from "@/lib/paginate";
 import { cn } from "@/lib/utils";
-import { Bell, BellOff } from "lucide-react";
+import { Bell } from "lucide-react";
 import { CheckCheck } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
 const activeStudentEndpoint = new URL("/api/students/active", cst.APP_URL);
@@ -24,8 +24,6 @@ const pollingDelay = 5000;
 
 export default function Notifications() {
   const t = useTranslations("notifications");
-  const format = useFormatter();
-
   const [students, setStudents] = useState<PaginatedActiveStudentRecord[]>([]);
   const [firstUnseenIndex, setFirstUnseenIndex] = useState(0);
   const sinceDateRef = useRef(Date.now());
@@ -86,36 +84,12 @@ export default function Notifications() {
         ) : (
           <ul className="flex flex-col gap-4 p-4">
             {students.toReversed().map((student, index) => {
-              const key = `${student.sessionId}-${student.studentId}`;
-              const fullName = `${student.firstName} ${student.lastName}`;
-              // Since status is either present or late, arrivedAt is guaranteed to exist
-              const arrivalDate = new Date(student.arrivedAt!);
-              const formattedDate = formatRelativeDate(arrivalDate, format);
-
               return (
-                <li
-                  key={key}
-                  className="flex w-full items-center justify-between gap-8"
-                >
-                  <div className="flex items-center gap-4">
-                    <Avatar src={student.pictureUrl} size={48} />
-                    <div className="flex flex-col">
-                      <p className="text-zinc-900">
-                        <span className="font-medium">{fullName}</span>{" "}
-                        {t("checked-in-for")}{" "}
-                        <span className="font-medium">
-                          {student.groupName}.
-                        </span>
-                      </p>
-                      <p className="text-sm font-medium text-gray-500">
-                        {formattedDate}
-                      </p>
-                    </div>
-                  </div>
-                  {isUnseenNotification(index) && (
-                    <div className="size-2 rounded-full bg-red-700" />
-                  )}
-                </li>
+                <NotificationEntry
+                  key={`${student.sessionId}-${student.studentId}`}
+                  student={student}
+                  unseen={isUnseenNotification(index)}
+                />
               );
             })}
           </ul>
@@ -150,22 +124,5 @@ function NotificationDropdownTrigger({ pending, readAll }: Props) {
         <div className="absolute top-4 right-[18px] size-2 rounded-full bg-red-700 outline-3 outline-white" />
       )}
     </>
-  );
-}
-
-function NoNotificationState() {
-  const t = useTranslations("notifications");
-  return (
-    <div className="flex flex-col items-center p-8">
-      <div className="flex aspect-square items-center rounded-full border border-gray-300 bg-gray-50 px-6 text-zinc-900">
-        <BellOff size={24} />
-      </div>
-      <h1 className="mt-4 text-lg font-semibold text-zinc-900">
-        {t("no-notification-title")}
-      </h1>
-      <p className="mt-1 font-medium text-gray-500">
-        {t("no-notification-subtitle")}
-      </p>
-    </div>
   );
 }

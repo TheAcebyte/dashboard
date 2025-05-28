@@ -14,8 +14,8 @@
   },
   "date": {
     "yesterday": "Yesterday",
-    "today": "today",
-    "tomorrow": "tomorrow"
+    "today": "Today",
+    "tomorrow": "Tomorrow"
   },
   "pagination": {
     "showing": "Showing",
@@ -30,13 +30,14 @@
     "cancel": "Cancel",
     "start": "Start",
     "confirm": "Confirm",
-    "attendants": "Attendants",
+    "attendants": "Participants",
     "attendance-rate": "Attendance Rate",
     "time-remaining": "Time Remaining",
     "schedule": "Schedule",
+    "session": "Session",
     "students": "Students",
-    "no-group-title": "No Groups Found",
-    "no-group-subtitle": "Create your first group to view attendance.",
+    "no-group-title": "No Groups Available",
+    "no-group-subtitle": "Create your first group to begin tracking attendance.",
     "move-to-groups": "Move To Groups",
     "no-active-session-title": "No Active Session",
     "no-active-session-subtitle": "Start a session to track attendance.",
@@ -71,9 +72,10 @@
     "student-dialog-excuse-placeholder": "Student excuse",
     "student-dialog-excuse-error-required": "Excuse is required.",
     "student-dialog-excuse-error-long": "Excuse is too long.",
-    "student-action-error-not-found": "Could not find student within session.",
+    "student-action-error-not-found": "Could not find student in session.",
     "student-action-success-excuse": "Successfully excused student.",
-    "student-action-success-update-status": "Successfully updated student status."
+    "student-action-success-update-status": "Successfully updated student status.",
+    "student-action-success-already-active": "Student status has already been updated."
   },
   "database-page": {
     "title": "Database",
@@ -86,7 +88,7 @@
     "cancel": "Cancel",
     "confirm": "Confirm",
     "apply": "Apply",
-    "group-searchbar-placeholder": "Search for groups",
+    "group-searchbar-placeholder": "Search for groups...",
     "group-dialog-add-title": "Add Group",
     "group-dialog-edit-title": "Edit Group",
     "group-dialog-delete-title": "Delete Group",
@@ -104,7 +106,7 @@
     "group-column-name": "Name",
     "group-column-student-count": "Student Count",
     "group-column-actions": "Actions",
-    "student-searchbar-placeholder": "Search for students",
+    "student-searchbar-placeholder": "Search for students...",
     "student-dialog-add-title": "Add Student",
     "student-dialog-edit-title": "Edit Student",
     "student-dialog-delete-title": "Delete Student",
@@ -140,6 +142,6 @@
     "notifications": "Notifications",
     "checked-in-for": "checked in for",
     "no-notification-title": "No Notifications",
-    "no-notification-subtitle": "Check back later for notifications."
+    "no-notification-subtitle": "Check back later for updates."
   }
 }

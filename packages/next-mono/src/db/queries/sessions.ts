@@ -2,6 +2,7 @@ import type {
   SessionFilterField,
   SessionStudentFilterField,
 } from "@/constants/filters";
+import { studentStatus } from "@/constants/student-status";
 import { db } from "@/db";
 import { groups } from "@/db/schema/groups";
 import { sessionStudents, sessions } from "@/db/schema/sessions";
@@ -85,14 +86,10 @@ export async function findStudentWithinSessionById(
 ) {
   const [matchedStudent] = await db
     .select()
-    .from(sessions)
-    .innerJoin(
-      sessionStudents,
-      eq(sessions.sessionId, sessionStudents.sessionId),
-    )
+    .from(sessionStudents)
     .where(
       and(
-        eq(sessions.sessionId, sessionId),
+        eq(sessionStudents.sessionId, sessionId),
         eq(sessionStudents.studentId, studentId),
       ),
     );

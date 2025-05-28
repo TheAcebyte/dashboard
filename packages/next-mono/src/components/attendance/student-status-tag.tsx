@@ -5,7 +5,7 @@ import {
 } from "@/components/ui/dropdown";
 import type { StudentStatus } from "@/constants/student-status";
 import type { PaginatedSessionStudentRecord } from "@/db/queries/sessions";
-import { capitalize, cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
 const tagStyles = {
