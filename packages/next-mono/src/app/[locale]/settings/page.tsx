@@ -1,6 +1,7 @@
 import LanguageSetting from "@/components/settings/language-setting";
 import NotificationsSetting from "@/components/settings/notifications-setting";
 import ThemeSetting from "@/components/settings/theme-setting";
+import WipeDatabaseDialog from "@/components/settings/wipe-database-dialog";
 import { getTranslations } from "next-intl/server";
 
 export default async function Page() {
@@ -26,7 +27,9 @@ export default async function Page() {
         <h1 className="w-full border-b border-red-100 py-4 text-xl font-semibold text-red-700">
           {t("danger-zone")}
         </h1>
-        <div></div>
+        <div>
+          <WipeDatabaseDialog />
+        </div>
       </div>
     </main>
   );

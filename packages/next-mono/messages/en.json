@@ -152,7 +152,15 @@
     "setting-theme-description": "Choose your display theme.",
     "light": "Light",
     "dark": "Dark",
-    "system": "System"
+    "system": "System",
+    "wipe-database-label": "Wipe Database",
+    "wipe-database-description": "Delete all data permanently. Cannot be undone.",
+    "wipe-database-button": "Wipe Database",
+    "wipe-database-dialog-title": "Wipe Database",
+    "wipe-database-dialog-confirm": "This action will permanently delete all data in the database. This cannot be undone.",
+    "action-wipe-database-success": "Successfully wiped database.",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "notifications": {
     "notifications": "Notifications",

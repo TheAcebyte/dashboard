@@ -152,7 +152,15 @@
     "setting-theme-description": "Choisissez votre thème d'affichage.",
     "light": "Clair",
     "dark": "Sombre",
-    "system": "Système"
+    "system": "Système",
+    "wipe-database-label": "Effacer la base de données",
+    "wipe-database-description": "Supprime toutes les données définitivement. Irréversible.",
+    "wipe-database-button": "Effacer",
+    "wipe-database-dialog-title": "Effacer la base de données",
+    "wipe-database-dialog-confirm": "Cette action supprimera définitivement toutes les données de la base. Irréversible.",
+    "action-wipe-database-success": "Base de données effacée avec succès.",
+    "cancel": "Annuler",
+    "confirm": "Confirmer"
   },
   "notifications": {
     "notifications": "Notifications",

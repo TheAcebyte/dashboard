@@ -6,6 +6,8 @@ export const buttonStyles = {
     "bg-zinc-900 text-white font-medium px-4 py-2 rounded-full transition-colors cursor-pointer hover:bg-zinc-800",
   outline:
     "bg-white border border-gray-300 text-zinc-900 font-medium px-4 py-2 rounded-full transition-colors cursor-pointer hover:bg-gray-50",
+  destructive:
+    "bg-red-700 text-white font-semibold px-4 py-2 rounded-full transition-colors cursor-pointer hover:bg-red-600",
 } as const satisfies Record<string, string>;
 
 type ButtonVariant = keyof typeof buttonStyles;
