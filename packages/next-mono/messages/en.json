@@ -138,6 +138,22 @@
     "student-column-actions": "Actions",
     "student-column-classmates": "Classmates"
   },
+  "settings-page": {
+    "title": "Settings",
+    "subtitle": "Manage your personal preferences and details.",
+    "preferences": "Preferences",
+    "danger-zone": "Danger Zone",
+    "setting-notifications-label": "Notifications",
+    "setting-notifications-description": "Receive alerts when students check in via camera.",
+    "setting-language-label": "Language",
+    "setting-language-description": "Select your preferred language.",
+    "language": "{locale, select, en {English} fr {Français} other {Unknown}}",
+    "setting-theme-label": "Theme",
+    "setting-theme-description": "Choose your display theme.",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
   "notifications": {
     "notifications": "Notifications",
     "checked-in-for": "checked in for",

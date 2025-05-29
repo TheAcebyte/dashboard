@@ -3,12 +3,16 @@ import { useEffect, useState } from "react";
 
 type VoidCallback = () => void;
 
-export default function usePolling(callback: VoidCallback, ms: number) {
-  const [pollingCounter, setPollingCounter] = useState(0);
+export default function usePolling(
+  callback: VoidCallback,
+  ms: number,
+  active: boolean = true,
+) {
   const visible = useVisibilityChange();
+  const [pollingCounter, setPollingCounter] = useState(0);
 
   useEffect(() => {
-    if (!visible) return;
+    if (!active || !visible) return;
     const pollingCallback = () => {
       callback();
       setPollingCounter((pollingCounter) => pollingCounter + 1);
@@ -16,7 +20,7 @@ export default function usePolling(callback: VoidCallback, ms: number) {
 
     const intervalId = setInterval(pollingCallback, ms);
     return () => clearInterval(intervalId);
-  }, [visible, callback, ms]);
+  }, [visible, callback, ms, active]);
 
   return pollingCounter;
 }

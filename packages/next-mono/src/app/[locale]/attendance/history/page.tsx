@@ -5,9 +5,9 @@ import { findAllGroups } from "@/db/queries/groups";
 export default async function Page() {
   const groups = await findAllGroups();
   return (
-    <div className="flex flex-1 flex-col gap-8">
+    <section className="flex flex-1 flex-col gap-8">
       <AttendanceTabPanel selected="history" groups={groups} />
       <SessionHistoryViewer />
-    </div>
+    </section>
   );
 }

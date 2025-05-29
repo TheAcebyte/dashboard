@@ -14,6 +14,7 @@ import { PaginatedActiveStudentRecord } from "@/db/queries/sessions";
 import usePolling from "@/hooks/use-polling";
 import { fetchAllPages } from "@/lib/paginate";
 import { cn } from "@/lib/utils";
+import { useSettingsStore } from "@/stores/settings-store";
 import { Bell } from "lucide-react";
 import { CheckCheck } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -24,6 +25,8 @@ const pollingDelay = 5000;
 
 export default function Notifications() {
   const t = useTranslations("notifications");
+  const { enabledNotifications } = useSettingsStore();
+
   const [students, setStudents] = useState<PaginatedActiveStudentRecord[]>([]);
   const [firstUnseenIndex, setFirstUnseenIndex] = useState(0);
   const sinceDateRef = useRef(Date.now());
@@ -36,7 +39,7 @@ export default function Notifications() {
       setStudents((students) => [...students, ...newerStudents]);
     });
   }, []);
-  usePolling(fetchNewerActiveStudents, pollingDelay);
+  usePolling(fetchNewerActiveStudents, pollingDelay, enabledNotifications);
 
   const readAllNotifications = () => setFirstUnseenIndex(students.length);
   const isUnseenNotification = (index: number) =>

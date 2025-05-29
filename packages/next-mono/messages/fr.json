@@ -138,6 +138,22 @@
     "student-column-actions": "Actions",
     "student-column-classmates": "Camarades"
   },
+  "settings-page": {
+    "title": "Paramètres",
+    "subtitle": "Gérez vos préférences et informations personnelles.",
+    "preferences": "Préférences",
+    "danger-zone": "Zone de danger",
+    "setting-notifications-label": "Notifications",
+    "setting-notifications-description": "Recevez des alertes lorsque des élèves se présentent au cours.",
+    "setting-language-label": "Langue",
+    "setting-language-description": "Sélectionnez votre langue préférée.",
+    "language": "{locale, select, en {English} fr {Français} other {Unknown}}",
+    "setting-theme-label": "Thème",
+    "setting-theme-description": "Choisissez votre thème d'affichage.",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
+  },
   "notifications": {
     "notifications": "Notifications",
     "checked-in-for": "s'est présenté pour",

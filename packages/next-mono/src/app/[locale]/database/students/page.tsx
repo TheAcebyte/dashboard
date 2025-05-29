@@ -6,7 +6,7 @@ import StudentSearchbar from "@/components/database/students/student-searchbar";
 
 export default function Page() {
   return (
-    <div className="mt-16 flex flex-col gap-8">
+    <section className="mt-16 flex flex-col gap-8">
       <DatabaseTabSelector selected="students" />
       <div className="mb-4 flex flex-col gap-4 lg:flex-row lg:gap-8">
         <StudentSearchbar />
@@ -16,6 +16,6 @@ export default function Page() {
         </div>
       </div>
       <StudentDataView />
-    </div>
+    </section>
   );
 }

@@ -8,9 +8,9 @@ export default async function Page() {
   const noGroupsFound = groups.length == 0;
 
   return (
-    <div className="flex flex-1 flex-col gap-8">
+    <section className="flex flex-1 flex-col gap-8">
       <AttendanceTabPanel selected="active" groups={groups} />
       {noGroupsFound ? <NoGroupState /> : <ActiveSessionViewer />}
-    </div>
+    </section>
   );
 }
