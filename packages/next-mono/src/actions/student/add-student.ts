@@ -56,13 +56,17 @@ export default async function addStudent(
     picture: picture,
   });
 
-  await fetch(datasetEndpoint, {
-    method: "POST",
-    body: JSON.stringify({
-      studentId,
-      pictureUrl,
-    }),
-  });
+  try {
+    await fetch(datasetEndpoint, {
+      method: "POST",
+      body: JSON.stringify({
+        studentId,
+        pictureUrl,
+      }),
+    });
+  } catch (e) {
+    console.error(e);
+  }
 
   return { success: true, message: t("student-action-success-add") };
 }

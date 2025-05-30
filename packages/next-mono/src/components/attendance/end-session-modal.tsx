@@ -21,10 +21,11 @@ interface Props {
 }
 
 export default function EndSessionDialog({ sessionId }: Props) {
+  const t = useTranslations("attendance-page");
   return (
     <Dialog id="end-session" className="mt-8 w-full">
       <DialogTrigger className={cn(buttonStyles.solid, "w-full px-8")}>
-        End Session
+        {t("session-dialog-end-title")}
       </DialogTrigger>
       <DialogContent>
         <EndSessionDialogContent sessionId={sessionId} />

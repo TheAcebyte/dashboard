@@ -37,23 +37,21 @@ export default function SessionTimerCard({
   const { refetch } = useSessionRefetchStore();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const decreaseRemainingTime = (remainingTime: number) => {
-    if (remainingTime <= 0) return 0;
-    return remainingTime - 1;
-  };
-
   useEffect(() => {
     const currentTime = Math.round(Date.now() / 1000);
-    const remainingTime = roundedStartTime + roundedDuration - currentTime;
-    const clampedRemainingTime = remainingTime <= 0 ? 0 : remainingTime;
-    setRemainingTime(clampedRemainingTime);
+    let remainingTime = roundedStartTime + roundedDuration - currentTime;
+    if (remainingTime <= 0) {
+      endSession(sessionId).then(refetch);
+      return;
+    }
 
+    setRemainingTime(remainingTime);
     const intervalId = setInterval(() => {
       if (remainingTime <= 0) {
-        endSession(sessionId);
-        refetch();
+        endSession(sessionId).then(refetch);
       } else {
-        setRemainingTime(decreaseRemainingTime);
+        remainingTime--;
+        setRemainingTime(remainingTime);
       }
     }, 1000);
     return () => clearInterval(intervalId);

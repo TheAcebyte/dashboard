@@ -54,5 +54,6 @@ function SelectLabel() {
     throw new Error("SelectLabel must be placed inside a Select component.");
   }
 
-  return <p className="py-2 font-medium">By {option}</p>;
+  const t = useTranslations("filters");
+  return <p className="py-2 font-medium">{t("by")} {option}</p>;
 }
