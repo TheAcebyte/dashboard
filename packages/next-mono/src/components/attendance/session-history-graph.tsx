@@ -3,7 +3,12 @@
 import { cst } from "@/constants";
 import { PaginatedSessionRecord } from "@/db/queries/sessions";
 import useInfinitePagination from "@/hooks/use-infinite-pagination";
-import { clamp, getAttendanceRate, mapRange } from "@/lib/utils";
+import {
+  clamp,
+  getAttendanceRate,
+  getCSSVariable,
+  mapRange,
+} from "@/lib/utils";
 import useAttendanceGroupStore from "@/stores/attendance-group-store";
 import { useSelectedSessionStore } from "@/stores/selected-session-store";
 import { useEffect, useRef, useState } from "react";
@@ -25,9 +30,6 @@ export default function SessionHistoryGraph({
   height = 400,
   entrySpacing = 50,
   lineWidth = 1,
-  lineColor = "oklch(52.7% 0.154 150.069)",
-  gradientColorTop = "rgba(123, 241, 168, 0.5)",
-  gradientColorBottom = "rgba(123, 241, 168, 0.05)",
 }: Props) {
   const { group } = useAttendanceGroupStore();
   const [queryParams, setQueryParams] = useState<Record<string, string>>();
@@ -102,8 +104,7 @@ export default function SessionHistoryGraph({
     clearCanvas();
 
     // Draw grid lines
-    const separatorColor = "oklch(21% 0.006 285.885)";
-    const gridLineColor = "oklch(87.2% 0.01 258.338)";
+    const gridLineColor = getCSSVariable(canvas, "--default-border");
     const gridLineWidth = 200;
     const gridLineColumns = Math.floor(canvas.width / gridLineWidth) + 1;
     for (let i = 0; i < gridLineColumns; i++) {
@@ -116,12 +117,14 @@ export default function SessionHistoryGraph({
       ctx.stroke();
     }
 
-    // Adding the background gradient below the graph
-    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    gradient.addColorStop(0, gradientColorTop);
-    gradient.addColorStop(1, gradientColorBottom);
-
     if (startIndex <= endIndex) {
+      // Adding the background gradient below the graph
+      const gradientColorTop = "rgba(123, 241, 168, 0.5)";
+      const gradientColorBottom = "rgba(123, 241, 168, 0.05)";
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, gradientColorTop);
+      gradient.addColorStop(1, gradientColorBottom);
+
       ctx.beginPath();
       for (let i = startIndex; i <= endIndex; i++) {
         const [x, y] = getCoordinates(i);
@@ -143,7 +146,7 @@ export default function SessionHistoryGraph({
         if (firstPoint) ctx.moveTo(x, y);
         ctx.lineTo(x, y);
       }
-      ctx.strokeStyle = lineColor;
+      ctx.strokeStyle = getCSSVariable(canvas, "--accent-fg");
       ctx.lineWidth = lineWidth;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
@@ -167,17 +170,17 @@ export default function SessionHistoryGraph({
       ctx.beginPath();
       ctx.moveTo(roundedMouseX, 0);
       ctx.lineTo(roundedMouseX, canvas.height);
-      ctx.strokeStyle = separatorColor;
+      ctx.strokeStyle = getCSSVariable(canvas, "--primary-fg");
       ctx.stroke();
 
       ctx.beginPath();
       ctx.arc(roundedMouseX, roundedMouseY, cursorOuterRadius, 0, 2 * Math.PI);
-      ctx.fillStyle = separatorColor;
+      ctx.fillStyle = getCSSVariable(canvas, "--primary-fg");
       ctx.fill();
 
       ctx.beginPath();
       ctx.arc(roundedMouseX, roundedMouseY, cursorInnerRadius, 0, 2 * Math.PI);
-      ctx.fillStyle = "white";
+      ctx.fillStyle = getCSSVariable(canvas, "--primary-bg");
       ctx.fill();
     }
 
@@ -185,7 +188,7 @@ export default function SessionHistoryGraph({
     ctx.beginPath();
     ctx.moveTo(0, canvas.height);
     ctx.lineTo(canvas.width, canvas.height);
-    ctx.strokeStyle = separatorColor;
+    ctx.strokeStyle = getCSSVariable(canvas, "--primary-fg");
     ctx.lineWidth = 2;
     ctx.stroke();
   };
