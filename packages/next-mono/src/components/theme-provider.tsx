@@ -11,5 +11,5 @@ export default function ThemeProvider({
   const mounted = useMounted();
 
   if (!mounted) return <>{children}</>;
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>; // Wrap children with ThemeProvider after mount
+  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
 }

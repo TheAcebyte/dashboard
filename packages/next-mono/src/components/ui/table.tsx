@@ -5,12 +5,12 @@ import { ComponentProps, ReactNode, createContext, useContext } from "react";
 
 const tableRowStyles = {
   header: {
-    row: "flex rounded-l-full rounded-r-full bg-gray-50",
-    cell: "text-gray-500 font-medium px-8 py-1",
+    row: "flex rounded-l-full rounded-r-full bg-primary-hover-bg",
+    cell: "text-secondary-fg font-medium px-8 py-1",
   },
   body: {
-    row: "border-b border-gray-200",
-    cell: "text-zinc-900 px-8 py-6",
+    row: "border-b border-subtle-border",
+    cell: "text-primary-fg px-8 py-6",
   },
 } as const satisfies Record<string, { row: string; cell: string }>;
 

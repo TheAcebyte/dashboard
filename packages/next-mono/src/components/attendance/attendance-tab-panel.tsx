@@ -33,11 +33,11 @@ export default function AttendanceTabPanel({ selected, groups }: Props) {
   }));
 
   return (
-    <div className="flex w-full items-center justify-between border-b border-gray-300">
+    <div className="flex w-full items-center justify-between border-b border-default-border">
       <TabSelector tabs={attendanceTabs} selected={selected} />
       {!noGroupsFound && (
         <div className="flex items-center gap-4">
-          <h2 className="font-medium text-gray-500">{t("group")}</h2>
+          <h2 className="font-medium text-secondary-fg">{t("group")}</h2>
           <Select
             options={groupOptions}
             offsetY={16}

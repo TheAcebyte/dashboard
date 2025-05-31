@@ -21,15 +21,15 @@ export default function NotificationEntry({ student, unseen = true }: Props) {
       <div className="flex items-center gap-4">
         <Avatar src={student.pictureUrl} size={48} />
         <div className="flex flex-col">
-          <p className="text-zinc-900">
+          <p className="text-primary-fg">
             <span className="font-medium">{fullName}</span>{" "}
             {t("checked-in-for")}{" "}
             <span className="font-medium">{student.groupName}.</span>
           </p>
-          <p className="text-sm font-medium text-gray-500">{formattedDate}</p>
+          <p className="text-sm font-medium text-secondary-fg">{formattedDate}</p>
         </div>
       </div>
-      {unseen && <div className="size-2 rounded-full bg-red-700" />}
+      {unseen && <div className="size-2 rounded-full bg-destructive-fg" />}
     </div>
   );
 }

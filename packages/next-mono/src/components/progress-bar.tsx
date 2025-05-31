@@ -4,7 +4,7 @@ const breakpointColors = [
   [0, "bg-red-700"],
   [25, "bg-orange-500"],
   [50, "bg-amber-400"],
-  [70, "bg-emerald-500"],
+  [70, "bg-green-700"],
   [90, "bg-cyan-500"],
 ] as const satisfies [number, string][];
 
@@ -30,7 +30,7 @@ export default function ProgressBar({ percentage, width }: Props) {
   const style = width ? { width } : {};
   return (
     <div
-      className="relative h-[8px] w-full overflow-hidden rounded-full bg-gray-200"
+      className="bg-disabled-bg relative h-[8px] w-full overflow-hidden rounded-full"
       style={style}
     >
       <div

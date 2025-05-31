@@ -24,7 +24,7 @@ export default function DeleteStudentDialog({ record }: Props) {
   const t = useTranslations("database-page");
   return (
     <Dialog id={`delete-student-${record.studentId}`} className="w-full">
-      <DialogTrigger className="flex w-full cursor-pointer items-center gap-4 bg-white px-4 py-2 font-medium text-red-700 transition-colors hover:bg-gray-50 hover:text-red-500">
+      <DialogTrigger className="flex w-full cursor-pointer items-center gap-4 bg-primary-bg px-4 py-2 font-medium text-destructive-fg transition-colors hover:bg-primary-hover-bg hover:text-destructive-hover-fg">
         <Trash2 size={20} />
         {t("delete")}
       </DialogTrigger>
@@ -60,14 +60,14 @@ function DeleteStudentDialogContent({ record }: Props) {
   }, [response]);
 
   return (
-    <div className="flex w-[400px] flex-col items-center rounded-2xl border border-gray-300 bg-white p-8">
-      <div className="flex aspect-square items-center rounded-full border border-gray-300 bg-gray-50 px-6 text-zinc-900">
+    <div className="flex w-[400px] flex-col items-center rounded-2xl border border-default-border bg-primary-bg p-8">
+      <div className="flex aspect-square items-center rounded-full border border-default-border bg-primary-hover-bg px-6 text-primary-fg">
         <AlertTriangle size={28} />
       </div>
-      <h1 className="mt-4 text-xl font-semibold text-zinc-900">
+      <h1 className="mt-4 text-xl font-semibold text-primary-fg">
         {t("student-dialog-delete-title")}
       </h1>
-      <p className="mt-1 text-center font-medium text-gray-500">
+      <p className="mt-1 text-center font-medium text-secondary-fg">
         {t("student-dialog-delete-confirm")}
       </p>
       <form className="mt-8 flex w-full flex-col gap-4" onSubmit={handleSubmit}>
@@ -85,7 +85,7 @@ function DeleteStudentDialogContent({ record }: Props) {
           </Button>
         </div>
         {response && !response.success && (
-          <div className="mx-auto flex items-center gap-2 font-medium text-red-700">
+          <div className="mx-auto flex items-center gap-2 font-medium text-destructive-fg">
             <CircleAlert />
             <p>{response.message}</p>
           </div>

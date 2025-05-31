@@ -13,7 +13,7 @@ export default function Sidebar() {
 
   if (match == "server") return null;
   return (
-    <div className="min-h-screen border-r border-gray-300">
+    <div className="min-h-screen border-r border-default-border">
       {match == "no-match" ? (
         <LargeSidebar tabs={navigationTabs} />
       ) : (

@@ -96,8 +96,8 @@ export default function SessionTimerCard({
     onlyContainsCharacter(splitTime.seconds, "0");
 
   return (
-    <div className="rounded-2xl border border-gray-300 px-8 py-4">
-      <header className="flex items-center gap-2 font-medium text-gray-500">
+    <div className="rounded-2xl border border-default-border px-8 py-4">
+      <header className="flex items-center gap-2 font-medium text-secondary-fg">
         <AlarmClock size={20} />
         <h1>{t("time-remaining")}</h1>
       </header>
@@ -105,17 +105,17 @@ export default function SessionTimerCard({
         <canvas width={size} height={size} ref={canvasRef}></canvas>
         <div className="absolute top-1/2 left-1/2 -translate-1/2 text-[32px] font-semibold">
           <span
-            className={cn("text-zinc-900", isUnderAnHour && "text-gray-500")}
+            className={cn("text-primary-fg", isUnderAnHour && "text-secondary-fg")}
           >
             {splitTime.hours}:
           </span>
           <span
-            className={cn("text-zinc-900", isUnderAMinute && "text-gray-500")}
+            className={cn("text-primary-fg", isUnderAMinute && "text-secondary-fg")}
           >
             {splitTime.minutes}:
           </span>
           <span
-            className={cn("text-zinc-900", isUnderASecond && "text-gray-500")}
+            className={cn("text-primary-fg", isUnderASecond && "text-secondary-fg")}
           >
             {splitTime.seconds}
           </span>

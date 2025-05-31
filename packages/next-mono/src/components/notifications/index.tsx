@@ -60,14 +60,14 @@ export default function Notifications() {
       <DropdownContent
         align="right"
         offsetY={8}
-        className="max-h-[400px] overflow-y-auto rounded-2xl border border-gray-300 bg-white"
+        className="max-h-[400px] overflow-y-auto rounded-2xl border border-default-border bg-primary-bg"
       >
-        <header className="flex items-center justify-between gap-16 border-b border-gray-300 px-4 py-2">
+        <header className="flex items-center justify-between gap-16 border-b border-default-border px-4 py-2">
           <div className="flex items-center gap-4">
-            <h1 className="text-lg font-semibold text-zinc-900">
+            <h1 className="text-lg font-semibold text-primary-fg">
               {t("notifications")}
             </h1>
-            <p className="aspect-square rounded-full bg-gray-50 p-1 text-sm font-semibold text-gray-500">
+            <p className="aspect-square rounded-full bg-primary-hover-bg p-1 text-sm font-semibold text-secondary-fg">
               {notificationCount}
             </p>
           </div>
@@ -76,8 +76,8 @@ export default function Notifications() {
             className={cn(
               "transition-colors",
               pending
-                ? "cursor-pointer text-gray-500 hover:text-gray-600"
-                : "text-green-700",
+                ? "cursor-pointer text-secondary-fg hover:text-secondary-hover-fg"
+                : "text-accent-fg",
             )}
             onClick={readAllNotifications}
           />
@@ -124,7 +124,7 @@ function NotificationDropdownTrigger({ pending, readAll }: Props) {
     <>
       <Bell className="relative" />
       {pending && (
-        <div className="absolute top-4 right-[18px] size-2 rounded-full bg-red-700 outline-3 outline-white" />
+        <div className="absolute top-4 right-[18px] size-2 rounded-full bg-destructive-fg outline-3 outline-white" />
       )}
     </>
   );

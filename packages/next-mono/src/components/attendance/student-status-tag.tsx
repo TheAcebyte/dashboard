@@ -9,10 +9,10 @@ import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
 const tagStyles = {
-  present: "text-emerald-700 bg-emerald-50",
-  absent: "text-red-700 bg-red-50",
-  late: "text-orange-600 bg-orange-50",
-  excused: "text-cyan-700 bg-cyan-50 hover:text-cyan-600",
+  present: "text-status-success-fg bg-status-success-bg",
+  absent: "text-destructive-fg bg-destructive-bg",
+  late: "text-status-warning-fg bg-status-warning-bg",
+  excused: "text-status-info-fg bg-status-info-bg hover:text-cyan-600",
 } as const satisfies Record<StudentStatus, string>;
 
 interface Props {
@@ -54,7 +54,7 @@ export default function StudentStatusTag({
       </DropdownTrigger>
       <DropdownContent
         offsetY={8}
-        className="rounded-2xl border border-gray-300 bg-white px-4 py-2"
+        className="rounded-2xl border border-default-border bg-primary-bg px-4 py-2"
       >
         {record.excuse}
       </DropdownContent>

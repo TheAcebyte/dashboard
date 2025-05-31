@@ -17,9 +17,9 @@ export default function Switch({
   width = 60,
   height = 30,
   padding = 4,
-  enabledClassName = "bg-zinc-900",
-  disabledClassName = "bg-gray-300",
-  circleClassName = "bg-white",
+  enabledClassName = "bg-primary-fg",
+  disabledClassName = "bg-disabled-bg",
+  circleClassName = "bg-primary-bg",
 }: Props) {
   const circleSize = height - 2 * padding;
   return (

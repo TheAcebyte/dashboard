@@ -33,7 +33,7 @@ export function TextInput({
 }: TextInputProps) {
   return (
     <div className={cn("flex w-full flex-col gap-2", className)}>
-      <label htmlFor={id} className="font-medium text-zinc-600">
+      <label htmlFor={id} className="font-medium text-emphasis-fg">
         {label}
       </label>
       <input
@@ -41,13 +41,13 @@ export function TextInput({
         type="text"
         placeholder={placeholder}
         className={cn(
-          "rounded-full border border-gray-300 px-4 py-2 text-zinc-900 outline-none placeholder:text-gray-400 focus-visible:border-gray-500",
-          error && "border-red-700",
+          "rounded-full border border-default-border px-4 py-2 text-primary-fg outline-none placeholder:text-muted-fg focus-visible:border-focus-border",
+          error && "border-destructive-fg",
         )}
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />
-      {error && <p className="text-sm font-medium text-red-700">{error}</p>}
+      {error && <p className="text-sm font-medium text-destructive-fg">{error}</p>}
     </div>
   );
 }
@@ -69,23 +69,23 @@ export function CNEInput({
 }: OTPInputProps) {
   return (
     <div className={cn("flex w-full flex-col gap-2", className)}>
-      <label className="font-medium text-zinc-600">{label}</label>
+      <label className="font-medium text-emphasis-fg">{label}</label>
       <OTPInput
         slots={10}
         value={value}
         setValue={setValue}
         className={cn(
-          "rounded-full border border-gray-300 px-4 py-2 text-zinc-900 outline-none placeholder:text-gray-400 focus-within:border-gray-500",
-          error && "border-red-700",
+          "rounded-full border border-default-border px-4 py-2 text-primary-fg outline-none placeholder:text-muted-fg focus-within:border-focus-border",
+          error && "border-destructive-fg",
         )}
       >
         <OTPInputSlot index={0} pattern={/^[A-Z]$/} placeholder="J" />
-        <span className="mx-2 text-gray-300">-</span>
+        <span className="mx-2 text-subtle-fg">-</span>
         {range(1, 10).map((i) => (
           <OTPInputSlot key={i} index={i} pattern={/^[0-9]$/} placeholder="0" />
         ))}
       </OTPInput>
-      {error && <p className="text-sm font-medium text-red-700">{error}</p>}
+      {error && <p className="text-sm font-medium text-destructive-fg">{error}</p>}
     </div>
   );
 }
@@ -99,28 +99,28 @@ export function DateInput({
 }: OTPInputProps) {
   return (
     <div className={cn("flex w-full flex-col gap-2", className)}>
-      <label className="font-medium text-zinc-600">{label}</label>
+      <label className="font-medium text-emphasis-fg">{label}</label>
       <OTPInput
         slots={8}
         value={value}
         setValue={setValue}
         className={cn(
-          "rounded-full border border-gray-300 px-4 py-2 text-zinc-900 outline-none placeholder:text-gray-400 focus-within:border-gray-500",
-          error && "border-red-700",
+          "rounded-full border border-default-border px-4 py-2 text-primary-fg outline-none placeholder:text-muted-fg focus-within:border-focus-border",
+          error && "border-destructive-fg",
         )}
       >
         <OTPInputSlot index={0} pattern={/^[0-9]$/} placeholder="d" />
         <OTPInputSlot index={1} pattern={/^[0-9]$/} placeholder="d" />
-        <span className="mx-2 text-gray-300">/</span>
+        <span className="mx-2 text-subtle-fg">/</span>
         <OTPInputSlot index={2} pattern={/^[0-9]$/} placeholder="M" />
         <OTPInputSlot index={3} pattern={/^[0-9]$/} placeholder="M" />
-        <span className="mx-2 text-gray-300">/</span>
+        <span className="mx-2 text-subtle-fg">/</span>
         <OTPInputSlot index={4} pattern={/^[0-9]$/} placeholder="y" />
         <OTPInputSlot index={5} pattern={/^[0-9]$/} placeholder="y" />
         <OTPInputSlot index={6} pattern={/^[0-9]$/} placeholder="y" />
         <OTPInputSlot index={7} pattern={/^[0-9]$/} placeholder="y" />
       </OTPInput>
-      {error && <p className="text-sm font-medium text-red-700">{error}</p>}
+      {error && <p className="text-sm font-medium text-destructive-fg">{error}</p>}
     </div>
   );
 }
@@ -145,17 +145,17 @@ export function SelectInput<T extends SelectOption[]>({
 }: SelectInputProps<T>) {
   return (
     <div className={cn("flex w-full flex-col gap-2", className)}>
-      <label className="font-medium text-zinc-600">{label}</label>
+      <label className="font-medium text-emphasis-fg">{label}</label>
       <Select
         options={options}
         value={value}
         setValue={setValue}
         className={cn(
-          "w-full rounded-full border border-gray-300 px-4 focus-within:border-gray-500",
-          error && "border-red-700",
+          "w-full rounded-full border border-default-border px-4 focus-within:border-focus-border",
+          error && "border-destructive-fg",
         )}
       />
-      {error && <p className="text-sm font-medium text-red-700">{error}</p>}
+      {error && <p className="text-sm font-medium text-destructive-fg">{error}</p>}
     </div>
   );
 }
@@ -201,8 +201,8 @@ export function ImageInput({ value, setValue, error }: ImageInputProps) {
   return (
     <div
       className={cn(
-        "relative size-[100px] rounded-full border border-gray-300 bg-gray-100 p-8",
-        error && "border-red-700",
+        "relative size-[100px] rounded-full border border-default-border bg-placeholder-bg p-8",
+        error && "border-destructive-fg",
       )}
       style={{
         backgroundImage: `url(${imageUrl})`,
@@ -210,14 +210,14 @@ export function ImageInput({ value, setValue, error }: ImageInputProps) {
         backgroundPosition: "center",
       }}
     >
-      {!imageUrl && <User width={32} height={32} className="text-gray-500" />}
+      {!imageUrl && <User width={32} height={32} className="text-secondary-fg" />}
       <div
         className={cn(
-          "absolute right-0 bottom-0 overflow-hidden rounded-full border border-gray-300 bg-white p-2",
-          error && "border-red-700",
+          "absolute right-0 bottom-0 overflow-hidden rounded-full border border-default-border bg-primary-bg p-2",
+          error && "border-destructive-fg",
         )}
       >
-        <Upload width={18} height={18} className="text-gray-500" />
+        <Upload width={18} height={18} className="text-secondary-fg" />
         <input
           type="file"
           accept="image/*"
@@ -269,29 +269,29 @@ export function OptionalUnitInput({
 
   return (
     <div className={cn("flex w-full flex-col gap-2", className)}>
-      <label htmlFor={id} className="font-medium text-zinc-600">
+      <label htmlFor={id} className="font-medium text-emphasis-fg">
         {label}
       </label>
       <div
         className={cn(
-          "group flex items-center gap-4 rounded-full border border-gray-300 focus-within:border-gray-500",
-          error && "border-red-700",
+          "group flex items-center gap-4 rounded-full border border-default-border focus-within:border-focus-border",
+          error && "border-destructive-fg",
         )}
       >
         <input
           id={id}
           type="number"
           placeholder={placeholder}
-          className="flex-1 px-4 py-2 text-zinc-900 outline-none placeholder:text-gray-400"
+          className="flex-1 px-4 py-2 text-primary-fg outline-none placeholder:text-muted-fg"
           value={value ?? ""}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
         />
-        <p className="border-l border-gray-300 px-4 font-medium text-zinc-900 group-focus-within:border-gray-500">
+        <p className="border-l border-default-border px-4 font-medium text-primary-fg group-focus-within:border-focus-border">
           {unit}
         </p>
       </div>
-      {error && <p className="text-sm font-medium text-red-700">{error}</p>}
+      {error && <p className="text-sm font-medium text-destructive-fg">{error}</p>}
     </div>
   );
 }
@@ -326,7 +326,7 @@ export function MessageInput({
 
   return (
     <div className={cn("flex w-full flex-col gap-2", className)}>
-      <label htmlFor={id} className="font-medium text-zinc-600">
+      <label htmlFor={id} className="font-medium text-emphasis-fg">
         {label}
       </label>
       <textarea
@@ -334,8 +334,8 @@ export function MessageInput({
         rows={rows}
         placeholder={placeholder}
         className={cn(
-          "resize-none rounded-2xl border border-gray-300 px-4 py-2 text-zinc-900 outline-none placeholder:text-gray-400 focus-visible:border-gray-500",
-          error && "border-red-700",
+          "resize-none rounded-2xl border border-default-border px-4 py-2 text-primary-fg outline-none placeholder:text-muted-fg focus-visible:border-focus-border",
+          error && "border-destructive-fg",
         )}
         value={value}
         onChange={(e) => setValue(e.target.value)}
@@ -344,12 +344,12 @@ export function MessageInput({
         <p
           className={cn(
             "text-sm font-medium",
-            characterCount <= characterLimit ? "text-gray-500" : "text-red-700",
+            characterCount <= characterLimit ? "text-secondary-fg" : "text-destructive-fg",
           )}
         >
           {characterCount}/{characterLimit}
         </p>
-        {error && <p className="text-sm font-medium text-red-700">{error}</p>}
+        {error && <p className="text-sm font-medium text-destructive-fg">{error}</p>}
       </div>
     </div>
   );

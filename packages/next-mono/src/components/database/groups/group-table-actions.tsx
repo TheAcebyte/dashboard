@@ -18,13 +18,13 @@ export default function GroupTableActions({ record }: Props) {
       <DropdownTrigger>
         <EllipsisVertical
           size={20}
-          className="cursor-pointer text-zinc-900 transition-colors hover:text-zinc-700"
+          className="cursor-pointer text-primary-fg transition-colors hover:text-primary-hover-fg"
         />
       </DropdownTrigger>
       <DropdownContent
         align="center"
         offsetY={8}
-        className="rounded-xl border border-gray-300 bg-white"
+        className="rounded-xl border border-default-border bg-primary-bg"
       >
         <EditGroupDialog record={record} />
         <DeleteGroupDialog record={record} />

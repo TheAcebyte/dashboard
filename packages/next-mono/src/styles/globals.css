@@ -1,18 +1,99 @@
 @import "tailwindcss";
 
 :root {
-  --primary-bg: white;
-  --primary-fg: black;
+  --primary-fg: var(--color-zinc-900);
+  --primary-hover-fg: var(--color-zinc-700);
+  --emphasis-fg: var(--color-zinc-600);
+  --secondary-fg: var(--color-gray-500);
+  --secondary-hover-fg: var(--color-gray-600);
+  --muted-fg: var(--color-gray-400);
+  --subtle-fg: var(--color-gray-300);
+  --accent-fg: var(--color-green-700);
+  --accent-hover-fg: var(--color-green-600);
+  --destructive-fg: var(--color-red-700);
+  --destructive-hover-fg: var(--color-red-600);
+  --status-warning-fg: var(--color-orange-600);
+  --status-success-fg: var(--color-emerald-700);
+  --status-info-fg: var(--color-cyan-700);
+
+  --primary-bg: var(--color-white);
+  --primary-hover-bg: var(--color-gray-50);
+  --placeholder-bg: var(--color-gray-100);
+  --disabled-bg: var(--color-gray-200);
+  --accent-bg: var(--color-green-50);
+  --destructive-bg: var(--color-red-50);
+  --status-warning-bg: var(--color-orange-50);
+  --status-success-bg: var(--color-emerald-50);
+  --status-info-bg: var(--color-cyan-50);
+
+  --default-border: var(--color-gray-300);
+  --subtle-border: var(--color-gray-200);
+  --focus-border: var(--color-gray-500);
+  --destructive-border: var(--color-red-100);
 }
 
 .dark {
-  --primary-bg: black;
-  --primary-fg: white;
+  --primary-fg: rgb(245, 245, 245);
+  --primary-hover-fg: rgb(212, 212, 212);
+  --emphasis-fg: rgb(163, 163, 163);
+  --secondary-fg: rgb(156, 156, 156);
+  --secondary-hover-fg: rgb(180, 180, 180);
+  --muted-fg: rgb(115, 115, 115);
+  --subtle-fg: rgb(90, 90, 90);
+  --accent-fg: rgb(34, 197, 94);
+  --accent-hover-fg: rgb(74, 222, 128);
+  --destructive-fg: rgb(239, 68, 68);
+  --destructive-hover-fg: rgb(248, 113, 113);
+  --status-warning-fg: rgb(251, 146, 60);
+  --status-success-fg: rgb(16, 185, 129);
+  --status-info-fg: rgb(6, 182, 212);
+
+  --primary-bg: rgb(8, 8, 8);
+  --primary-hover-bg: rgb(15, 15, 15);
+  --placeholder-bg: rgb(22, 22, 22);
+  --disabled-bg: rgb(28, 28, 28);
+  --accent-bg: rgb(5, 20, 10);
+  --destructive-bg: rgb(25, 8, 8);
+  --status-warning-bg: rgb(25, 15, 5);
+  --status-success-bg: rgb(5, 20, 15);
+  --status-info-bg: rgb(5, 15, 20);
+
+  --default-border: rgb(38, 38, 38);
+  --subtle-border: rgb(28, 28, 28);
+  --focus-border: rgb(82, 82, 82);
+  --destructive-border: rgb(60, 20, 20);
 }
 
 @theme {
-  --color-primary-bg: var(--primary-bg);
   --color-primary-fg: var(--primary-fg);
+  --color-primary-hover-fg: var(--primary-hover-fg);
+  --color-emphasis-fg: var(--emphasis-fg);
+  --color-secondary-fg: var(--secondary-fg);
+  --color-secondary-hover-fg: var(--secondary-hover-fg);
+  --color-muted-fg: var(--muted-fg);
+  --color-subtle-fg: var(--subtle-fg);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-hover-fg: var(--accent-hover-fg);
+  --color-destructive-fg: var(--destructive-fg);
+  --color-destructive-hover-fg: var(--destructive-hover-fg);
+  --color-status-warning-fg: var(--status-warning-fg);
+  --color-status-success-fg: var(--status-success-fg);
+  --color-status-info-fg: var(--status-info-fg);
+
+  --color-primary-bg: var(--primary-bg);
+  --color-primary-hover-bg: var(--primary-hover-bg);
+  --color-placeholder-bg: var(--placeholder-bg);
+  --color-disabled-bg: var(--disabled-bg);
+  --color-accent-bg: var(--accent-bg);
+  --color-destructive-bg: var(--destructive-bg);
+  --color-status-warning-bg: var(--status-warning-bg);
+  --color-status-success-bg: var(--status-success-bg);
+  --color-status-info-bg: var(--status-info-bg);
+
+  --color-default-border: var(--default-border);
+  --color-subtle-border: var(--subtle-border);
+  --color-focus-border: var(--focus-border);
+  --color-destructive-border: var(--destructive-border);
 }
 
 .transition-dropdown {

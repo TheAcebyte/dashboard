@@ -25,7 +25,7 @@ export default function Avatar({ src, alt, size, className }: Props) {
           src={src}
           alt={alt}
           className={cn(
-            "cursor-pointer rounded-full border border-gray-300 bg-gray-100 object-cover",
+            "cursor-pointer rounded-full border border-default-border bg-placeholder-bg object-cover",
             className,
           )}
           style={imageStyle}

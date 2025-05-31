@@ -22,12 +22,12 @@ export default function StudentCard({ record, classmates, remaining }: Props) {
   classmatesUrl.searchParams.set("query", record.group);
 
   return (
-    <div className="w-[300px] rounded-2xl border border-gray-300 bg-white">
-      <div className="relative h-[80px] rounded-2xl bg-gray-100">
+    <div className="border-default-border bg-primary-bg w-[300px] rounded-2xl border">
+      <div className="bg-placeholder-bg relative h-[80px] rounded-t-2xl rounded-r-2xl">
         <Avatar
           src={record.pictureUrl}
           size={100}
-          className="absolute bottom-0 left-8 translate-y-1/2 border-3 border-white"
+          className="border-primary-bg absolute bottom-0 left-8 translate-y-1/2 border-3"
         />
         <StudentCardActions record={record} />
       </div>
@@ -39,22 +39,22 @@ export default function StudentCard({ record, classmates, remaining }: Props) {
             gridTemplateColumns: "max-content max-content",
           }}
         >
-          <h2 className="font-medium text-gray-500">
+          <h2 className="text-secondary-fg font-medium">
             {t("student-column-name")}
           </h2>
-          <p className="font-medium text-zinc-900">{fullName}</p>
-          <h2 className="font-medium text-gray-500">
+          <p className="text-primary-fg font-medium">{fullName}</p>
+          <h2 className="text-secondary-fg font-medium">
             {t("student-column-cne")}
           </h2>
-          <p className="font-medium text-zinc-900">{record.cne}</p>
-          <h2 className="font-medium text-gray-500">
+          <p className="text-primary-fg font-medium">{record.cne}</p>
+          <h2 className="text-secondary-fg font-medium">
             {t("student-column-group")}
           </h2>
-          <p className="font-medium text-zinc-900">{record.group}</p>
+          <p className="text-primary-fg font-medium">{record.group}</p>
         </div>
         {classmates.length >= displayClassmatesThreshold && (
           <div className="flex flex-col gap-4">
-            <h2 className="font-medium text-zinc-900">
+            <h2 className="text-primary-fg font-medium">
               {t("student-column-classmates")}
             </h2>
             <div className="flex items-center gap-2">
@@ -64,7 +64,7 @@ export default function StudentCard({ record, classmates, remaining }: Props) {
                     <Avatar
                       src={classmate.pictureUrl}
                       size={40}
-                      className="border-2 border-white bg-white"
+                      className="border-primary-bg bg-primary-bg border-2"
                     />
                   </li>
                 ))}
@@ -72,7 +72,7 @@ export default function StudentCard({ record, classmates, remaining }: Props) {
               {remaining > 0 && (
                 <Link
                   href={classmatesUrl}
-                  className="font-medium text-green-700 hover:text-green-600"
+                  className="text-accent-fg hover:text-accent-hover-fg font-medium"
                   style={{ translate: `${-10 * (classmates.length - 1)}px` }}
                 >
                   +{remaining} more

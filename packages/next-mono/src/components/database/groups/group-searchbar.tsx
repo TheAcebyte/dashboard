@@ -26,22 +26,22 @@ export default function GroupSearchbar({ className }: Props) {
   return (
     <div
       className={cn(
-        "flex items-center gap-4 rounded-full border border-gray-300 px-4",
+        "flex items-center gap-4 rounded-full border border-default-border px-4",
         className,
       )}
     >
       {searchQuery == "" ? (
-        <Search className="text-zinc-900" />
+        <Search className="text-primary-fg" />
       ) : (
         <X
-          className="cursor-pointer text-zinc-900 hover:text-zinc-700"
+          className="cursor-pointer text-primary-fg hover:text-primary-hover-fg"
           onClick={clearSearchQuery}
         />
       )}
       <input
         type="text"
         placeholder={tPage("group-searchbar-placeholder")}
-        className="min-w-0 flex-1 text-zinc-900 outline-none placeholder:text-gray-400"
+        className="min-w-0 flex-1 text-primary-fg outline-none placeholder:text-muted-fg"
         value={searchQuery}
         onChange={handleChange}
       />

@@ -71,13 +71,13 @@ function AddStudentDialogContent() {
   if (!groupOptions) return null;
   if (groupOptions.length == 0) return <NoGroupState />;
   return (
-    <div className="rounded-2xl border border-gray-300 bg-white">
-      <header className="flex items-center justify-between border-b border-gray-300 px-8 py-4">
-        <h1 className="text-xl font-semibold text-zinc-900">
+    <div className="rounded-2xl border border-default-border bg-primary-bg">
+      <header className="flex items-center justify-between border-b border-default-border px-8 py-4">
+        <h1 className="text-xl font-semibold text-primary-fg">
           {t("student-dialog-add-title")}
         </h1>
         <X
-          className="cursor-pointer text-zinc-900 hover:text-zinc-700"
+          className="cursor-pointer text-primary-fg hover:text-primary-hover-fg"
           onClick={close}
         />
       </header>
@@ -141,7 +141,7 @@ function AddStudentDialogContent() {
           </Button>
         </div>
         {response && !response.success && (
-          <div className="flex items-center gap-2 font-medium text-red-700">
+          <div className="flex items-center gap-2 font-medium text-destructive-fg">
             <CircleAlert />
             <p>{response.message}</p>
           </div>
@@ -161,14 +161,14 @@ function NoGroupState() {
 
   const { close } = contextValue;
   return (
-    <div className="flex w-[400px] flex-col items-center rounded-2xl border border-gray-300 bg-white p-8">
-      <div className="flex aspect-square items-center rounded-full border border-gray-300 bg-gray-50 px-6 text-zinc-900">
+    <div className="flex w-[400px] flex-col items-center rounded-2xl border border-default-border bg-primary-bg p-8">
+      <div className="flex aspect-square items-center rounded-full border border-default-border bg-primary-hover-bg px-6 text-primary-fg">
         <UsersRound size={24} />
       </div>
-      <h1 className="mt-4 text-xl font-semibold text-zinc-900">
+      <h1 className="mt-4 text-xl font-semibold text-primary-fg">
         No Groups Found
       </h1>
-      <p className="mt-1 font-medium text-gray-500">
+      <p className="mt-1 font-medium text-secondary-fg">
         Create your first group to continue.
       </p>
       <div className="mt-8 flex w-full gap-4">

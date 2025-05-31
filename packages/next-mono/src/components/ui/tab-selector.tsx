@@ -22,10 +22,10 @@ export default function TabSelector({ tabs, selected }: Props) {
             <Link
               href={tab.route}
               className={cn(
-                "block p-4 font-medium text-gray-500 transition-colors",
+                "block p-4 font-medium text-secondary-fg transition-colors",
                 isSelected
-                  ? "border-b-2 border-green-700 text-green-700"
-                  : "hover:text-zinc-700",
+                  ? "border-b-2 border-accent-fg text-accent-fg"
+                  : "hover:text-primary-hover-fg",
               )}
             >
               {tab.name}

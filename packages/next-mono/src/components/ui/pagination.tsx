@@ -21,9 +21,9 @@ export function PaginationStatus({
   const right = count == 0 ? 0 : left + count - 1;
 
   return (
-    <p className="font-medium text-gray-500">
+    <p className="font-medium text-secondary-fg">
       {t("showing")}
-      <span className="font-semibold text-zinc-900">
+      <span className="font-semibold text-primary-fg">
         {` ${left}-${right} `}
       </span>
       {t("of")} {total}
@@ -77,8 +77,8 @@ export function PaginationControl({
         className={cn(
           "transition-colors",
           isOnFirstPage
-            ? "text-gray-400"
-            : "cursor-pointer text-zinc-900 hover:text-zinc-700",
+            ? "text-muted-fg"
+            : "cursor-pointer text-primary-fg hover:text-primary-hover-fg",
         )}
         onClick={gotoPreviousPage}
       />
@@ -100,8 +100,8 @@ export function PaginationControl({
         className={cn(
           "transition-colors",
           isOnLastPage
-            ? "text-gray-400"
-            : "cursor-pointer text-zinc-900 hover:text-zinc-700",
+            ? "text-muted-fg"
+            : "cursor-pointer text-primary-fg hover:text-primary-hover-fg",
         )}
         onClick={gotoNextPage}
       />
@@ -146,7 +146,7 @@ export function SmallPageList() {
       <li
         key={page}
         className={cn(
-          "aspect-square cursor-pointer rounded-lg p-1 text-center font-medium text-zinc-900 outline-gray-300 transition-colors hover:bg-gray-50",
+          "aspect-square cursor-pointer rounded-lg p-1 text-center font-medium text-primary-fg outline-gray-300 transition-colors hover:bg-primary-hover-bg",
           isCurrentPage && "outline",
         )}
         onClick={() => gotoPage(page)}
@@ -176,7 +176,7 @@ export function LargePageListLeft() {
           <li
             key={page}
             className={cn(
-              "aspect-square cursor-pointer rounded-lg p-1 text-center font-medium text-zinc-900 outline-gray-300 transition-colors hover:bg-gray-50",
+              "aspect-square cursor-pointer rounded-lg p-1 text-center font-medium text-primary-fg outline-gray-300 transition-colors hover:bg-primary-hover-bg",
               isCurrentPage && "outline",
             )}
             onClick={() => gotoPage(page)}
@@ -187,13 +187,13 @@ export function LargePageListLeft() {
       })}
       <li
         key="ellipse"
-        className="aspect-square rounded-lg p-1 text-center font-medium text-zinc-900"
+        className="aspect-square rounded-lg p-1 text-center font-medium text-primary-fg"
       >
         ...
       </li>
       <li
         key={lastPage}
-        className="aspect-square cursor-pointer rounded-lg p-1 text-center font-medium text-zinc-900 transition-colors hover:bg-gray-50"
+        className="aspect-square cursor-pointer rounded-lg p-1 text-center font-medium text-primary-fg transition-colors hover:bg-primary-hover-bg"
         onClick={() => gotoPage(lastPage)}
       >
         {lastPage}
@@ -215,14 +215,14 @@ export function LargePageListRight() {
     <>
       <li
         key={1}
-        className="aspect-square cursor-pointer rounded-lg p-1 text-center font-medium text-zinc-900 transition-colors hover:bg-gray-50"
+        className="aspect-square cursor-pointer rounded-lg p-1 text-center font-medium text-primary-fg transition-colors hover:bg-primary-hover-bg"
         onClick={() => gotoPage(1)}
       >
         1
       </li>
       <li
         key="ellipse"
-        className="aspect-square rounded-lg p-1 text-center font-medium text-zinc-900"
+        className="aspect-square rounded-lg p-1 text-center font-medium text-primary-fg"
       >
         ...
       </li>
@@ -234,7 +234,7 @@ export function LargePageListRight() {
           <li
             key={page}
             className={cn(
-              "aspect-square cursor-pointer rounded-lg p-1 text-center font-medium text-zinc-900 outline-gray-300 transition-colors hover:bg-gray-50",
+              "aspect-square cursor-pointer rounded-lg p-1 text-center font-medium text-primary-fg outline-gray-300 transition-colors hover:bg-primary-hover-bg",
               isCurrentPage && "outline",
             )}
             onClick={() => gotoPage(page)}
@@ -260,14 +260,14 @@ export function LargePageListCenter() {
     <>
       <li
         key={1}
-        className="aspect-square cursor-pointer rounded-lg p-1 text-center font-medium text-zinc-900 transition-colors hover:bg-gray-50"
+        className="aspect-square cursor-pointer rounded-lg p-1 text-center font-medium text-primary-fg transition-colors hover:bg-primary-hover-bg"
         onClick={() => gotoPage(1)}
       >
         1
       </li>
       <li
         key="ellipse-1"
-        className="aspect-square rounded-lg p-1 text-center font-medium text-zinc-900"
+        className="aspect-square rounded-lg p-1 text-center font-medium text-primary-fg"
       >
         ...
       </li>
@@ -279,7 +279,7 @@ export function LargePageListCenter() {
           <li
             key={page}
             className={cn(
-              "aspect-square cursor-pointer rounded-lg p-1 text-center font-medium text-zinc-900 outline-gray-300 transition-colors hover:bg-gray-50",
+              "aspect-square cursor-pointer rounded-lg p-1 text-center font-medium text-primary-fg outline-gray-300 transition-colors hover:bg-primary-hover-bg",
               isCurrentPage && "outline",
             )}
             onClick={() => gotoPage(page)}
@@ -290,13 +290,13 @@ export function LargePageListCenter() {
       })}
       <li
         key="ellipse-2"
-        className="aspect-square rounded-lg p-1 text-center font-medium text-zinc-900"
+        className="aspect-square rounded-lg p-1 text-center font-medium text-primary-fg"
       >
         ...
       </li>
       <li
         key={lastPage}
-        className="aspect-square cursor-pointer rounded-lg p-1 text-center font-medium text-zinc-900 transition-colors hover:bg-gray-50"
+        className="aspect-square cursor-pointer rounded-lg p-1 text-center font-medium text-primary-fg transition-colors hover:bg-primary-hover-bg"
         onClick={() => gotoPage(lastPage)}
       >
         {lastPage}

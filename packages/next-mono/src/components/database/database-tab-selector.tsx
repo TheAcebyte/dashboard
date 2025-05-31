@@ -21,7 +21,7 @@ export default function DatabaseTabSelector({ selected }: Props) {
   const t = useTranslations("database-page");
   const databaseTabs = getDatabaseTabs(t);
   return (
-    <div className="w-full border-b border-gray-300">
+    <div className="w-full border-b border-default-border">
       <TabSelector tabs={databaseTabs} selected={selected} />
     </div>
   );

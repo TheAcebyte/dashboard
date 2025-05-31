@@ -10,8 +10,8 @@ export default async function Layout({
   return (
     <main className="relative flex-1 px-8 py-16 sm:px-16">
       <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold text-zinc-900">{t("title")}</h1>
-        <p className="font-medium text-gray-500">{t("subtitle")}</p>
+        <h1 className="text-2xl font-semibold text-primary-fg">{t("title")}</h1>
+        <p className="font-medium text-secondary-fg">{t("subtitle")}</p>
       </div>
       {children}
     </main>

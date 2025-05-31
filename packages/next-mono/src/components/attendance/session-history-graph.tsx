@@ -3,11 +3,7 @@
 import { cst } from "@/constants";
 import { PaginatedSessionRecord } from "@/db/queries/sessions";
 import useInfinitePagination from "@/hooks/use-infinite-pagination";
-import {
-  clamp,
-  getAttendanceRate,
-  mapRange,
-} from "@/lib/utils";
+import { clamp, getAttendanceRate, mapRange } from "@/lib/utils";
 import useAttendanceGroupStore from "@/stores/attendance-group-store";
 import { useSelectedSessionStore } from "@/stores/selected-session-store";
 import { useEffect, useRef, useState } from "react";
@@ -54,7 +50,9 @@ export default function SessionHistoryGraph({
 
   useEffect(() => {
     if (!paginate || sessionId) return;
-    const [{ sessionId: firstSessionId }] = paginate.response.data;
+    const [firstSession] = paginate.response.data;
+    if (!firstSession) return;
+    const firstSessionId = firstSession.sessionId;
     setSessionId(firstSessionId);
   }, [paginate?.response]);
 

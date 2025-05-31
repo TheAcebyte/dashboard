@@ -25,15 +25,15 @@ export default function LargeSidebar({ tabs }: Props) {
               <Link
                 href={tab.route}
                 className={cn(
-                  "relative flex gap-4 py-2 px-8 text-gray-500 transition-colors",
-                  routeMatch && "bg-green-50 text-green-700",
-                  !routeMatch && "hover:bg-gray-50 hover:text-zinc-700",
+                  "relative flex gap-4 py-2 px-8 text-secondary-fg transition-colors",
+                  routeMatch && "bg-accent-bg text-accent-fg",
+                  !routeMatch && "hover:bg-primary-hover-bg hover:text-primary-hover-fg",
                 )}
               >
                 {tab.icon}
                 <p className="font-medium">{tab.name}</p>
                 {routeMatch && (
-                  <div className="absolute top-0 left-0 h-full w-[2px] bg-green-700" />
+                  <div className="absolute top-0 left-0 h-full w-[2px] bg-accent-fg" />
                 )}
               </Link>
             </li>

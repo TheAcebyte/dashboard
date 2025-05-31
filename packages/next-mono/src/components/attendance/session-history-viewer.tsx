@@ -33,11 +33,11 @@ function SelectedSessionDetails() {
   if (!sessionId || !data) return;
   return (
     <div>
-      <h1 className="mb-4 text-2xl font-semibold text-zinc-900">
+      <h1 className="mb-4 text-2xl font-semibold text-primary-fg">
         {t("session")}
       </h1>
       <SessionCardList session={data} />
-      <h1 className="mt-16 mb-4 text-2xl font-semibold text-zinc-900">
+      <h1 className="mt-16 mb-4 text-2xl font-semibold text-primary-fg">
         {t("students")}
       </h1>
       <div className="flex flex-col gap-8">

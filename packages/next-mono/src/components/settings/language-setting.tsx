@@ -26,10 +26,10 @@ export default function LanguageSetting() {
   return (
     <div className="flex w-full items-center justify-between">
       <div>
-        <h1 className="font-semibold text-zinc-900">
+        <h1 className="font-semibold text-primary-fg">
           {t("setting-language-label")}
         </h1>
-        <p className="font-medium text-gray-500">
+        <p className="font-medium text-secondary-fg">
           {t("setting-language-description")}
         </p>
       </div>
@@ -37,7 +37,7 @@ export default function LanguageSetting() {
         options={languageOptions}
         value={locale}
         setValue={setLocale}
-        className="rounded-full border border-gray-300 px-4"
+        className="rounded-full border border-default-border px-4"
       />
     </div>
   );

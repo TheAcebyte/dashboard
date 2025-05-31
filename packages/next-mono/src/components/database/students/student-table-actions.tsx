@@ -15,13 +15,13 @@ interface Props {
 export default function StudentTableActions({ record }: Props) {
   return (
     <Dropdown>
-      <DropdownTrigger className="cursor-pointer text-zinc-900 transition-colors hover:text-zinc-700">
+      <DropdownTrigger className="cursor-pointer text-primary-fg transition-colors hover:text-primary-hover-fg">
         <EllipsisVertical size={20} />
       </DropdownTrigger>
       <DropdownContent
         align="center"
         offsetY={8}
-        className="rounded-xl border border-gray-300 bg-white"
+        className="rounded-xl border border-default-border bg-primary-bg"
       >
         <EditStudentDialog record={record} />
         <DeleteStudentDialog record={record} />

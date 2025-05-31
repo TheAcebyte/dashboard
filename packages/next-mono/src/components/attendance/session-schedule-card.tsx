@@ -22,8 +22,8 @@ export default function SessionScheduleCard({ session }: SessionScheduleProps) {
   }
 
   return (
-    <div className="flex flex-col rounded-2xl border border-gray-300 px-8 py-4">
-      <header className="flex items-center gap-2 font-medium text-gray-500">
+    <div className="flex flex-col rounded-2xl border border-default-border px-8 py-4">
+      <header className="flex items-center gap-2 font-medium text-secondary-fg">
         <Calendar size={20} />
         <h1>{t("schedule")}</h1>
       </header>
@@ -48,8 +48,8 @@ function UnboundedSchedule({ startDate }: UnboundedScheduleProps) {
   const startDateLong = useLongDate(startDate);
   return (
     <div className="mt-4">
-      <p className="text-[32px] font-semibold text-zinc-900">{startTime}</p>
-      <p className="font-medium text-gray-500">{startDateLong}</p>
+      <p className="text-[32px] font-semibold text-primary-fg">{startTime}</p>
+      <p className="font-medium text-secondary-fg">{startDateLong}</p>
     </div>
   );
 }
@@ -70,21 +70,21 @@ function BoundedSchedule({ startDate, endDate }: BoundedScheduleProps) {
     return (
       <div className="mt-4">
         <div className="text-[32px] font-semibold">
-          <p className="inline text-zinc-900">{startTime}</p>
-          <span className="text-gray-500"> - </span>
-          <p className="inline text-zinc-900">{endTime}</p>
+          <p className="inline text-primary-fg">{startTime}</p>
+          <span className="text-secondary-fg"> - </span>
+          <p className="inline text-primary-fg">{endTime}</p>
         </div>
-        <p className="font-medium text-gray-500">{startDateLong}</p>
+        <p className="font-medium text-secondary-fg">{startDateLong}</p>
       </div>
     );
   }
 
   return (
     <div className="mt-4">
-      <p className="text-[32px] font-semibold text-zinc-900">{startTime}</p>
-      <p className="font-medium text-gray-500">{startDateLong}</p>
-      <p className="mt-4 text-[32px] font-semibold text-zinc-900">{endTime}</p>
-      <p className="font-medium text-gray-500">{endDateLong}</p>
+      <p className="text-[32px] font-semibold text-primary-fg">{startTime}</p>
+      <p className="font-medium text-secondary-fg">{startDateLong}</p>
+      <p className="mt-4 text-[32px] font-semibold text-primary-fg">{endTime}</p>
+      <p className="font-medium text-secondary-fg">{endDateLong}</p>
     </div>
   );
 }

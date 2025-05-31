@@ -11,7 +11,7 @@ export default function Spinner({ className, ref }: Props) {
   return (
     <div
       className={cn(
-        "aspect-square rounded-full border border-gray-300 bg-white p-2 text-zinc-700",
+        "aspect-square rounded-full border border-default-border bg-primary-bg p-2 text-primary-hover-fg",
         className,
       )}
       ref={ref}

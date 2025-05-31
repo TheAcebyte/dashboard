@@ -25,7 +25,7 @@ export default function ExcuseStudentDialog({ record }: Props) {
   const t = useTranslations("attendance-page");
   return (
     <Dialog id={`excuse-student-${record.studentId}`} className="w-full">
-      <DialogTrigger className="flex w-full cursor-pointer items-center gap-4 bg-white px-4 py-2 font-medium text-zinc-900 transition-colors hover:bg-gray-50 hover:text-zinc-700">
+      <DialogTrigger className="flex w-full cursor-pointer items-center gap-4 bg-primary-bg px-4 py-2 font-medium text-primary-fg transition-colors hover:bg-primary-hover-bg hover:text-primary-hover-fg">
         <Eraser size={20} />
         {t("excuse")}
       </DialogTrigger>
@@ -69,13 +69,13 @@ function ExcuseStudentDialogContent({ record }: Props) {
   }, [response]);
 
   return (
-    <div className="w-[400px] rounded-2xl border border-gray-300 bg-white">
-      <header className="flex items-center justify-between border-b border-gray-300 px-8 py-4">
-        <h1 className="text-xl font-semibold text-zinc-900">
+    <div className="w-[400px] rounded-2xl border border-default-border bg-primary-bg">
+      <header className="flex items-center justify-between border-b border-default-border px-8 py-4">
+        <h1 className="text-xl font-semibold text-primary-fg">
           {t("student-dialog-excuse-title")}
         </h1>
         <X
-          className="cursor-pointer text-zinc-900 hover:text-zinc-700"
+          className="cursor-pointer text-primary-fg hover:text-primary-hover-fg"
           onClick={close}
         />
       </header>
@@ -102,7 +102,7 @@ function ExcuseStudentDialogContent({ record }: Props) {
           </Button>
         </div>
         {response && !response.success && (
-          <div className="mt-4 flex items-center gap-2 font-medium text-red-700">
+          <div className="mt-4 flex items-center gap-2 font-medium text-destructive-fg">
             <CircleAlert />
             <p>{response.message}</p>
           </div>

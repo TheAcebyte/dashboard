@@ -23,10 +23,10 @@ export default function SmallSidebar({ tabs }: Props) {
               <Link
                 href={tab.route}
                 className={cn(
-                  "flex rounded-full p-4 text-gray-500 transition-colors",
-                  routeMatch && "bg-green-50 text-green-700",
+                  "flex rounded-full p-4 text-secondary-fg transition-colors",
+                  routeMatch && "bg-accent-bg text-accent-fg",
                   !routeMatch &&
-                    "cursor-pointer hover:bg-gray-50 hover:text-zinc-700",
+                    "cursor-pointer hover:bg-primary-hover-bg hover:text-primary-hover-fg",
                 )}
               >
                 {tab.icon}

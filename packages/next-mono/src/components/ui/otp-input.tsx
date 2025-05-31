@@ -179,7 +179,7 @@ export function OTPInputSlot({
       type="text"
       placeholder={placeholder}
       className={cn(
-        "w-[1ch] outline-none placeholder:text-gray-400",
+        "w-[1ch] outline-none placeholder:text-muted-fg",
         robotoMono.className,
         className,
       )}

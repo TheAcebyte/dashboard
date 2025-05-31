@@ -11,10 +11,10 @@ export default function NotificationsSetting() {
   return (
     <div className="flex w-full items-center justify-between">
       <div>
-        <h1 className="font-semibold text-zinc-900">
+        <h1 className="font-semibold text-primary-fg">
           {t("setting-notifications-label")}
         </h1>
-        <p className="font-medium text-gray-500">
+        <p className="font-medium text-secondary-fg">
           {t("setting-notifications-description")}
         </p>
       </div>
