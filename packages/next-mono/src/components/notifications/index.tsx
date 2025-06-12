@@ -124,7 +124,7 @@ function NotificationDropdownTrigger({ pending, readAll }: Props) {
     <>
       <Bell className="relative" />
       {pending && (
-        <div className="absolute top-4 right-[18px] size-2 rounded-full bg-destructive-fg outline-3 outline-white" />
+        <div className="absolute top-4 right-[18px] size-2 rounded-full bg-destructive-fg outline-3 outline-primary-bg" />
       )}
     </>
   );

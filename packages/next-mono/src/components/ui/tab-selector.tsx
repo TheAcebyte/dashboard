@@ -22,9 +22,9 @@ export default function TabSelector({ tabs, selected }: Props) {
             <Link
               href={tab.route}
               className={cn(
-                "block p-4 font-medium text-secondary-fg transition-colors",
+                "text-secondary-fg block p-4 font-medium transition-colors",
                 isSelected
-                  ? "border-b-2 border-accent-fg text-accent-fg"
+                  ? "border-accent-fg text-accent-fg border-b-2"
                   : "hover:text-primary-hover-fg",
               )}
             >

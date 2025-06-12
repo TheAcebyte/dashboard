@@ -54,6 +54,7 @@ export default function SessionHistoryGraph({
     if (!paginate || sessionId) return;
     const [firstSession] = paginate.response.data;
     if (!firstSession) return;
+
     const firstSessionId = firstSession.sessionId;
     setSessionId(firstSessionId);
   }, [paginate?.response]);

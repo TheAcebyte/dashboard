@@ -28,8 +28,6 @@ export default function useInfinitePagination<T>(
       url.searchParams.set(parameter, options?.queryParams[parameter]);
     }
 
-    console.log(url);
-
     const controller = new AbortController();
     const fetchResponse = async () => {
       const numberOfPages = await fetchNumberOfPages(

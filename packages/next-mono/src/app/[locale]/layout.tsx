@@ -35,7 +35,7 @@ export default async function LocaleLayout({
       <body className={cn("bg-primary-bg antialiased", monaSans.className)}>
         <Suspense>
           <NextIntlClientProvider>
-            <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               <main className="flex w-full">
                 <Sidebar />
                 {children}

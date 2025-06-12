@@ -58,7 +58,7 @@ export default function Select<T extends SelectOption[]>({
 
   return (
     <Dropdown className={className}>
-      <DropdownTrigger className="flex w-full cursor-pointer items-center gap-2 transition-colors hover:text-primary-hover-fg">
+      <DropdownTrigger className="hover:text-primary-hover-fg flex w-full cursor-pointer items-center gap-2 transition-colors">
         <SelectDropdownTrigger option={options[selected].label}>
           {children}
         </SelectDropdownTrigger>
@@ -67,7 +67,7 @@ export default function Select<T extends SelectOption[]>({
         align="right"
         offsetX={offsetX}
         offsetY={offsetY ?? 8}
-        className="rounded-xl border border-default-border bg-primary-bg"
+        className="border-default-border bg-primary-bg rounded-xl border"
       >
         <SelectDropdownContent options={options} select={select} />
       </DropdownContent>
@@ -126,7 +126,7 @@ function SelectDropdownContent({ options, select }: SelectDropdownContent) {
         return (
           <li
             key={index}
-            className="cursor-pointer px-4 py-2 text-primary-fg transition-colors hover:bg-primary-hover-bg"
+            className="text-primary-fg hover:bg-primary-hover-bg cursor-pointer px-4 py-2 transition-colors"
             onClick={handleClick}
           >
             {option.label}

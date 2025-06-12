@@ -23,7 +23,7 @@ export default function StudentCard({ record, classmates, remaining }: Props) {
 
   return (
     <div className="border-default-border bg-primary-bg w-[300px] rounded-2xl border">
-      <div className="bg-placeholder-bg relative h-[80px] rounded-t-2xl rounded-r-2xl">
+      <div className="bg-placeholder-bg relative h-[80px] rounded-tl-2xl rounded-tr-2xl">
         <Avatar
           src={record.pictureUrl}
           size={100}
