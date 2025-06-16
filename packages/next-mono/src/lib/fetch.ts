@@ -1,18 +1,19 @@
-import { cst } from "@/constants";
+import { env } from "@/constants/env";
 import { PaginatedGroupRecord } from "@/db/queries/groups";
 import type { ActiveSessionResponse, Session } from "@/db/queries/sessions";
 import { PaginatedStudentRecord } from "@/db/queries/students";
 import { fetchAllPages, fetchPage } from "@/lib/paginate";
 
-const studentEndpoint = new URL("/api/students", cst.APP_URL);
-const groupEndpoint = new URL("/api/groups", cst.APP_URL);
-const sessionEndpoint = new URL("/api/sessions", cst.APP_URL);
+const studentEndpoint = new URL("/api/students", env.APP_URL);
+const groupEndpoint = new URL("/api/groups", env.APP_URL);
+const sessionEndpoint = new URL("/api/sessions", env.APP_URL);
 
 export async function fetchPicture(
-  pictureUrl: string,
+  endpoint: string,
   options?: { name?: string; type?: string },
 ) {
-  const response = await fetch(pictureUrl);
+  const url = new URL(endpoint, env.APP_URL);
+  const response = await fetch(url);
   const blob = await response.blob();
   return new File([blob], options?.name ?? "unnamed", { type: options?.type });
 }
@@ -42,8 +43,7 @@ export async function fetchGroupByName(name: string) {
   return group;
 }
 
-export async function fetchSessionById(sessionId: string) {
-  const url = new URL(`${sessionEndpoint}/${sessionId}`);
+export async function fetchSessionById(sessionId: string) { const url = new URL(`${sessionEndpoint}/${sessionId}`);
   const response = await fetch(url);
   const data = await response.json();
   return data as Session;

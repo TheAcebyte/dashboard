@@ -4,7 +4,7 @@ import {
   type StudentFields,
   getStudentSchema,
 } from "@/actions/student/validation";
-import { cst } from "@/constants";
+import { env } from "@/constants/env";
 import { db } from "@/db";
 import { findStudentByCNE } from "@/db/queries/students";
 import { studentPictures, students } from "@/db/schema/students";
@@ -12,7 +12,7 @@ import type { ServerActionResponse } from "@/types/utils";
 import { randomUUID } from "crypto";
 import { getTranslations } from "next-intl/server";
 
-const datasetEndpoint = new URL("/add_toDB", cst.FLASK_APP_URL);
+const datasetEndpoint = new URL("/add_toDB", env.FLASK_APP_URL);
 
 export default async function addStudent(
   payload: StudentFields,
@@ -39,7 +39,7 @@ export default async function addStudent(
   const birthDate = new Date(usLocaleDate).getTime();
   const fileArrayBuffer = await payload.file.arrayBuffer();
   const picture = Buffer.from(fileArrayBuffer);
-  const pictureUrl = new URL(`/api/students/${studentId}/picture`, cst.APP_URL);
+  const pictureUrl = `/api/students/${studentId}/picture`;
 
   await db.insert(students).values({
     studentId: studentId,

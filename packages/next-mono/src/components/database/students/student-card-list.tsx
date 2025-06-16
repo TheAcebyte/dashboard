@@ -2,7 +2,7 @@
 
 import StudentCard from "@/components/database/students/student-card";
 import Spinner from "@/components/spinner";
-import { cst } from "@/constants";
+import { env } from "@/constants/env";
 import type { StudentFilterField } from "@/constants/filters";
 import type { PaginatedStudentRecord } from "@/db/queries/students";
 import useInfinitePagination from "@/hooks/use-infinite-pagination";
@@ -12,7 +12,7 @@ import useStudentSearchStore from "@/stores/student-search-store";
 import { useEffect, useRef, useState } from "react";
 
 const maxShownClassmates = 4;
-const studentEndpoint = new URL("/api/students", cst.APP_URL);
+const studentEndpoint = new URL("/api/students", env.APP_URL);
 
 type GroupStudents = Record<
   string,

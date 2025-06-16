@@ -6,7 +6,7 @@ import {
   PaginationStatus,
 } from "@/components/ui/pagination";
 import { Table, TableCell, TableRow } from "@/components/ui/table";
-import { cst } from "@/constants";
+import { env } from "@/constants/env";
 import { GroupFilterField } from "@/constants/filters";
 import { PaginatedGroupRecord } from "@/db/queries/groups";
 import usePagination from "@/hooks/use-pagination";
@@ -15,7 +15,7 @@ import { useTableRefetchStore } from "@/stores/refetch-store";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
-const groupEndpoint = new URL("/api/groups", cst.APP_URL);
+const groupEndpoint = new URL("/api/groups", env.APP_URL);
 
 export default function GroupTable() {
   const t = useTranslations("database-page");

@@ -7,7 +7,7 @@ import {
   PaginationStatus,
 } from "@/components/ui/pagination";
 import { Table, TableCell, TableRow } from "@/components/ui/table";
-import { cst } from "@/constants";
+import { env } from "@/constants/env";
 import { StudentFilterField } from "@/constants/filters";
 import type { PaginatedStudentRecord } from "@/db/queries/students";
 import usePagination from "@/hooks/use-pagination";
@@ -17,7 +17,7 @@ import useStudentSearchStore from "@/stores/student-search-store";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
-const studentEndpoint = new URL("/api/students", cst.APP_URL);
+const studentEndpoint = new URL("/api/students", env.APP_URL);
 
 export default function StudentTable() {
   const t = useTranslations("database-page");
@@ -58,7 +58,7 @@ export default function StudentTable() {
             <TableRow key={index}>
               <TableCell weight={4}>
                 <div className="flex items-center gap-4">
-                  <Avatar src={record.pictureUrl} size={48} />
+                  <Avatar endpoint={record.pictureUrl} size={48} />
                   <p>{fullName}</p>
                 </div>
               </TableCell>

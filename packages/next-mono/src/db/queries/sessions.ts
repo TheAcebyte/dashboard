@@ -2,7 +2,6 @@ import type {
   SessionFilterField,
   SessionStudentFilterField,
 } from "@/constants/filters";
-import { studentStatus } from "@/constants/student-status";
 import { db } from "@/db";
 import { groups } from "@/db/schema/groups";
 import { sessionStudents, sessions } from "@/db/schema/sessions";

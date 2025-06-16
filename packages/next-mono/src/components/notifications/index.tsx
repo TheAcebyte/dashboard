@@ -9,7 +9,7 @@ import {
   DropdownTrigger,
   dropdownContext,
 } from "@/components/ui/dropdown";
-import { cst } from "@/constants";
+import { env } from "@/constants/env";
 import { PaginatedActiveStudentRecord } from "@/db/queries/sessions";
 import usePolling from "@/hooks/use-polling";
 import { fetchAllPages } from "@/lib/paginate";
@@ -20,7 +20,7 @@ import { CheckCheck } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
-const activeStudentEndpoint = new URL("/api/students/active", cst.APP_URL);
+const activeStudentEndpoint = new URL("/api/students/active", env.APP_URL);
 const pollingDelay = 5000;
 
 export default function Notifications() {

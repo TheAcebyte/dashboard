@@ -8,7 +8,7 @@ import {
   PaginationStatus,
 } from "@/components/ui/pagination";
 import { Table, TableCell, TableRow } from "@/components/ui/table";
-import { cst } from "@/constants";
+import { env } from "@/constants/env";
 import type { SessionStudentFilterField } from "@/constants/filters";
 import type { StudentStatus } from "@/constants/student-status";
 import type {
@@ -30,7 +30,7 @@ export default function SessionStudentTable({ session }: Props) {
   const t = useTranslations("attendance-page");
   const endpoint = new URL(
     `/api/sessions/${session.sessionId}/students`,
-    cst.APP_URL,
+    env.APP_URL,
   );
 
   const { searchField, searchQuery } = useSessionStudentSearchStore();
@@ -71,7 +71,7 @@ export default function SessionStudentTable({ session }: Props) {
             <TableRow key={index}>
               <TableCell weight={4}>
                 <div className="flex items-center gap-4">
-                  <Avatar src={record.pictureUrl} size={48} />
+                  <Avatar endpoint={record.pictureUrl} size={48} />
                   <p>{fullName}</p>
                 </div>
               </TableCell>

@@ -19,7 +19,7 @@ export default function NotificationEntry({ student, unseen = true }: Props) {
   return (
     <div className="flex w-full items-center justify-between gap-8">
       <div className="flex items-center gap-4">
-        <Avatar src={student.pictureUrl} size={48} />
+        <Avatar endpoint={student.pictureUrl} size={48} />
         <div className="flex flex-col">
           <p className="text-primary-fg">
             <span className="font-medium">{fullName}</span>{" "}

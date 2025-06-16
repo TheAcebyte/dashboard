@@ -1,12 +1,12 @@
 import StudentCardActions from "@/components/database/students/student-card-actions";
 import Avatar from "@/components/ui/avatar";
-import { cst } from "@/constants";
+import { env } from "@/constants/env";
 import { PaginatedStudentRecord } from "@/db/queries/students";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 
 const displayClassmatesThreshold = 5;
-const studentCardListUrl = new URL("/database/students?view=card", cst.APP_URL);
+const studentCardListUrl = new URL("/database/students?view=card", env.APP_URL);
 
 interface Props {
   record: PaginatedStudentRecord;

@@ -1,4 +1,4 @@
-import { cst } from "@/constants";
+import { env } from "@/constants/env";
 import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
@@ -6,6 +6,6 @@ export default defineConfig({
   schema: "./src/db/schema",
   dialect: "sqlite",
   dbCredentials: {
-    url: cst.DATABASE_URL,
+    url: env.DATABASE_URL,
   },
 });

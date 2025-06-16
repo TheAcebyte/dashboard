@@ -1,3 +1,4 @@
+import { env } from "@/constants/env";
 import type { Session } from "@/db/queries/sessions";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -85,4 +86,8 @@ export function getCSSVariable<T extends HTMLElement>(
 ) {
   if (typeof window == "undefined") return fallback || "";
   return window.getComputedStyle(element).getPropertyValue(property);
+}
+
+export function getPictureUrl(endpoint: string) {
+  return new URL(endpoint, env.APP_URL);
 }

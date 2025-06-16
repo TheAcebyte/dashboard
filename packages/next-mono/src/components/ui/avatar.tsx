@@ -1,14 +1,16 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { env } from "@/constants/env";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  src: string;
+  endpoint: string;
   alt?: string;
   size?: number;
   className?: string;
 }
 
-export default function Avatar({ src, alt, size, className }: Props) {
+export default function Avatar({ endpoint, alt, size, className }: Props) {
+  const src = new URL(endpoint, env.APP_URL).toString();
   const imageStyle = !size
     ? {}
     : {

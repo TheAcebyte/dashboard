@@ -1,6 +1,6 @@
 "use client";
 
-import { cst } from "@/constants";
+import { env } from "@/constants/env";
 import { PaginatedSessionRecord } from "@/db/queries/sessions";
 import useInfinitePagination from "@/hooks/use-infinite-pagination";
 import {
@@ -13,7 +13,7 @@ import useAttendanceGroupStore from "@/stores/attendance-group-store";
 import { useSelectedSessionStore } from "@/stores/selected-session-store";
 import { useEffect, useRef, useState } from "react";
 
-const sessionEndpoint = new URL("/api/sessions", cst.APP_URL);
+const sessionEndpoint = new URL("/api/sessions", env.APP_URL);
 const defaultLimit = 20;
 const maxCanvasWidth = 1080;
 
