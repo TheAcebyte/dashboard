@@ -25,7 +25,7 @@ export default function StudentCard({ record, classmates, remaining }: Props) {
     <div className="border-default-border bg-primary-bg w-[300px] rounded-2xl border">
       <div className="bg-placeholder-bg relative h-[80px] rounded-tl-2xl rounded-tr-2xl">
         <Avatar
-          src={record.pictureUrl}
+          endpoint={record.pictureUrl}
           size={100}
           className="border-primary-bg absolute bottom-0 left-8 translate-y-1/2 border-3"
         />
@@ -62,7 +62,7 @@ export default function StudentCard({ record, classmates, remaining }: Props) {
                 {classmates.map((classmate, index) => (
                   <li key={index} style={{ translate: `${-10 * index}px` }}>
                     <Avatar
-                      src={classmate.pictureUrl}
+                      endpoint={classmate.pictureUrl}
                       size={40}
                       className="border-primary-bg bg-primary-bg border-2"
                     />
