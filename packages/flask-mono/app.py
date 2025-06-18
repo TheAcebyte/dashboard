@@ -1,13 +1,14 @@
 from flask import Flask, request, render_template, jsonify
 import requests
-from datetime import datetime 
 import io
 import shutil
 from PIL import Image
 from utils import get_post_endpoint, img_processing, send_data
 import os
+from dotenv import load_dotenv
 
-
+load_dotenv()
+print(os.environ.get("NEXT_APP_URL"))
 app = Flask(__name__)
 
 DB_PATH = "db/"

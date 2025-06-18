@@ -5,13 +5,11 @@ from deepface import DeepFace
 import json
 from typing import Optional
 import os
-from deepface import DeepFace
-
 
 
 def get_post_endpoint(studentId):
-    return f"http://192.168.1.150:3000/api/students/{studentId}/session"
-
+    next_app_url = os.environ.get("NEXT_APP_HOST")
+    return f"${next_app_url}/api/students/{studentId}/session"
 
 def cache_embeddings(db_path: str = "db", model_name: str = "Facenet"):
     embedding_list = DeepFace.represent(img_path=db_path, model_name=model_name)
@@ -25,7 +23,6 @@ def load_embeddings(embeddings_json_path: str = "db/embeddings.json"):
 
 def send_data(payload: dict[str: bool] | None, url: str) -> None: 
     requests.post(url, json=payload)
-
 
 def img_processing(img_path: os.path, db_path: str | os.PathLike, model_name: str = "Facenet") -> Optional[str]:
     '''I have to find a way to connect the model with the db,
