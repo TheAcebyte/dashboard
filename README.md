@@ -1,5 +1,6 @@
 # dashboard
 A fullstack student attendance management dashboard built with Next.js and SQLite.
+
 Supports live session tracking, student management across groups, and attendance history. 
 
 ## Demo
